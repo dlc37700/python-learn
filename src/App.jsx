@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { PyodideProvider, usePyodide } from './contexts/PyodideContext.jsx'
 import Sidebar from './components/Sidebar.jsx'
 import Lesson from './components/Lesson.jsx'
@@ -117,10 +117,15 @@ function AppInner() {
   const [currentModule, setCurrentModule] = useState(null)
   const [view, setView] = useState('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const mainRef = useRef(null)
 
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
   }, [progress])
+
+  useEffect(() => {
+    mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [currentModule, view])
 
   function updateProgress(moduleId, key) {
     setProgress(prev => ({
@@ -224,7 +229,7 @@ function AppInner() {
           )}
         </header>
 
-        <main className="flex-1 overflow-y-auto p-6">
+        <main ref={mainRef} className="flex-1 overflow-y-auto p-6">
           {view === 'home' && (
             <HomePage progress={progress} onSelect={handleSelectModule} />
           )}
