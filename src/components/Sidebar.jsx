@@ -1,7 +1,44 @@
 import { modules } from '../data/modules.js'
-import ProgressBar from './ProgressBar.jsx'
+
+const level1 = modules.filter(m => !m.level || m.level === 1)
+const level2 = modules.filter(m => m.level === 2)
+
+function ModuleButton({ mod, isActive, progress, onSelect }) {
+  const p = progress[mod.id] || {}
+  const done = [p.lesson, p.exercises, p.quiz].filter(Boolean).length
+  return (
+    <button
+      onClick={() => onSelect(mod.id)}
+      className={`w-full text-left rounded-xl p-3 transition-all duration-200 group ${
+        isActive
+          ? 'bg-gradient-to-r from-cyan-900/60 to-purple-900/40 border border-cyan-700/50'
+          : 'hover:bg-gray-800/60 border border-transparent'
+      }`}
+    >
+      <div className="flex items-center gap-3">
+        <span className="text-xl">{mod.emoji}</span>
+        <div className="flex-1 min-w-0">
+          <div className={`text-sm font-semibold truncate ${isActive ? 'text-cyan-300' : 'text-gray-200 group-hover:text-white'}`}>
+            {mod.title}
+          </div>
+          <div className="flex gap-1 mt-1">
+            {['lesson', 'exercises', 'quiz'].map(k => (
+              <div
+                key={k}
+                className={`h-1.5 flex-1 rounded-full transition-all ${p[k] ? 'bg-green-400' : 'bg-gray-700'}`}
+              />
+            ))}
+          </div>
+        </div>
+        {done === 3 && <span className="text-green-400 text-sm">✓</span>}
+      </div>
+    </button>
+  )
+}
 
 export default function Sidebar({ currentModule, currentView, onSelect, onTerminal, progress }) {
+  const isActive = (id) => currentModule === id && currentView !== 'terminal' && currentView !== 'home'
+
   return (
     <aside className="flex flex-col h-full">
       {/* Logo */}
@@ -18,47 +55,32 @@ export default function Sidebar({ currentModule, currentView, onSelect, onTermin
       </div>
 
       {/* Module list */}
-      <nav className="flex-1 overflow-y-auto p-3 space-y-1">
-        {modules.map((mod) => {
-          const p = progress[mod.id] || {}
-          const done = [p.lesson, p.exercises, p.quiz].filter(Boolean).length
-          const isActive = currentModule === mod.id && currentView !== 'terminal' && currentView !== 'home'
+      <nav className="flex-1 overflow-y-auto p-3">
+        {/* Niveau 1 */}
+        <div className="mb-1">
+          <div className="flex items-center gap-2 px-2 py-1.5 mb-1">
+            <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest">Niveau 1</span>
+            <div className="flex-1 h-px bg-cyan-900/50" />
+          </div>
+          <div className="space-y-0.5">
+            {level1.map(mod => (
+              <ModuleButton key={mod.id} mod={mod} isActive={isActive(mod.id)} progress={progress} onSelect={onSelect} />
+            ))}
+          </div>
+        </div>
 
-          return (
-            <button
-              key={mod.id}
-              onClick={() => onSelect(mod.id)}
-              className={`w-full text-left rounded-xl p-3 transition-all duration-200 group ${
-                isActive
-                  ? 'bg-gradient-to-r from-cyan-900/60 to-purple-900/40 border border-cyan-700/50'
-                  : 'hover:bg-gray-800/60 border border-transparent'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-xl">{mod.emoji}</span>
-                <div className="flex-1 min-w-0">
-                  <div className={`text-sm font-semibold truncate ${isActive ? 'text-cyan-300' : 'text-gray-200 group-hover:text-white'}`}>
-                    {mod.title}
-                  </div>
-                  <div className="flex gap-1 mt-1">
-                    {[
-                      { key: 'lesson', title: 'Cours' },
-                      { key: 'exercises', title: 'Exercices' },
-                      { key: 'quiz', title: 'Quiz' },
-                    ].map(s => (
-                      <div
-                        key={s.key}
-                        title={s.title}
-                        className={`h-1.5 flex-1 rounded-full transition-all ${p[s.key] ? 'bg-green-400' : 'bg-gray-700'}`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                {done === 3 && <span className="text-green-400 text-sm">✓</span>}
-              </div>
-            </button>
-          )
-        })}
+        {/* Niveau 2 */}
+        <div className="mt-3">
+          <div className="flex items-center gap-2 px-2 py-1.5 mb-1">
+            <span className="text-xs font-bold text-purple-400 uppercase tracking-widest">Niveau 2</span>
+            <div className="flex-1 h-px bg-purple-900/50" />
+          </div>
+          <div className="space-y-0.5">
+            {level2.map(mod => (
+              <ModuleButton key={mod.id} mod={mod} isActive={isActive(mod.id)} progress={progress} onSelect={onSelect} />
+            ))}
+          </div>
+        </div>
       </nav>
 
       {/* Terminal button */}
