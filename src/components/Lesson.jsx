@@ -33,7 +33,7 @@ export default function Lesson({ mod, progress, onLessonRead, onExerciseComplete
       <div
         ref={contentRef}
         className="lesson-content mb-8"
-        dangerouslySetInnerHTML={{ __html: mod.lesson.html }}
+        dangerouslySetInnerHTML={{ __html: mod.lesson.content || mod.lesson.html || '' }}
       />
 
       {/* Mark as read */}
@@ -66,13 +66,19 @@ export default function Lesson({ mod, progress, onLessonRead, onExerciseComplete
                   Exercice {i + 1}
                 </div>
                 <h3 className="text-white font-semibold">{ex.title}</h3>
-                <p className="text-gray-400 text-sm mt-1">{ex.instruction}</p>
+                <p
+                  className="text-gray-400 text-sm mt-1"
+                  dangerouslySetInnerHTML={{ __html: ex.description || ex.instruction || '' }}
+                />
+                {ex.hint && (
+                  <p className="text-xs text-yellow-500/80 mt-2">💡 Indice : {ex.hint}</p>
+                )}
               </div>
               <div className="p-5">
                 <CodeEditor
-                  starterCode={ex.starterCode}
+                  starterCode={ex.starter || ex.starterCode}
                   solution={ex.solution}
-                  exerciseId={ex.id}
+                  exerciseId={`${mod.id}-${ex.id}`}
                   onComplete={() => onExerciseComplete(mod.id, ex.id)}
                 />
               </div>
