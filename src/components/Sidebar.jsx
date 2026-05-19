@@ -1,7 +1,17 @@
+import { useState } from 'react'
 import { modules } from '../data/modules.js'
 
-const level1 = modules.filter(m => !m.level || m.level === 1)
-const level2 = modules.filter(m => m.level === 2)
+const byLevel = {
+  1: modules.filter(m => !m.level || m.level === 1),
+  2: modules.filter(m => m.level === 2),
+  3: modules.filter(m => m.level === 3),
+}
+
+const levelLabels = {
+  1: { label: 'Niveau 1', color: 'text-cyan-400', line: 'bg-cyan-900/50' },
+  2: { label: 'Niveau 2', color: 'text-purple-400', line: 'bg-purple-900/50' },
+  3: { label: 'Niveau 3', color: 'text-orange-400', line: 'bg-orange-900/50' },
+}
 
 function ModuleButton({ mod, isActive, progress, onSelect }) {
   const p = progress[mod.id] || {}
@@ -23,16 +33,43 @@ function ModuleButton({ mod, isActive, progress, onSelect }) {
           </div>
           <div className="flex gap-1 mt-1">
             {['lesson', 'exercises', 'quiz'].map(k => (
-              <div
-                key={k}
-                className={`h-1.5 flex-1 rounded-full transition-all ${p[k] ? 'bg-green-400' : 'bg-gray-700'}`}
-              />
+              <div key={k} className={`h-1.5 flex-1 rounded-full transition-all ${p[k] ? 'bg-green-400' : 'bg-gray-700'}`} />
             ))}
           </div>
         </div>
-        {done === 3 && <span className="text-green-400 text-sm">✓</span>}
+        {done === 3 && <span className="text-green-400 text-sm flex-shrink-0">✓</span>}
       </div>
     </button>
+  )
+}
+
+function LevelSection({ level, mods, isActive, progress, onSelect, defaultOpen }) {
+  const [open, setOpen] = useState(defaultOpen)
+  const { label, color, line } = levelLabels[level]
+  const doneCount = mods.filter(m => {
+    const p = progress[m.id] || {}
+    return p.lesson && p.exercises && p.quiz
+  }).length
+
+  return (
+    <div className="mb-1">
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-800/40 transition-all group"
+      >
+        <span className={`text-xs font-bold uppercase tracking-widest ${color}`}>{label}</span>
+        <div className={`flex-1 h-px ${line}`} />
+        <span className="text-xs text-gray-500">{doneCount}/{mods.length}</span>
+        <span className={`text-gray-500 text-xs transition-transform duration-200 ${open ? 'rotate-180' : ''}`}>▼</span>
+      </button>
+      {open && (
+        <div className="space-y-0.5 mt-0.5">
+          {mods.map(mod => (
+            <ModuleButton key={mod.id} mod={mod} isActive={isActive(mod.id)} progress={progress} onSelect={onSelect} />
+          ))}
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -40,51 +77,24 @@ export default function Sidebar({ currentModule, currentView, onSelect, onTermin
   const isActive = (id) => currentModule === id && currentView !== 'terminal' && currentView !== 'home'
 
   return (
-    <aside className="flex flex-col h-full">
-      {/* Logo */}
-      <div className="p-5 border-b border-gray-800">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center text-lg font-bold text-white">
-            Py
-          </div>
-          <div>
-            <div className="font-bold text-white text-sm">Python Learn</div>
-            <div className="text-xs text-gray-400">Pour les 3èmes 🎓</div>
-          </div>
-        </div>
-      </div>
-
-      {/* Module list */}
+    <aside className="flex-1 flex flex-col overflow-hidden">
+      {/* Module list — scrollable */}
       <nav className="flex-1 overflow-y-auto p-3">
-        {/* Niveau 1 */}
-        <div className="mb-1">
-          <div className="flex items-center gap-2 px-2 py-1.5 mb-1">
-            <span className="text-xs font-bold text-cyan-400 uppercase tracking-widest">Niveau 1</span>
-            <div className="flex-1 h-px bg-cyan-900/50" />
-          </div>
-          <div className="space-y-0.5">
-            {level1.map(mod => (
-              <ModuleButton key={mod.id} mod={mod} isActive={isActive(mod.id)} progress={progress} onSelect={onSelect} />
-            ))}
-          </div>
-        </div>
-
-        {/* Niveau 2 */}
-        <div className="mt-3">
-          <div className="flex items-center gap-2 px-2 py-1.5 mb-1">
-            <span className="text-xs font-bold text-purple-400 uppercase tracking-widest">Niveau 2</span>
-            <div className="flex-1 h-px bg-purple-900/50" />
-          </div>
-          <div className="space-y-0.5">
-            {level2.map(mod => (
-              <ModuleButton key={mod.id} mod={mod} isActive={isActive(mod.id)} progress={progress} onSelect={onSelect} />
-            ))}
-          </div>
-        </div>
+        {[1, 2, 3].map(lvl => (
+          <LevelSection
+            key={lvl}
+            level={lvl}
+            mods={byLevel[lvl]}
+            isActive={isActive}
+            progress={progress}
+            onSelect={onSelect}
+            defaultOpen={lvl === 1}
+          />
+        ))}
       </nav>
 
-      {/* Terminal button */}
-      <div className="p-3 border-t border-gray-800">
+      {/* Terminal button — always visible at bottom */}
+      <div className="p-3 border-t border-gray-800 shrink-0">
         <button
           onClick={onTerminal}
           className={`w-full rounded-xl p-3 flex items-center gap-3 transition-all duration-200 ${

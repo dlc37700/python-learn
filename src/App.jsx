@@ -165,13 +165,13 @@ function AppInner() {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full w-64 bg-gray-950 border-r border-gray-800/60 z-30 transform transition-transform duration-300 lg:relative lg:translate-x-0 ${
+        className={`fixed top-0 left-0 h-full w-64 bg-gray-950 border-r border-gray-800/60 z-30 flex flex-col transform transition-transform duration-300 lg:relative lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         }`}
       >
         <button
           onClick={handleHome}
-          className="w-full flex items-center gap-2 px-5 py-3 text-sm text-gray-400 hover:text-white hover:bg-gray-800/40 transition-all border-b border-gray-800/60"
+          className="w-full flex items-center gap-2 px-5 py-3 text-sm text-gray-400 hover:text-white hover:bg-gray-800/40 transition-all border-b border-gray-800/60 shrink-0"
         >
           <span>🏠</span> Accueil
         </button>

@@ -1493,5 +1493,895 @@ print(f"Nombre de valeurs uniques : {len(set(notes))}")`,
         explanation: 'C\'est le swap élégant de Python : les valeurs de a et b sont échangées en une seule ligne.'
       }
     ]
+  },
+
+  // ─── NIVEAU 3 ────────────────────────────────────────────────────────────────
+
+  {
+    id: 15,
+    emoji: '🏛️',
+    title: 'Classes & POO',
+    level: 3,
+    description: 'Crée tes propres types d\'objets avec la POO !',
+    color: '#f97316',
+    lesson: {
+      title: 'Introduction à la Programmation Orientée Objet',
+      content: `
+        <h2>Qu'est-ce qu'un objet ?</h2>
+        <p>Jusqu'ici, on a utilisé des données séparées : une variable <code>prenom</code>, une autre <code>age</code>... La <strong>Programmation Orientée Objet (POO)</strong> permet de regrouper des données ET des fonctions dans une seule entité : un <strong>objet</strong>.</p>
+        <div class="info-box"><p>💡 Une <strong>classe</strong>, c'est le plan de construction. Un <strong>objet</strong>, c'est la maison construite à partir du plan.</p></div>
+
+        <h2>Créer une classe</h2>
+        <pre><code class="language-python">class Eleve:
+    def __init__(self, prenom, age):
+        self.prenom = prenom   # attribut
+        self.age = age         # attribut
+
+    def se_presenter(self):
+        print(f"Je m'appelle {self.prenom}, j'ai {self.age} ans.")
+
+# Créer des objets (instances)
+e1 = Eleve("Alice", 15)
+e2 = Eleve("Bob", 14)
+
+e1.se_presenter()   # Je m'appelle Alice, j'ai 15 ans.
+e2.se_presenter()   # Je m'appelle Bob, j'ai 14 ans.
+print(e1.prenom)    # Alice</code></pre>
+
+        <h2>Le rôle de self et __init__</h2>
+        <ul>
+          <li><code>__init__</code> est la méthode constructeur — elle est appelée automatiquement à la création</li>
+          <li><code>self</code> représente l'objet lui-même — il permet d'accéder à ses propres attributs</li>
+        </ul>
+
+        <h2>Attributs et méthodes</h2>
+        <pre><code class="language-python">class Compteur:
+    def __init__(self):
+        self.valeur = 0         # attribut d'instance
+
+    def incrementer(self):
+        self.valeur += 1
+
+    def reinitialiser(self):
+        self.valeur = 0
+
+    def afficher(self):
+        print(f"Compteur : {self.valeur}")
+
+c = Compteur()
+c.incrementer()
+c.incrementer()
+c.incrementer()
+c.afficher()        # Compteur : 3
+c.reinitialiser()
+c.afficher()        # Compteur : 0</code></pre>
+        <div class="tip-box"><p>✅ Chaque objet a ses propres attributs indépendants. Deux Eleve n'ont pas le même prenom.</p></div>
+      `
+    },
+    interactiveCode: `class Animal:
+    def __init__(self, nom, espece):
+        self.nom = nom
+        self.espece = espece
+        self.faim = 50  # 0 = rassasié, 100 = affamé
+
+    def manger(self):
+        self.faim = max(0, self.faim - 20)
+        print(f"{self.nom} mange. Faim : {self.faim}%")
+
+    def decrire(self):
+        print(f"{self.nom} est un(e) {self.espece} (faim: {self.faim}%)")
+
+chat = Animal("Mimi", "chat")
+chien = Animal("Rex", "chien")
+
+chat.decrire()
+chien.decrire()
+chat.manger()
+chat.manger()
+chat.decrire()`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Classe Rectangle',
+        description: 'Crée une classe <code>Rectangle</code> avec les attributs <code>longueur</code> et <code>largeur</code>, et deux méthodes : <code>aire()</code> et <code>perimetre()</code> qui retournent les valeurs.',
+        starter: '# Crée la classe Rectangle\n\n# Test\nr = Rectangle(5, 3)\nprint(r.aire())       # 15\nprint(r.perimetre())  # 16\n',
+        solution: 'class Rectangle:\n    def __init__(self, longueur, largeur):\n        self.longueur = longueur\n        self.largeur = largeur\n\n    def aire(self):\n        return self.longueur * self.largeur\n\n    def perimetre(self):\n        return 2 * (self.longueur + self.largeur)\n\nr = Rectangle(5, 3)\nprint(r.aire())\nprint(r.perimetre())',
+        hint: 'def __init__(self, longueur, largeur): puis self.longueur = longueur ...'
+      },
+      {
+        id: 2,
+        title: 'Classe Compte bancaire',
+        description: 'Crée une classe <code>Compte</code> avec un <code>solde</code> initial. Ajoute les méthodes <code>deposer(montant)</code>, <code>retirer(montant)</code> (sans aller sous 0) et <code>afficher_solde()</code>.',
+        starter: '# Crée la classe Compte\n\nc = Compte(100)\nc.deposer(50)\nc.retirer(30)\nc.afficher_solde()  # Solde : 120\nc.retirer(200)       # Fonds insuffisants\n',
+        solution: 'class Compte:\n    def __init__(self, solde_initial):\n        self.solde = solde_initial\n\n    def deposer(self, montant):\n        self.solde += montant\n\n    def retirer(self, montant):\n        if montant > self.solde:\n            print("Fonds insuffisants")\n        else:\n            self.solde -= montant\n\n    def afficher_solde(self):\n        print(f"Solde : {self.solde}")\n\nc = Compte(100)\nc.deposer(50)\nc.retirer(30)\nc.afficher_solde()\nc.retirer(200)',
+        hint: 'retirer() doit vérifier if montant > self.solde avant de soustraire'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Que représente self dans une classe Python ?',
+        options: ['Le nom de la classe', 'L\'instance courante de l\'objet', 'Un paramètre obligatoire sans signification', 'La classe parente'],
+        answer: 1,
+        explanation: 'self désigne l\'instance (l\'objet) sur laquelle la méthode est appelée. Il donne accès aux attributs et méthodes de cet objet.'
+      },
+      {
+        id: 2,
+        question: 'Quel est le rôle de __init__ ?',
+        options: ['Détruire l\'objet', 'Appeler la classe parente', 'Initialiser l\'objet à sa création', 'Définir les méthodes'],
+        answer: 2,
+        explanation: '__init__ est le constructeur : il est appelé automatiquement quand on crée un objet avec MaClasse().'
+      },
+      {
+        id: 3,
+        question: 'Comment accède-t-on à l\'attribut "nom" d\'un objet "p" ?',
+        options: ['nom(p)', 'p->nom', 'p.nom', 'get(p, nom)'],
+        answer: 2,
+        explanation: 'On accède aux attributs d\'un objet avec la notation pointée : objet.attribut.'
+      }
+    ]
+  },
+  {
+    id: 16,
+    emoji: '👑',
+    title: 'Héritage',
+    level: 3,
+    description: 'Réutilise et spécialise tes classes !',
+    color: '#eab308',
+    lesson: {
+      title: 'Héritage et polymorphisme',
+      content: `
+        <h2>Qu'est-ce que l'héritage ?</h2>
+        <p>L'héritage permet à une classe <strong>enfant</strong> de récupérer tous les attributs et méthodes d'une classe <strong>parent</strong>, puis de les spécialiser ou d'en ajouter de nouveaux.</p>
+        <div class="info-box"><p>💡 Analogie : <code>Animal</code> est le parent. <code>Chien</code> et <code>Chat</code> héritent d'<code>Animal</code> — ils ont tout ce qu'un animal a, plus leurs propres spécificités.</p></div>
+
+        <h2>Syntaxe de base</h2>
+        <pre><code class="language-python">class Animal:
+    def __init__(self, nom):
+        self.nom = nom
+
+    def respirer(self):
+        print(f"{self.nom} respire.")
+
+class Chien(Animal):           # Chien hérite d'Animal
+    def aboyer(self):
+        print(f"{self.nom} dit : Woof !")
+
+rex = Chien("Rex")
+rex.respirer()   # Méthode héritée d'Animal
+rex.aboyer()     # Méthode propre à Chien</code></pre>
+
+        <h2>super() — appeler le parent</h2>
+        <pre><code class="language-python">class Animal:
+    def __init__(self, nom, espece):
+        self.nom = nom
+        self.espece = espece
+
+    def decrire(self):
+        print(f"{self.nom} est un {self.espece}")
+
+class Chien(Animal):
+    def __init__(self, nom, race):
+        super().__init__(nom, "chien")  # appelle Animal.__init__
+        self.race = race
+
+    def decrire(self):
+        super().decrire()               # appelle Animal.decrire()
+        print(f"Race : {self.race}")
+
+rex = Chien("Rex", "Berger Allemand")
+rex.decrire()</code></pre>
+
+        <h2>Polymorphisme</h2>
+        <p>Chaque sous-classe peut redéfinir une méthode du parent — c'est le <strong>polymorphisme</strong> :</p>
+        <pre><code class="language-python">class Animal:
+    def parler(self):
+        print("...")
+
+class Chien(Animal):
+    def parler(self):
+        print("Woof !")
+
+class Chat(Animal):
+    def parler(self):
+        print("Miaou !")
+
+animaux = [Chien(), Chat(), Animal()]
+for a in animaux:
+    a.parler()   # Woof ! / Miaou ! / ...</code></pre>
+        <div class="tip-box"><p>✅ isinstance(rex, Animal) retourne True — un Chien EST un Animal.</p></div>
+      `
+    },
+    interactiveCode: `class Vehicule:
+    def __init__(self, marque, vitesse_max):
+        self.marque = marque
+        self.vitesse_max = vitesse_max
+
+    def decrire(self):
+        print(f"{self.marque} — vitesse max : {self.vitesse_max} km/h")
+
+    def rouler(self):
+        print(f"{self.marque} roule !")
+
+class Voiture(Vehicule):
+    def __init__(self, marque, vitesse_max, portes):
+        super().__init__(marque, vitesse_max)
+        self.portes = portes
+
+    def decrire(self):
+        super().decrire()
+        print(f"  {self.portes} portes")
+
+class Moto(Vehicule):
+    def rouler(self):
+        print(f"{self.marque} vroooom !")
+
+v = Voiture("Peugeot", 180, 5)
+m = Moto("Yamaha", 220)
+v.decrire()
+m.decrire()
+v.rouler()
+m.rouler()`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Formes géométriques',
+        description: 'Crée une classe <code>Forme</code> avec un attribut <code>couleur</code> et une méthode <code>aire()</code> qui retourne 0. Crée deux sous-classes : <code>Cercle(rayon)</code> et <code>Carre(cote)</code> qui redéfinissent <code>aire()</code>.',
+        starter: 'import math\n# Crée les classes Forme, Cercle et Carre\n\nc = Cercle("rouge", 5)\nq = Carre("bleu", 4)\nprint(f"Cercle rouge : {c.aire():.2f}")   # 78.54\nprint(f"Carré bleu : {q.aire()}")          # 16\n',
+        solution: 'import math\n\nclass Forme:\n    def __init__(self, couleur):\n        self.couleur = couleur\n    def aire(self):\n        return 0\n\nclass Cercle(Forme):\n    def __init__(self, couleur, rayon):\n        super().__init__(couleur)\n        self.rayon = rayon\n    def aire(self):\n        return math.pi * self.rayon ** 2\n\nclass Carre(Forme):\n    def __init__(self, couleur, cote):\n        super().__init__(couleur)\n        self.cote = cote\n    def aire(self):\n        return self.cote ** 2\n\nc = Cercle("rouge", 5)\nq = Carre("bleu", 4)\nprint(f"Cercle rouge : {c.aire():.2f}")\nprint(f"Carré bleu : {q.aire()}")',
+        hint: 'class Cercle(Forme): — puis super().__init__(couleur) dans __init__, et redéfinis aire()'
+      },
+      {
+        id: 2,
+        title: 'isinstance',
+        description: 'Crée une liste avec un objet Voiture et un objet Moto (des classes ci-dessus). Boucle dessus et affiche pour chaque objet s\'il est une instance de Voiture.',
+        starter: 'class Vehicule:\n    def __init__(self, marque):\n        self.marque = marque\n\nclass Voiture(Vehicule):\n    pass\n\nclass Moto(Vehicule):\n    pass\n\nvehicules = [Voiture("Peugeot"), Moto("Yamaha"), Voiture("Renault")]\n# Affiche le type de chaque véhicule\n',
+        solution: 'class Vehicule:\n    def __init__(self, marque):\n        self.marque = marque\n\nclass Voiture(Vehicule):\n    pass\n\nclass Moto(Vehicule):\n    pass\n\nvehicules = [Voiture("Peugeot"), Moto("Yamaha"), Voiture("Renault")]\nfor v in vehicules:\n    if isinstance(v, Voiture):\n        print(f"{v.marque} → Voiture")\n    else:\n        print(f"{v.marque} → Moto")',
+        hint: 'isinstance(objet, Classe) retourne True si l\'objet est une instance de la classe'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Quelle syntaxe crée une classe Chien héritant d\'Animal ?',
+        options: ['class Chien extends Animal:', 'class Chien(Animal):', 'class Chien -> Animal:', 'class Chien inherits Animal:'],
+        answer: 1,
+        explanation: 'En Python, l\'héritage s\'écrit en mettant la classe parente entre parenthèses après le nom de la classe enfant.'
+      },
+      {
+        id: 2,
+        question: 'Que fait super().__init__() dans une sous-classe ?',
+        options: ['Crée un nouvel objet', 'Appelle le constructeur de la classe parente', 'Détruit l\'objet parent', 'Redéfinit la méthode init'],
+        answer: 1,
+        explanation: 'super() donne accès à la classe parente. super().__init__() appelle son constructeur, utile pour initialiser les attributs hérités.'
+      },
+      {
+        id: 3,
+        question: 'Qu\'est-ce que le polymorphisme ?',
+        options: ['Avoir plusieurs classes', 'Plusieurs objets avec le même nom', 'Redéfinir une méthode dans une sous-classe', 'Importer plusieurs modules'],
+        answer: 2,
+        explanation: 'Le polymorphisme permet à chaque sous-classe de redéfinir une méthode héritée avec son propre comportement.'
+      }
+    ]
+  },
+  {
+    id: 17,
+    emoji: '📁',
+    title: 'Fichiers & JSON',
+    level: 3,
+    description: 'Lis, écris et stocke des données durablement !',
+    color: '#14b8a6',
+    lesson: {
+      title: 'Lire et écrire des fichiers',
+      content: `
+        <h2>Lire un fichier</h2>
+        <p>Python peut lire et écrire des fichiers texte. On utilise toujours <strong>with open()</strong> qui ferme le fichier automatiquement.</p>
+        <pre><code class="language-python"># Lire tout le contenu
+with open("notes.txt", "r", encoding="utf-8") as f:
+    contenu = f.read()
+    print(contenu)
+
+# Lire ligne par ligne
+with open("notes.txt", "r", encoding="utf-8") as f:
+    for ligne in f:
+        print(ligne.strip())  # strip() enlève \\n</code></pre>
+        <div class="info-box"><p>💡 Les modes : "r" = lecture, "w" = écriture (écrase), "a" = ajout, "r+" = lecture + écriture.</p></div>
+
+        <h2>Écrire dans un fichier</h2>
+        <pre><code class="language-python"># Créer/écraser le fichier
+with open("output.txt", "w", encoding="utf-8") as f:
+    f.write("Bonjour !\\n")
+    f.write("Deuxième ligne\\n")
+
+# Ajouter sans effacer
+with open("output.txt", "a", encoding="utf-8") as f:
+    f.write("Ligne ajoutée\\n")</code></pre>
+
+        <h2>Le format JSON</h2>
+        <p><strong>JSON</strong> est le format universel pour stocker des données structurées (listes, dictionnaires) :</p>
+        <pre><code class="language-python">import json
+
+# Convertir Python → JSON (écriture)
+eleves = [
+    {"nom": "Alice", "note": 15},
+    {"nom": "Bob",   "note": 12}
+]
+with open("eleves.json", "w") as f:
+    json.dump(eleves, f, indent=2)
+
+# Lire JSON → Python
+with open("eleves.json", "r") as f:
+    data = json.load(f)
+print(data[0]["nom"])   # Alice</code></pre>
+
+        <h2>JSON sans fichier</h2>
+        <pre><code class="language-python">import json
+
+# Dict → chaîne JSON
+texte = json.dumps({"nom": "Alice", "age": 15})
+print(texte)   # {"nom": "Alice", "age": 15}
+
+# Chaîne JSON → dict
+d = json.loads('{"nom": "Alice", "age": 15}')
+print(d["nom"])  # Alice</code></pre>
+        <div class="tip-box"><p>✅ Dans Pyodide (le navigateur), les fichiers sont en mémoire uniquement. Utilise json.dumps/loads pour tester la sérialisation.</p></div>
+      `
+    },
+    interactiveCode: `import json
+
+# Simuler la sauvegarde d'élèves en JSON
+eleves = [
+    {"nom": "Alice", "note": 15, "classe": "3ème A"},
+    {"nom": "Bob",   "note": 12, "classe": "3ème B"},
+    {"nom": "Chloé", "note": 18, "classe": "3ème A"},
+]
+
+# Sérialiser en JSON
+json_str = json.dumps(eleves, indent=2, ensure_ascii=False)
+print("=== JSON généré ===")
+print(json_str)
+
+# Désérialiser
+data = json.loads(json_str)
+print("\\n=== Notes ===")
+for e in data:
+    print(f"  {e['nom']} : {e['note']}/20")
+
+moyenne = sum(e['note'] for e in data) / len(data)
+print(f"\\nMoyenne de classe : {moyenne:.1f}/20")`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Sérialiser un inventaire',
+        description: 'Crée un dictionnaire <code>inventaire</code> (articles → quantité), convertis-le en JSON avec <code>json.dumps</code> et affiche le résultat indenté.',
+        starter: 'import json\n\ninventaire = {"pommes": 12, "bananes": 5, "cerises": 30}\n# Convertis en JSON (indent=2) et affiche\n',
+        solution: 'import json\n\ninventaire = {"pommes": 12, "bananes": 5, "cerises": 30}\njson_str = json.dumps(inventaire, indent=2)\nprint(json_str)',
+        hint: 'json.dumps(dictionnaire, indent=2) convertit et formate le JSON'
+      },
+      {
+        id: 2,
+        title: 'Filtrer depuis JSON',
+        description: 'Parse la chaîne JSON fournie, puis affiche uniquement les élèves avec une note >= 14.',
+        starter: 'import json\n\ndata = \'[{"nom":"Alice","note":15},{"nom":"Bob","note":11},{"nom":"Chloe","note":17},{"nom":"David","note":9}]\'\n# Parse le JSON et affiche les élèves avec note >= 14\n',
+        solution: 'import json\n\ndata = \'[{"nom":"Alice","note":15},{"nom":"Bob","note":11},{"nom":"Chloe","note":17},{"nom":"David","note":9}]\'\neleves = json.loads(data)\nbons = [e for e in eleves if e["note"] >= 14]\nfor e in bons:\n    print(f"{e[\'nom\']} : {e[\'note\']}/20")',
+        hint: 'json.loads(data) pour parser, puis une compréhension de liste avec if note >= 14'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Quel mode ouvre un fichier pour ajouter du contenu sans l\'effacer ?',
+        options: ['"r"', '"w"', '"a"', '"x"'],
+        answer: 2,
+        explanation: '"a" (append) ouvre le fichier en mode ajout. "w" efface et recrée le fichier. "r" est lecture seule.'
+      },
+      {
+        id: 2,
+        question: 'Que fait json.loads(texte) ?',
+        options: ['Écrit du JSON dans un fichier', 'Lit un fichier JSON', 'Convertit une chaîne JSON en objet Python', 'Valide le JSON'],
+        answer: 2,
+        explanation: 'json.loads() (load string) convertit une chaîne JSON en liste/dictionnaire Python. json.load() lit depuis un fichier.'
+      },
+      {
+        id: 3,
+        question: 'Pourquoi utiliser "with open(...) as f:" ?',
+        options: ['C\'est obligatoire en Python', 'Le fichier est fermé automatiquement même en cas d\'erreur', 'C\'est plus rapide', 'Pour lire plusieurs fichiers à la fois'],
+        answer: 1,
+        explanation: '"with" garantit que le fichier est toujours fermé correctement, même si une exception se produit.'
+      }
+    ]
+  },
+  {
+    id: 18,
+    emoji: '🌀',
+    title: 'Récursion',
+    level: 3,
+    description: 'Une fonction qui s\'appelle elle-même !',
+    color: '#a855f7',
+    lesson: {
+      title: 'Fonctions récursives',
+      content: `
+        <h2>Qu'est-ce que la récursion ?</h2>
+        <p>Une fonction <strong>récursive</strong> est une fonction qui s'appelle elle-même. C'est une technique puissante pour résoudre des problèmes qui se répètent naturellement.</p>
+        <div class="info-box"><p>💡 Imagine un miroir face à un autre miroir : tu vois des reflets qui s'emboîtent à l'infini. La récursion, c'est pareil — mais avec un cas d'arrêt !</p></div>
+
+        <h2>La structure obligatoire</h2>
+        <p>Toute fonction récursive doit avoir :</p>
+        <ul>
+          <li>Un <strong>cas de base</strong> (arrêt) — sinon boucle infinie !</li>
+          <li>Un <strong>appel récursif</strong> qui se rapproche du cas de base</li>
+        </ul>
+        <pre><code class="language-python">def countdown(n):
+    if n <= 0:          # Cas de base
+        print("Décollage !")
+    else:
+        print(n)
+        countdown(n - 1)  # Appel récursif
+
+countdown(5)  # 5, 4, 3, 2, 1, Décollage !</code></pre>
+
+        <h2>Factorielle</h2>
+        <pre><code class="language-python">def factorielle(n):
+    if n == 0 or n == 1:   # Cas de base
+        return 1
+    return n * factorielle(n - 1)  # n! = n × (n-1)!
+
+print(factorielle(5))  # 120  (5×4×3×2×1)
+print(factorielle(0))  # 1</code></pre>
+
+        <h2>Suite de Fibonacci</h2>
+        <pre><code class="language-python">def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+for i in range(8):
+    print(fibonacci(i), end=" ")
+# 0 1 1 2 3 5 8 13</code></pre>
+        <div class="tip-box"><p>✅ La récursion est élégante mais peut être lente sur de grandes valeurs. Pour fibonacci(35)+, préfère une boucle.</p></div>
+
+        <h2>Parcourir une structure imbriquée</h2>
+        <pre><code class="language-python">def somme_liste(lst):
+    if not lst:           # Liste vide
+        return 0
+    return lst[0] + somme_liste(lst[1:])
+
+print(somme_liste([1, 2, 3, 4, 5]))  # 15</code></pre>
+      `
+    },
+    interactiveCode: `def factorielle(n):
+    if n <= 1:
+        return 1
+    return n * factorielle(n - 1)
+
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n - 1) + fibonacci(n - 2)
+
+print("Factorielles :")
+for i in range(8):
+    print(f"  {i}! = {factorielle(i)}")
+
+print("\\nSuite de Fibonacci :")
+fib = [fibonacci(i) for i in range(10)]
+print("  " + " ".join(str(n) for n in fib))`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Puissance récursive',
+        description: 'Écris une fonction récursive <code>puissance(base, exp)</code> qui calcule base^exp sans utiliser **. (base^0 = 1, base^n = base × base^(n-1))',
+        starter: '# Écris la fonction récursive puissance(base, exp)\n\nprint(puissance(2, 0))   # 1\nprint(puissance(2, 8))   # 256\nprint(puissance(3, 4))   # 81\n',
+        solution: 'def puissance(base, exp):\n    if exp == 0:\n        return 1\n    return base * puissance(base, exp - 1)\n\nprint(puissance(2, 0))\nprint(puissance(2, 8))\nprint(puissance(3, 4))',
+        hint: 'Cas de base : exp == 0 → retourne 1. Sinon : base × puissance(base, exp-1)'
+      },
+      {
+        id: 2,
+        title: 'Inverser une chaîne',
+        description: 'Écris une fonction récursive <code>inverser(s)</code> qui retourne la chaîne inversée. (inverser("") = "", sinon dernier caractère + inverser du reste)',
+        starter: '# Écris inverser(s) de façon récursive\n\nprint(inverser("Python"))  # nohtyP\nprint(inverser("abc"))    # cba\n',
+        solution: 'def inverser(s):\n    if s == "":\n        return ""\n    return inverser(s[1:]) + s[0]\n\nprint(inverser("Python"))\nprint(inverser("abc"))',
+        hint: 'inverser(s) = inverser(s[1:]) + s[0] — le premier caractère va à la fin'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Qu\'est-ce que le cas de base dans une récursion ?',
+        options: ['L\'appel récursif', 'La condition d\'arrêt qui évite la boucle infinie', 'Le premier appel de la fonction', 'Les paramètres de la fonction'],
+        answer: 1,
+        explanation: 'Le cas de base est la condition qui arrête la récursion. Sans lui, la fonction s\'appellerait à l\'infini jusqu\'à un RecursionError.'
+      },
+      {
+        id: 2,
+        question: 'Que calcule factorielle(4) si défini récursivement ?',
+        options: ['4', '8', '16', '24'],
+        answer: 3,
+        explanation: '4! = 4 × 3 × 2 × 1 = 24. La récursion déroule : 4 × factorielle(3) = 4 × 6 = 24.'
+      },
+      {
+        id: 3,
+        question: 'Que se passe-t-il sans cas de base ?',
+        options: ['La fonction retourne 0', 'Python affiche une erreur de syntaxe', 'RecursionError : profondeur max dépassée', 'La fonction ne s\'exécute pas'],
+        answer: 2,
+        explanation: 'Python limite la profondeur de récursion (env. 1000). Sans cas de base, on atteint cette limite et Python lève un RecursionError.'
+      }
+    ]
+  },
+  {
+    id: 19,
+    emoji: '🔍',
+    title: 'Algorithmes',
+    level: 3,
+    description: 'Recherche et tri : les algos fondamentaux !',
+    color: '#06b6d4',
+    lesson: {
+      title: 'Algorithmes de recherche et de tri',
+      content: `
+        <h2>Recherche linéaire</h2>
+        <p>Parcourir une liste élément par élément jusqu'à trouver la cible :</p>
+        <pre><code class="language-python">def recherche_lineaire(liste, cible):
+    for i, val in enumerate(liste):
+        if val == cible:
+            return i      # Retourne l'index
+    return -1             # Pas trouvé
+
+nombres = [5, 3, 8, 1, 9, 2]
+print(recherche_lineaire(nombres, 8))  # 2
+print(recherche_lineaire(nombres, 7))  # -1</code></pre>
+
+        <h2>Recherche dichotomique (liste triée)</h2>
+        <p>Sur une liste <strong>triée</strong>, on coupe en deux à chaque étape — beaucoup plus rapide !</p>
+        <pre><code class="language-python">def recherche_dicho(liste, cible):
+    gauche, droite = 0, len(liste) - 1
+    while gauche <= droite:
+        milieu = (gauche + droite) // 2
+        if liste[milieu] == cible:
+            return milieu
+        elif liste[milieu] < cible:
+            gauche = milieu + 1
+        else:
+            droite = milieu - 1
+    return -1
+
+triee = [1, 3, 5, 7, 9, 11, 13]
+print(recherche_dicho(triee, 7))   # 3
+print(recherche_dicho(triee, 6))   # -1</code></pre>
+        <div class="info-box"><p>💡 Recherche linéaire : jusqu'à N étapes. Dichotomique : jusqu'à log₂(N) étapes. Sur 1 million d'éléments → max 20 étapes !</p></div>
+
+        <h2>Tri à bulles</h2>
+        <pre><code class="language-python">def tri_bulles(liste):
+    n = len(liste)
+    lst = liste.copy()
+    for i in range(n):
+        for j in range(0, n - i - 1):
+            if lst[j] > lst[j + 1]:
+                lst[j], lst[j + 1] = lst[j + 1], lst[j]
+    return lst
+
+nombres = [64, 34, 25, 12, 22, 11, 90]
+print(tri_bulles(nombres))  # [11, 12, 22, 25, 34, 64, 90]</code></pre>
+
+        <h2>sorted() et sort()</h2>
+        <pre><code class="language-python">eleves = [("Alice", 15), ("Bob", 18), ("Chloé", 12)]
+
+# Trier par note (deuxième élément)
+par_note = sorted(eleves, key=lambda e: e[1])
+print(par_note)  # [('Chloé', 12), ('Alice', 15), ('Bob', 18)]
+
+# Tri décroissant
+desc = sorted(eleves, key=lambda e: e[1], reverse=True)
+print(desc)</code></pre>
+        <div class="tip-box"><p>✅ En pratique, utilise toujours sorted() ou .sort() de Python — ils utilisent Timsort, plus efficace que le tri à bulles.</p></div>
+      `
+    },
+    interactiveCode: `def recherche_dicho(liste, cible):
+    gauche, droite = 0, len(liste) - 1
+    etapes = 0
+    while gauche <= droite:
+        etapes += 1
+        milieu = (gauche + droite) // 2
+        if liste[milieu] == cible:
+            return milieu, etapes
+        elif liste[milieu] < cible:
+            gauche = milieu + 1
+        else:
+            droite = milieu - 1
+    return -1, etapes
+
+liste = list(range(0, 1000, 2))  # 500 nombres pairs
+idx, n = recherche_dicho(liste, 742)
+print(f"742 trouvé à l'index {idx} en {n} étapes (sur {len(liste)} éléments)")
+
+# Tri avec key
+mots = ["banane", "kiwi", "framboise", "figue", "mangue"]
+print("\\nMots triés par longueur :")
+for m in sorted(mots, key=len):
+    print(f"  {m} ({len(m)} lettres)")`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Trouver le minimum',
+        description: 'Écris une fonction <code>trouver_min(liste)</code> qui retourne le plus petit élément sans utiliser <code>min()</code>.',
+        starter: '# Écris trouver_min sans utiliser min()\n\nnombres = [42, 7, 19, 3, 55, 11]\nprint(trouver_min(nombres))  # 3\n',
+        solution: 'def trouver_min(liste):\n    mini = liste[0]\n    for val in liste:\n        if val < mini:\n            mini = val\n    return mini\n\nnombres = [42, 7, 19, 3, 55, 11]\nprint(trouver_min(nombres))',
+        hint: 'Commence avec mini = liste[0], puis boucle et mets à jour si tu trouves plus petit'
+      },
+      {
+        id: 2,
+        title: 'Classement d\'élèves',
+        description: 'Trie la liste d\'élèves par note décroissante et affiche le classement avec le rang.',
+        starter: 'eleves = [\n    {"nom": "Alice", "note": 15},\n    {"nom": "Bob", "note": 18},\n    {"nom": "Chloé", "note": 12},\n    {"nom": "David", "note": 16},\n]\n# Trie par note décroissante et affiche le classement\n',
+        solution: 'eleves = [\n    {"nom": "Alice", "note": 15},\n    {"nom": "Bob", "note": 18},\n    {"nom": "Chloé", "note": 12},\n    {"nom": "David", "note": 16},\n]\nclasse = sorted(eleves, key=lambda e: e["note"], reverse=True)\nfor rang, e in enumerate(classe, 1):\n    print(f"  {rang}. {e[\'nom\']} — {e[\'note\']}/20")',
+        hint: 'sorted(..., key=lambda e: e["note"], reverse=True) — puis enumerate(classe, 1) pour le rang'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Quelle recherche nécessite une liste triée ?',
+        options: ['Recherche linéaire', 'Recherche dichotomique', 'Les deux', 'Aucune des deux'],
+        answer: 1,
+        explanation: 'La recherche dichotomique (binaire) suppose que la liste est triée — elle compare avec l\'élément du milieu pour éliminer la moitié restante.'
+      },
+      {
+        id: 2,
+        question: 'Combien d\'étapes max pour chercher dans 1024 éléments avec dichotomie ?',
+        options: ['1024', '512', '10', '32'],
+        answer: 2,
+        explanation: 'log₂(1024) = 10. La dichotomie divise par 2 à chaque étape : 1024 → 512 → 256 → ... → 1. Maximum 10 étapes.'
+      },
+      {
+        id: 3,
+        question: 'Que fait sorted(liste, reverse=True) ?',
+        options: ['Inverse l\'ordre actuel', 'Trie par ordre décroissant', 'Mélange aléatoirement', 'Trie en ordre croissant'],
+        answer: 1,
+        explanation: 'reverse=True trie par ordre décroissant (du plus grand au plus petit).'
+      }
+    ]
+  },
+  {
+    id: 20,
+    emoji: '🗃️',
+    title: 'Compréhensions avancées',
+    level: 3,
+    description: 'Dict, set et compréhensions imbriquées !',
+    color: '#ec4899',
+    lesson: {
+      title: 'Compréhensions de dict, set, et imbriquées',
+      content: `
+        <h2>Compréhension de dictionnaire</h2>
+        <p>Comme les compréhensions de listes, mais pour créer des dictionnaires :</p>
+        <pre><code class="language-python"># {clé: valeur for ... in ...}
+carres = {n: n**2 for n in range(1, 6)}
+print(carres)  # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+# Inverser un dictionnaire (clés ↔ valeurs)
+original = {"a": 1, "b": 2, "c": 3}
+inverse = {v: k for k, v in original.items()}
+print(inverse)  # {1: 'a', 2: 'b', 3: 'c'}
+
+# Filtrer un dictionnaire
+notes = {"Alice": 15, "Bob": 9, "Chloé": 17, "David": 11}
+admis = {nom: n for nom, n in notes.items() if n >= 10}
+print(admis)  # {'Alice': 15, 'Chloé': 17, 'David': 11}</code></pre>
+
+        <h2>Compréhension de set</h2>
+        <pre><code class="language-python"># {expression for ... in ...}
+impairs = {n for n in range(20) if n % 2 != 0}
+print(impairs)  # {1, 3, 5, 7, 9, 11, 13, 15, 17, 19}
+
+# Lettres uniques d'un texte
+lettres = {c.lower() for c in "Python est Super" if c.isalpha()}
+print(sorted(lettres))</code></pre>
+
+        <h2>Compréhensions imbriquées</h2>
+        <pre><code class="language-python"># Table de multiplication (matrice)
+table = [[i * j for j in range(1, 4)] for i in range(1, 4)]
+for ligne in table:
+    print(ligne)
+# [1, 2, 3]
+# [2, 4, 6]
+# [3, 6, 9]
+
+# Aplatir une liste de listes
+matrice = [[1, 2], [3, 4], [5, 6]]
+plat = [x for ligne in matrice for x in ligne]
+print(plat)  # [1, 2, 3, 4, 5, 6]</code></pre>
+        <div class="tip-box"><p>✅ Les compréhensions imbriquées se lisent de gauche à droite, comme des boucles for imbriquées.</p></div>
+
+        <h2>Générateur</h2>
+        <pre><code class="language-python"># Utiliser () au lieu de [] crée un générateur (paresseux)
+gen = (n**2 for n in range(1000000))  # Pas de mémoire utilisée !
+print(next(gen))  # 0
+print(next(gen))  # 1</code></pre>
+      `
+    },
+    interactiveCode: `# Compréhension de dictionnaire
+notes = {"Alice": 15, "Bob": 9, "Chloé": 17, "David": 11, "Emma": 14}
+
+# Élèves admis (note >= 10)
+admis = {nom: n for nom, n in notes.items() if n >= 10}
+print("Admis :", admis)
+
+# Mentions
+def mention(n):
+    if n >= 16: return "TB"
+    if n >= 14: return "B"
+    if n >= 12: return "AB"
+    return "P"
+
+mentions = {nom: mention(n) for nom, n in notes.items()}
+print("Mentions :", mentions)
+
+# Aplatir une matrice
+matrice = [[1,2,3],[4,5,6],[7,8,9]]
+plat = [x for ligne in matrice for x in ligne]
+print("Aplati :", plat)`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Fréquence des lettres',
+        description: 'Crée un dictionnaire qui associe chaque lettre (minuscule, sans espaces) à son nombre d\'occurrences dans la phrase donnée.',
+        starter: 'phrase = "python est un langage puissant"\n# Crée un dict {lettre: nb_occurrences}\n# Affiche les 5 lettres les plus fréquentes\n',
+        solution: 'phrase = "python est un langage puissant"\nfreq = {c: phrase.count(c) for c in set(phrase) if c != " "}\ntop5 = sorted(freq.items(), key=lambda x: x[1], reverse=True)[:5]\nfor lettre, nb in top5:\n    print(f"  \'{lettre}\' : {nb} fois")',
+        hint: 'Crée un set des caractères (sans espace), puis {c: phrase.count(c) for c in ...}'
+      },
+      {
+        id: 2,
+        title: 'Matrice identité',
+        description: 'Génère une matrice identité N×N (1 sur la diagonale, 0 ailleurs) avec une compréhension imbriquée. N=4.',
+        starter: 'N = 4\n# Génère la matrice identité avec une compréhension\nmatrice = []\n# Affiche-la ligne par ligne\n',
+        solution: 'N = 4\nmatrice = [[1 if i == j else 0 for j in range(N)] for i in range(N)]\nfor ligne in matrice:\n    print(ligne)',
+        hint: '[[1 if i==j else 0 for j in range(N)] for i in range(N)]'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Quelle syntaxe crée une compréhension de dictionnaire ?',
+        options: ['[k: v for k, v in ...]', '{k: v for k, v in ...}', '(k: v for k, v in ...)', 'dict(k: v for k, v in ...)'],
+        answer: 1,
+        explanation: 'Les accolades {} avec deux-points k: v définissent une compréhension de dictionnaire.'
+      },
+      {
+        id: 2,
+        question: 'Que retourne {x for x in [1,1,2,2,3]} ?',
+        options: ['[1, 1, 2, 2, 3]', '{1, 2, 3}', '(1, 2, 3)', '{1: 1, 2: 2, 3: 1}'],
+        answer: 1,
+        explanation: 'La compréhension de set élimine les doublons et retourne {1, 2, 3}.'
+      },
+      {
+        id: 3,
+        question: 'Dans [x for ligne in matrice for x in ligne], que fait le code ?',
+        options: ['Crée une matrice', 'Transpose la matrice', 'Aplatit la matrice en une liste', 'Filtre les éléments'],
+        answer: 2,
+        explanation: 'Cette compréhension imbriquée parcourt chaque ligne puis chaque élément, créant une liste plate à partir d\'une liste de listes.'
+      }
+    ]
+  },
+  {
+    id: 21,
+    emoji: '🔗',
+    title: 'Fonctions intégrées',
+    level: 3,
+    description: 'map, filter, zip, enumerate et les outils pro !',
+    color: '#10b981',
+    lesson: {
+      title: 'Outils fonctionnels de Python',
+      content: `
+        <h2>enumerate()</h2>
+        <p>Itérer avec l'index ET la valeur :</p>
+        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
+
+for i, fruit in enumerate(fruits):
+    print(f"{i+1}. {fruit}")
+# 1. pomme
+# 2. banane
+# 3. cerise
+
+# Démarrer à un autre index
+for i, fruit in enumerate(fruits, start=1):
+    print(f"{i}. {fruit}")</code></pre>
+
+        <h2>zip()</h2>
+        <p>Combiner plusieurs listes en parallèle :</p>
+        <pre><code class="language-python">prenoms = ["Alice", "Bob", "Chloé"]
+notes   = [15, 12, 18]
+villes  = ["Paris", "Lyon", "Nantes"]
+
+for prenom, note, ville in zip(prenoms, notes, villes):
+    print(f"{prenom} ({ville}) : {note}/20")
+
+# Créer un dictionnaire depuis deux listes
+d = dict(zip(prenoms, notes))
+print(d)  # {'Alice': 15, 'Bob': 12, 'Chloé': 18}</code></pre>
+
+        <h2>map()</h2>
+        <p>Appliquer une fonction à chaque élément :</p>
+        <pre><code class="language-python">nombres = [1, 2, 3, 4, 5]
+
+carres = list(map(lambda x: x**2, nombres))
+print(carres)  # [1, 4, 9, 16, 25]
+
+# Équivalent en compréhension (préféré en Python)
+carres = [x**2 for x in nombres]</code></pre>
+
+        <h2>filter()</h2>
+        <pre><code class="language-python">nombres = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+pairs = list(filter(lambda x: x % 2 == 0, nombres))
+print(pairs)  # [2, 4, 6, 8, 10]</code></pre>
+
+        <h2>any() et all()</h2>
+        <pre><code class="language-python">notes = [12, 15, 9, 17, 11]
+
+print(any(n >= 18 for n in notes))   # False (aucun >= 18)
+print(all(n >= 10 for n in notes))   # False (9 < 10)
+print(all(n > 8 for n in notes))     # True (tous > 8)</code></pre>
+        <div class="tip-box"><p>✅ any() = au moins un True. all() = tous True. Très utiles pour valider des conditions sur des listes.</p></div>
+      `
+    },
+    interactiveCode: `prenoms = ["Alice", "Bob", "Chloé", "David"]
+notes = [15, 12, 18, 9]
+villes = ["Paris", "Lyon", "Nantes", "Bordeaux"]
+
+# zip + enumerate
+print("=== Classement ===")
+resultats = list(zip(prenoms, notes, villes))
+classes = sorted(resultats, key=lambda x: x[1], reverse=True)
+
+for rang, (prenom, note, ville) in enumerate(classes, 1):
+    emoji = "🥇" if rang == 1 else "🥈" if rang == 2 else "🥉" if rang == 3 else "  "
+    print(f"{emoji} {rang}. {prenom} ({ville}) : {note}/20")
+
+# any / all
+print(f"\\nQuelqu'un >= 16 ? {any(n >= 16 for n in notes)}")
+print(f"Tout le monde >= 10 ? {all(n >= 10 for n in notes)}")
+
+# Dictionnaire depuis zip
+dico = dict(zip(prenoms, notes))
+print(f"\\nDict : {dico}")`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Numéroter une liste',
+        description: 'À partir de la liste de tâches, affiche chaque tâche numérotée à partir de 1 avec <code>enumerate</code>.',
+        starter: 'taches = ["Faire les devoirs", "Apprendre Python", "Jouer au foot", "Lire un livre"]\n# Affiche :\n# 1. Faire les devoirs\n# 2. Apprendre Python\n# ...\n',
+        solution: 'taches = ["Faire les devoirs", "Apprendre Python", "Jouer au foot", "Lire un livre"]\nfor i, tache in enumerate(taches, 1):\n    print(f"{i}. {tache}")',
+        hint: 'enumerate(taches, 1) démarre la numérotation à 1'
+      },
+      {
+        id: 2,
+        title: 'Bulletin de notes',
+        description: 'Avec zip, combine matieres et notes pour afficher le bulletin. Puis vérifie avec any/all si l\'élève est admis partout (>= 10).',
+        starter: 'matieres = ["Maths", "Français", "Histoire", "Sciences", "Python"]\nnotes = [14, 11, 8, 15, 18]\n# Affiche le bulletin et vérifie si admis partout\n',
+        solution: 'matieres = ["Maths", "Français", "Histoire", "Sciences", "Python"]\nnotes = [14, 11, 8, 15, 18]\nprint("=== Bulletin ===")\nfor matiere, note in zip(matieres, notes):\n    statut = "✓" if note >= 10 else "✗"\n    print(f"  {statut} {matiere} : {note}/20")\nprint(f"\\nAdmis partout : {all(n >= 10 for n in notes)}")\nprint(f"Au moins une matière >= 15 : {any(n >= 15 for n in notes)}")',
+        hint: 'for matiere, note in zip(matieres, notes): — puis all/any sur la liste notes'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Que retourne enumerate(["a","b","c"], 1) ?',
+        options: ['["a","b","c"]', '[(1,"a"),(2,"b"),(3,"c")]', '[(0,"a"),(1,"b"),(2,"c")]', '[1,2,3]'],
+        answer: 1,
+        explanation: 'enumerate retourne des paires (index, valeur). Avec start=1 : (1,"a"), (2,"b"), (3,"c").'
+      },
+      {
+        id: 2,
+        question: 'Que fait zip([1,2,3], ["a","b","c"]) ?',
+        options: ['Concatène les deux listes', 'Crée des paires [(1,"a"),(2,"b"),(3,"c")]', 'Crée un dictionnaire', 'Retourne le plus long'],
+        answer: 1,
+        explanation: 'zip combine plusieurs itérables en paires. Utile pour parcourir deux listes en parallèle.'
+      },
+      {
+        id: 3,
+        question: 'Que retourne all([True, True, False]) ?',
+        options: ['True', 'False', '[True, True, False]', 'None'],
+        answer: 1,
+        explanation: 'all() retourne True uniquement si TOUS les éléments sont vrais. Ici False est présent → retourne False.'
+      }
+    ]
   }
 ];
