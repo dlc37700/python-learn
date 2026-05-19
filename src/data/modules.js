@@ -9,27 +9,56 @@ export const modules = [
       title: 'Bienvenue dans Python !',
       content: `
         <h2>Qu'est-ce que Python ?</h2>
-        <p>Python est un langage de programmation — c'est comme une <strong>recette de cuisine pour ton ordinateur</strong> ! Tu écris des instructions, et l'ordinateur les exécute exactement comme tu les as écrites.</p>
+        <p>Imagine que tu veuilles expliquer à un robot comment préparer un sandwich. Tu ne peux pas juste dire "fais-le" — il faut tout détailler : "prends le pain", "ouvre le pain", "pose le jambon", etc. Un <strong>langage de programmation</strong>, c'est exactement ça : une façon précise de donner des instructions à une machine.</p>
+        <p>Python est l'un de ces langages. Il a été créé en 1991 et s'est imposé comme le langage préféré des débutants ET des professionnels. Pourquoi ? Parce qu'il ressemble presque à de l'anglais lisible, et qu'il est incroyablement puissant.</p>
         <div class="info-box">
-          <p>🐍 Python est utilisé par des millions de développeurs dans le monde entier : pour créer des jeux, des sites web, de l'intelligence artificielle et bien plus encore !</p>
+          <p>🐍 Python est utilisé par Google, Netflix, Instagram, la NASA, les chercheurs en IA… et maintenant par toi ! Le nom vient de la troupe humoristique "Monty Python", pas du serpent.</p>
         </div>
 
-        <h2>Ta première ligne de code</h2>
-        <p>La commande la plus importante pour commencer est <code>print()</code>. Elle permet d'<strong>afficher du texte</strong> à l'écran.</p>
+        <h2>Comment ça marche ?</h2>
+        <p>Quand tu écris du code Python, tu écris des <strong>instructions</strong> dans un fichier texte. Python les lit ligne par ligne, de haut en bas, et les exécute dans l'ordre. C'est comme une liste de courses que ton ordinateur suit à la lettre.</p>
+        <p>Le résultat s'affiche dans la <strong>console</strong> — c'est la zone noire où tu vois les sorties de ton programme. C'est ta fenêtre de dialogue avec Python.</p>
+
+        <h2>La fonction print() — ton premier outil</h2>
+        <p>La toute première chose à apprendre, c'est comment faire parler Python. La fonction <code>print()</code> affiche du texte dans la console. C'est la commande la plus utilisée quand on débute.</p>
         <pre><code class="language-python">print("Bonjour le monde !")
 print("Je m'appelle Python")</code></pre>
-
+        <p>Décortiquons la première ligne :</p>
+        <ul>
+          <li><strong>print</strong> — le nom de la fonction (vient de l'anglais "imprimer/afficher")</li>
+          <li><strong>( )</strong> — les parenthèses indiquent qu'on appelle une fonction</li>
+          <li><strong>"Bonjour le monde !"</strong> — le texte à afficher, obligatoirement entre guillemets</li>
+        </ul>
         <div class="tip-box">
-          <p>💡 Le texte doit être entre guillemets : simples <code>'bonjour'</code> ou doubles <code>"bonjour"</code>, les deux fonctionnent !</p>
+          <p>💡 Les guillemets sont obligatoires autour du texte. Sans eux, Python croit que tu parles d'une variable et affiche une erreur. Tu peux utiliser des guillemets simples <code>'bonjour'</code> ou doubles <code>"bonjour"</code> — les deux fonctionnent.</p>
         </div>
 
-        <h2>Les commentaires</h2>
-        <p>Un commentaire commence par <code>#</code>. Python l'<strong>ignore complètement</strong> — c'est pour toi, pour laisser des notes dans ton code.</p>
-        <pre><code class="language-python"># Ceci est un commentaire, Python l'ignore
-print("Bonjour !")  # Commentaire en fin de ligne</code></pre>
+        <h2>print() peut afficher beaucoup de choses</h2>
+        <p>print() ne se limite pas au texte. Tu peux aussi afficher des nombres, des calculs, ou plusieurs choses à la fois :</p>
+        <pre><code class="language-python">print(42)               # Un nombre entier
+print(3.14)             # Un nombre décimal
+print(10 + 5)           # Un calcul → affiche 15
+print("J'ai", 15, "ans")  # Plusieurs éléments séparés par des virgules</code></pre>
+        <p>Quand on sépare plusieurs éléments par des virgules dans print(), Python les affiche avec un espace entre eux automatiquement.</p>
 
-        <h2>Essaie par toi-même !</h2>
-        <p>Tu peux modifier le code ci-dessous et cliquer sur <strong>Exécuter</strong> pour voir le résultat :</p>
+        <h2>Les commentaires — des notes pour toi</h2>
+        <p>Un commentaire, c'est du texte dans ton code que Python <strong>ignore complètement</strong>. Il commence par le symbole <code>#</code>. À quoi ça sert ? À laisser des explications pour toi-même (ou quelqu'un qui lira ton code plus tard).</p>
+        <pre><code class="language-python"># Ceci est un commentaire — Python l'ignore totalement
+print("Bonjour !")  # Ce commentaire est en fin de ligne
+
+# Tu peux commenter une ligne de code pour la désactiver :
+# print("Cette ligne ne s'exécutera pas")</code></pre>
+        <p>Prends l'habitude de commenter ton code ! Dans 6 mois, quand tu reliras un vieux programme, tu seras content d'avoir laissé des notes.</p>
+
+        <h2>Erreurs courantes à éviter</h2>
+        <ul>
+          <li>Oublier les guillemets autour du texte : <code>print(bonjour)</code> → erreur !</li>
+          <li>Mélanger guillemets ouvrants et fermants : <code>print("bonjour')</code> → erreur !</li>
+          <li>Les majuscules comptent : <code>Print()</code> ne fonctionne pas, seulement <code>print()</code></li>
+        </ul>
+        <div class="tip-box">
+          <p>✅ Ne t'inquiète pas des erreurs — elles font partie de l'apprentissage ! Lis le message d'erreur, il te dit souvent exactement ce qui ne va pas.</p>
+        </div>
       `
     },
     interactiveCode: `print("Bonjour le monde !")
@@ -86,43 +115,76 @@ print("Je commence à apprendre Python")`,
     lesson: {
       title: 'Les variables',
       content: `
+        <h2>Pourquoi a-t-on besoin de variables ?</h2>
+        <p>Imagine que tu calcules la moyenne de tes notes plusieurs fois dans ton programme. Sans variable, tu devrais réécrire "14 + 17 + 12 + 15" à chaque fois. Avec une variable, tu stockes le résultat une fois, et tu l'utilises partout. Les variables sont les <strong>tiroirs de mémoire</strong> de ton programme.</p>
+
         <h2>C'est quoi une variable ?</h2>
-        <p>Une variable, c'est comme une <strong>boîte avec une étiquette</strong>. Tu mets une valeur dedans, tu lui donnes un nom, et tu peux la réutiliser plus tard !</p>
-        <div class="info-box">
-          <p>📦 Imagine : tu as une boîte étiquetée "age". Tu mets le nombre 15 dedans. Plus tard, tu peux demander "quel est mon age ?" et Python te répond 15 !</p>
+        <p>Une variable, c'est un <strong>nom</strong> qu'on donne à un emplacement en mémoire pour y stocker une valeur. Pense à une boîte avec une étiquette collée dessus :</p>
+        <ul>
+          <li>L'<strong>étiquette</strong> = le nom de la variable (ex: <code>age</code>)</li>
+          <li>Le <strong>contenu</strong> = la valeur stockée (ex: <code>15</code>)</li>
+          <li>Le <strong>signe =</strong> = l'opération "met cette valeur dans cette boîte"</li>
+        </ul>
+        <pre><code class="language-python">age = 15          # La boîte "age" contient 15
+prenom = "Alice"  # La boîte "prenom" contient "Alice"
+print(age)        # Affiche 15
+print(prenom)     # Affiche Alice</code></pre>
+        <p>À tout moment, tu peux <strong>changer</strong> la valeur d'une variable — la boîte garde le même nom, mais son contenu change :</p>
+        <pre><code class="language-python">score = 0
+print(score)   # 0
+score = 10
+print(score)   # 10
+score = score + 5   # La nouvelle valeur = l'ancienne + 5
+print(score)   # 15</code></pre>
+
+        <h2>Les règles de nommage</h2>
+        <p>Un nom de variable doit respecter quelques règles :</p>
+        <ul>
+          <li>Commence par une lettre ou un underscore <code>_</code> (pas un chiffre)</li>
+          <li>Ne contient que des lettres, chiffres ou underscores (pas d'espaces !)</li>
+          <li>Est sensible à la casse : <code>Age</code> et <code>age</code> sont deux variables différentes</li>
+          <li>Par convention, on écrit en minuscules avec des underscores : <code>mon_prenom</code></li>
+        </ul>
+        <div class="tip-box">
+          <p>✅ Choisis des noms explicites ! <code>age</code> est bien, <code>a</code> ne dit rien. <code>nombre_de_points</code> est excellent.</p>
         </div>
 
-        <h2>Déclarer une variable</h2>
-        <p>C'est très simple : <code>nom = valeur</code></p>
+        <h2>Les 4 types de base</h2>
+        <p>En Python, chaque valeur a un <strong>type</strong> qui indique sa nature. Les 4 types fondamentaux :</p>
+
+        <h3>🔢 int — les nombres entiers</h3>
+        <p>Pour compter des choses : âge, score, année, quantité... Pas de virgule, peut être négatif.</p>
         <pre><code class="language-python">age = 15
-prenom = "Alice"
-print(age)      # Affiche 15
-print(prenom)   # Affiche Alice</code></pre>
+score = -5
+annee = 2024</code></pre>
 
-        <h2>Les types de variables</h2>
-        <p>Il existe plusieurs types de données en Python :</p>
-
-        <h3>🔢 int — les entiers</h3>
-        <pre><code class="language-python">age = 15
-annee = 2024
-score = -5</code></pre>
-
-        <h3>📝 str — les chaînes de caractères</h3>
+        <h3>📝 str — le texte (string = chaîne de caractères)</h3>
+        <p>Pour stocker du texte : noms, messages, adresses... Toujours entre guillemets.</p>
         <pre><code class="language-python">prenom = "Alice"
-message = 'Bonjour !'
-ville = "Paris"</code></pre>
+message = 'Bonjour !'     # guillemets simples ou doubles, au choix
+vide = ""                  # chaîne vide</code></pre>
 
-        <h3>🔣 float — les décimaux</h3>
+        <h3>🔣 float — les nombres décimaux</h3>
+        <p>Pour les mesures précises : taille, poids, prix, coordonnées GPS... Le séparateur décimal est un <strong>point</strong> (pas une virgule !).</p>
         <pre><code class="language-python">taille = 1.75
-pi = 3.14
-temperature = -2.5</code></pre>
+prix = 9.99
+temperature = -3.5</code></pre>
 
-        <h3>✅ bool — les booléens</h3>
+        <h3>✅ bool — les booléens (vrai/faux)</h3>
+        <p>Pour représenter un état qui ne peut être que OUI ou NON. Très utilisé dans les conditions. Attention : <code>True</code> et <code>False</code> prennent une majuscule.</p>
         <pre><code class="language-python">etudiant = True
-majeur = False</code></pre>
+majeur = False
+connecte = True</code></pre>
 
-        <div class="tip-box">
-          <p>💡 Tu peux connaître le type d'une variable avec <code>type()</code> : <code>print(type(age))</code> affiche <code>&lt;class 'int'&gt;</code></p>
+        <h2>Découvrir le type d'une variable</h2>
+        <p>Si tu ne sais pas quel type contient une variable, utilise <code>type()</code> :</p>
+        <pre><code class="language-python">age = 15
+print(type(age))      # &lt;class 'int'&gt;
+print(type("Alice"))  # &lt;class 'str'&gt;
+print(type(3.14))     # &lt;class 'float'&gt;
+print(type(True))     # &lt;class 'bool'&gt;</code></pre>
+        <div class="info-box">
+          <p>💡 Le type d'une variable est important ! On ne peut pas additionner un <code>int</code> et un <code>str</code> directement — Python ne sait pas comment faire. Tu verras comment convertir les types dans le prochain module.</p>
         </div>
       `
     },
@@ -187,43 +249,78 @@ print("Étudiant:", etudiant)`,
     lesson: {
       title: 'Les opérations',
       content: `
-        <h2>Les opérateurs arithmétiques</h2>
-        <p>Python peut faire des calculs comme une calculatrice, et même plus !</p>
+        <h2>Python est une super calculatrice</h2>
+        <p>L'une des premières choses qu'on fait avec Python, c'est des calculs. Mais Python va bien plus loin qu'une calculatrice classique. Il dispose de 7 opérateurs arithmétiques, dont certains que tu ne connais peut-être pas encore.</p>
+
+        <h2>Les 7 opérateurs arithmétiques</h2>
         <pre><code class="language-python">a = 10
 b = 3
 
-print(a + b)   # Addition : 13
-print(a - b)   # Soustraction : 7
-print(a * b)   # Multiplication : 30
-print(a / b)   # Division : 3.333...
-print(a // b)  # Division entière : 3
-print(a % b)   # Modulo (reste) : 1
-print(a ** b)  # Puissance : 1000</code></pre>
+print(a + b)   # Addition       → 13
+print(a - b)   # Soustraction   → 7
+print(a * b)   # Multiplication → 30
+print(a / b)   # Division       → 3.3333...
+print(a // b)  # Division entière → 3
+print(a % b)   # Modulo (reste) → 1
+print(a ** b)  # Puissance      → 1000</code></pre>
+        <p>Les 4 premiers sont familiers. Expliquons les 3 derniers :</p>
 
+        <h3>// — la division entière</h3>
+        <p>La division entière donne le <strong>quotient sans les décimales</strong>. Utile quand on veut travailler uniquement avec des nombres entiers :</p>
+        <pre><code class="language-python">print(10 / 3)   # 3.3333... (division normale, float)
+print(10 // 3)  # 3         (division entière, int)
+print(7 // 2)   # 3         (7 divisé par 2 = 3 reste 1)</code></pre>
+
+        <h3>% — le modulo (reste de division)</h3>
+        <p>Le modulo donne le <strong>reste</strong> d'une division. C'est très utile pour savoir si un nombre est pair/impair, ou pour faire des cycles :</p>
+        <pre><code class="language-python">print(10 % 3)  # 1  (10 = 3×3 + 1, reste = 1)
+print(9 % 3)   # 0  (9 = 3×3 + 0, divisible !)
+print(7 % 2)   # 1  (impair → reste non nul)
+print(8 % 2)   # 0  (pair → reste nul)</code></pre>
         <div class="info-box">
-          <p>🧮 <code>//</code> donne la partie entière de la division : 10 // 3 = 3<br>
-          <code>%</code> donne le reste : 10 % 3 = 1 (car 10 = 3×3 + 1)</p>
+          <p>💡 Astuce du pro : <code>n % 2 == 0</code> permet de tester si un nombre est pair. Si le reste de la division par 2 est 0, le nombre est pair !</p>
         </div>
 
+        <h3>** — la puissance</h3>
+        <p>L'opérateur <code>**</code> calcule une puissance. <code>2 ** 8</code> signifie 2 multiplié par lui-même 8 fois :</p>
+        <pre><code class="language-python">print(2 ** 3)   # 8     (2³ = 2×2×2)
+print(10 ** 2)  # 100   (10²)
+print(2 ** 10)  # 1024  (utilisé en informatique !)</code></pre>
+
+        <h2>Priorité des opérations</h2>
+        <p>Python respecte les règles mathématiques : multiplication et division avant addition et soustraction. Utilise des parenthèses pour forcer l'ordre :</p>
+        <pre><code class="language-python">print(2 + 3 * 4)    # 14  (3×4 d'abord, puis +2)
+print((2 + 3) * 4)  # 20  (parenthèses en premier)</code></pre>
+
         <h2>Concaténation de chaînes</h2>
-        <p>Le <code>+</code> avec des chaînes les <strong>colle ensemble</strong> !</p>
+        <p>Le symbole <code>+</code> ne sert pas qu'à additionner des nombres. Avec des <strong>chaînes de texte</strong>, il les <strong>colle bout à bout</strong> — c'est la concaténation :</p>
         <pre><code class="language-python">prenom = "Alice"
 nom = "Martin"
 print("Bonjour " + prenom + " " + nom + " !")
-# Affiche : Bonjour Alice Martin !</code></pre>
+# → Bonjour Alice Martin !</code></pre>
+        <p>Attention : l'espace entre le prénom et le nom, c'est toi qui le gères ! Python ne l'ajoute pas automatiquement avec <code>+</code>.</p>
 
-        <h2>Conversion de types</h2>
-        <p>Parfois on a besoin de convertir un type en un autre :</p>
+        <h2>Le piège : mélanger nombres et texte</h2>
+        <p>Python ne peut pas additionner un nombre et du texte. Il faut d'abord <strong>convertir</strong> l'un des deux :</p>
         <pre><code class="language-python">age = 15
-message = "J'ai " + str(age) + " ans"
-print(message)  # J'ai 15 ans
 
-texte = "42"
-nombre = int(texte)
-print(nombre + 8)  # 50</code></pre>
+# ❌ Ceci génère une erreur :
+# print("J'ai " + age + " ans")
 
+# ✅ Il faut convertir age en str :
+print("J'ai " + str(age) + " ans")   # J'ai 15 ans
+
+# ✅ Ou utiliser une f-string (on verra ça plus tard) :
+print(f"J'ai {age} ans")             # J'ai 15 ans</code></pre>
+
+        <h2>Les fonctions de conversion</h2>
+        <ul>
+          <li><code>str(15)</code> → convertit le nombre 15 en texte <code>"15"</code></li>
+          <li><code>int("42")</code> → convertit le texte <code>"42"</code> en nombre <code>42</code></li>
+          <li><code>float("3.14")</code> → convertit le texte <code>"3.14"</code> en décimal <code>3.14</code></li>
+        </ul>
         <div class="tip-box">
-          <p>💡 On ne peut pas additionner un nombre et une chaîne directement ! Il faut d'abord convertir avec <code>str()</code> ou <code>int()</code>.</p>
+          <p>✅ Résumé : <code>+</code> avec des nombres = addition. <code>+</code> avec des textes = collage. Jamais les deux ensemble sans conversion !</p>
         </div>
       `
     },
@@ -291,60 +388,83 @@ print("Je m'appelle " + prenom + " et j'ai " + str(age) + " ans")`,
     lesson: {
       title: 'Les conditions',
       content: `
-        <h2>Si... sinon...</h2>
-        <p>Les conditions permettent à ton programme de prendre des <strong>décisions</strong>. Comme dans la vraie vie : "Si j'ai faim, je mange. Sinon, je continue."</p>
+        <h2>Pourquoi des conditions ?</h2>
+        <p>Jusqu'ici, ton programme exécute toutes les lignes dans l'ordre, sans réfléchir. Mais la vraie vie est pleine de choix : "Si j'ai plus de 18 ans, je peux voter. Sinon, je ne peux pas." Les conditions permettent à ton programme de <strong>prendre des décisions</strong> selon les données.</p>
+        <p>Sans conditions, tous les programmes feraient toujours la même chose, quelle que soit la situation. Avec les conditions, ils deviennent vraiment intelligents.</p>
 
-        <h2>Le if basique</h2>
+        <h2>Le if — "si..."</h2>
+        <p>La syntaxe de base : si une condition est vraie, exécute ce bloc de code.</p>
         <pre><code class="language-python">age = 16
 
 if age >= 18:
     print("Tu es majeur !")
-else:
-    print("Tu es mineur.")</code></pre>
+    print("Tu peux voter.")</code></pre>
+        <p>Ici, si <code>age</code> vaut 16, la condition <code>16 >= 18</code> est <strong>fausse</strong> — les deux lignes indentées ne s'exécutent pas du tout.</p>
 
+        <h2>L'indentation — LA règle la plus importante</h2>
+        <p>En Python, l'<strong>indentation</strong> (les espaces au début d'une ligne) n'est pas optionnelle — elle est <strong>obligatoire</strong> pour définir les blocs de code. C'est ce qui rend Python si lisible.</p>
+        <pre><code class="language-python">if age >= 18:
+    print("Dans le if")     # ← 4 espaces : appartient au if
+    print("Encore dans le if")  # ← idem
+print("Hors du if")        # ← 0 espace : s'exécute toujours</code></pre>
         <div class="info-box">
-          <p>⚠️ <strong>L'indentation est obligatoire !</strong> Le code dans un if doit être décalé de 4 espaces. C'est ainsi que Python sait ce qui appartient au bloc if.</p>
+          <p>⚠️ Utilise toujours <strong>4 espaces</strong> (ou la touche Tab) pour indenter. Mélanger espaces et tabs cause des erreurs. Tous les éditeurs modernes le font automatiquement.</p>
         </div>
 
-        <h2>if / elif / else</h2>
-        <p><code>elif</code> signifie "else if" — c'est pour tester plusieurs conditions :</p>
+        <h2>Le else — "sinon..."</h2>
+        <p><code>else</code> s'exécute quand la condition du <code>if</code> est fausse. On ne peut pas avoir de <code>else</code> sans <code>if</code>.</p>
+        <pre><code class="language-python">age = 16
+
+if age >= 18:
+    print("Majeur ✓")
+else:
+    print("Mineur ✗")</code></pre>
+        <p>Python lit cela comme : "Si age est supérieur ou égal à 18 → affiche Majeur. Dans tous les autres cas → affiche Mineur."</p>
+
+        <h2>elif — "sinon si..."</h2>
+        <p>Pour tester plusieurs cas, on enchaîne des <code>elif</code>. Python les teste dans l'ordre et s'arrête au premier vrai :</p>
         <pre><code class="language-python">note = 15
 
 if note >= 16:
-    print("Excellent !")
+    print("Excellent !")      # testé en premier
+elif note >= 14:
+    print("Très bien")        # testé seulement si le if est faux
 elif note >= 12:
     print("Bien")
 elif note >= 10:
     print("Passable")
 else:
-    print("À améliorer")</code></pre>
+    print("À améliorer")      # si aucune condition précédente n'est vraie</code></pre>
+        <p>Pour note = 15 : <code>15 >= 16</code> est faux, <code>15 >= 14</code> est vrai → Python affiche "Très bien" et <strong>ignore</strong> tout le reste.</p>
 
         <h2>Les opérateurs de comparaison</h2>
-        <pre><code class="language-python">a == b   # Égal à
-a != b   # Différent de
-a < b    # Inférieur à
-a > b    # Supérieur à
-a <= b   # Inférieur ou égal
-a >= b   # Supérieur ou égal</code></pre>
+        <p>Ces opérateurs comparent deux valeurs et retournent <code>True</code> ou <code>False</code> :</p>
+        <pre><code class="language-python">print(5 == 5)   # True  — égal à (DEUX signes égal !)
+print(5 != 3)   # True  — différent de
+print(5 > 3)    # True  — strictement supérieur
+print(5 < 3)    # False — strictement inférieur
+print(5 >= 5)   # True  — supérieur ou égal
+print(5 <= 4)   # False — inférieur ou égal</code></pre>
+        <div class="tip-box">
+          <p>⚠️ Erreur classique : confondre <code>=</code> (affectation, crée une variable) et <code>==</code> (comparaison, pose une question). <code>age = 15</code> stocke 15. <code>age == 15</code> demande "est-ce que age vaut 15 ?"</p>
+        </div>
 
-        <h2>Les opérateurs logiques</h2>
+        <h2>Combiner des conditions : and, or, not</h2>
+        <p>Tu peux combiner plusieurs conditions en une seule expression :</p>
         <pre><code class="language-python">age = 16
 permis = True
 
+# and : les DEUX doivent être vraies
 if age >= 18 and permis:
-    print("Tu peux conduire !")
+    print("Tu peux conduire !")   # age >= 18 est faux → n'affiche rien
 
-if age < 12 or age > 65:
-    print("Tarif réduit")
+# or : AU MOINS UNE doit être vraie
+if age < 13 or age > 17:
+    print("Pas au lycée")         # age > 17 est faux, age < 13 aussi → rien
 
+# not : inverse la condition
 if not permis:
-    print("Pas de permis !")</code></pre>
-
-        <div class="tip-box">
-          <p>💡 <code>and</code> : les deux conditions doivent être vraies<br>
-          <code>or</code> : au moins une condition doit être vraie<br>
-          <code>not</code> : inverse la condition</p>
-        </div>
+    print("Pas de permis")        # not True = False → rien</code></pre>
       `
     },
     interactiveCode: `# Système de notes
@@ -413,49 +533,69 @@ print("Note:", note, "/ 20")`,
     lesson: {
       title: 'Les boucles',
       content: `
-        <h2>À quoi servent les boucles ?</h2>
-        <p>Imagine que tu doives afficher "Bonjour" 100 fois. Tu n'allais quand même pas écrire 100 lignes print() ! Les boucles permettent de <strong>répéter des instructions</strong>.</p>
+        <h2>Pourquoi les boucles sont-elles indispensables ?</h2>
+        <p>Suppose que tu veuilles afficher la table de multiplication de 7. Sans boucle, tu écrirais 10 lignes de print(). Avec une boucle, tu en écris 2. Et si demain tu veux la table jusqu'à 100 ? Avec une boucle, tu changes un seul chiffre. <strong>Les boucles permettent de répéter du code automatiquement</strong>, ce qui est l'un des super-pouvoirs de la programmation.</p>
 
-        <h2>La boucle for</h2>
-        <p>La boucle <code>for</code> répète un nombre <strong>connu</strong> de fois :</p>
+        <h2>La boucle for — "pour chaque..."</h2>
+        <p>La boucle <code>for</code> est utilisée quand tu sais <strong>à l'avance combien de fois</strong> tu veux répéter quelque chose. Elle parcourt une séquence de valeurs une par une.</p>
         <pre><code class="language-python">for i in range(5):
     print(i)
-# Affiche : 0, 1, 2, 3, 4</code></pre>
+# Affiche : 0, puis 1, puis 2, puis 3, puis 4</code></pre>
+        <p>Décortiquons : <code>range(5)</code> génère la séquence 0, 1, 2, 3, 4. À chaque tour de boucle, <code>i</code> prend la valeur suivante, et les lignes indentées s'exécutent.</p>
 
-        <h3>range() en détail</h3>
-        <pre><code class="language-python">range(5)        # 0, 1, 2, 3, 4
-range(1, 6)     # 1, 2, 3, 4, 5
-range(0, 10, 2) # 0, 2, 4, 6, 8 (pas de 2)
-range(5, 0, -1) # 5, 4, 3, 2, 1 (à rebours)</code></pre>
+        <h2>range() — le générateur de séquences</h2>
+        <p><code>range()</code> est extrêmement flexible. Il accepte 1, 2 ou 3 arguments :</p>
+        <pre><code class="language-python">range(5)          # 0, 1, 2, 3, 4          (de 0 à 4)
+range(2, 8)       # 2, 3, 4, 5, 6, 7       (de 2 à 7)
+range(1, 10, 2)   # 1, 3, 5, 7, 9          (de 1 à 9, pas de 2)
+range(10, 0, -1)  # 10, 9, 8, ..., 1       (compte à rebours)</code></pre>
+        <div class="info-box">
+          <p>💡 La borne de fin est <strong>toujours exclue</strong>. <code>range(1, 6)</code> donne 1, 2, 3, 4, 5 — pas 6. Pense-y comme "de 1 jusqu'à 6 non inclus".</p>
+        </div>
 
-        <h2>La boucle while</h2>
-        <p>La boucle <code>while</code> continue tant qu'une <strong>condition est vraie</strong> :</p>
+        <h2>for sur une liste</h2>
+        <p>On peut aussi parcourir directement les éléments d'une liste, sans passer par range() :</p>
+        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
+for fruit in fruits:
+    print("J'aime les", fruit)
+# J'aime les pomme
+# J'aime les banane
+# J'aime les cerise</code></pre>
+        <p>C'est souvent plus lisible que <code>for i in range(len(fruits))</code> quand on n'a pas besoin de l'index.</p>
+
+        <h2>La boucle while — "tant que..."</h2>
+        <p>La boucle <code>while</code> répète son bloc de code <strong>tant qu'une condition reste vraie</strong>. On l'utilise quand on ne sait pas à l'avance combien d'itérations il faudra.</p>
         <pre><code class="language-python">compteur = 0
 while compteur < 5:
-    print(compteur)
-    compteur += 1  # IMPORTANT : sinon boucle infinie !</code></pre>
-
-        <div class="info-box">
-          <p>🔄 <strong>for</strong> : quand tu sais combien de fois répéter<br>
-          <strong>while</strong> : quand tu répètes jusqu'à ce qu'une condition change</p>
-        </div>
-
-        <h2>break et continue</h2>
-        <pre><code class="language-python"># break : quitte la boucle immédiatement
-for i in range(10):
-    if i == 5:
-        break
-    print(i)  # Affiche 0, 1, 2, 3, 4
-
-# continue : saute à l'itération suivante
-for i in range(5):
-    if i == 2:
-        continue
-    print(i)  # Affiche 0, 1, 3, 4</code></pre>
-
+    print("Tour", compteur)
+    compteur += 1    # compteur = compteur + 1
+# Tour 0, Tour 1, Tour 2, Tour 3, Tour 4</code></pre>
+        <p>Ici, Python vérifie <code>compteur &lt; 5</code> avant chaque tour. Dès que c'est faux (compteur vaut 5), la boucle s'arrête.</p>
         <div class="tip-box">
-          <p>💡 Attention aux boucles infinies avec while ! Assure-toi toujours que la condition finit par devenir False.</p>
+          <p>⚠️ Le piège du while : si tu oublies <code>compteur += 1</code>, la condition reste toujours vraie → <strong>boucle infinie</strong>. Ton programme tourne sans fin ! Assure-toi toujours que quelque chose dans la boucle fait progresser vers la sortie.</p>
         </div>
+
+        <h2>break — sortir d'urgence</h2>
+        <p><code>break</code> quitte immédiatement la boucle, même si la condition est encore vraie ou que range() n'est pas terminé :</p>
+        <pre><code class="language-python">for i in range(100):
+    if i == 5:
+        break          # On sort dès que i vaut 5
+    print(i)
+# Affiche : 0, 1, 2, 3, 4  — puis s'arrête</code></pre>
+
+        <h2>continue — sauter une itération</h2>
+        <p><code>continue</code> saute le reste du tour en cours et passe directement au suivant :</p>
+        <pre><code class="language-python">for i in range(10):
+    if i % 2 == 0:    # Si i est pair
+        continue      # Saute ce tour
+    print(i)          # N'affiche que les impairs : 1, 3, 5, 7, 9</code></pre>
+
+        <h2>for ou while : comment choisir ?</h2>
+        <ul>
+          <li>Tu connais le nombre d'itérations à l'avance → utilise <strong>for</strong></li>
+          <li>Tu répètes jusqu'à ce qu'une condition change → utilise <strong>while</strong></li>
+          <li>Quand c'est possible, préfère <strong>for</strong> : moins risqué de boucle infinie</li>
+        </ul>
       `
     },
     interactiveCode: `# La boucle for avec range
@@ -521,45 +661,76 @@ for i in range(1, 6):
     lesson: {
       title: 'Les listes',
       content: `
-        <h2>Qu'est-ce qu'une liste ?</h2>
-        <p>Une liste, c'est comme un <strong>tiroir avec plusieurs compartiments</strong>. Tu peux y stocker plusieurs valeurs dans une seule variable !</p>
-        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
-notes = [14, 17, 12, 15, 18]
-mix = [42, "bonjour", True, 3.14]</code></pre>
+        <h2>Le problème des variables séparées</h2>
+        <p>Imagine que tu veuilles stocker les notes de toute ta classe : 30 élèves. Créer 30 variables séparées (<code>note1</code>, <code>note2</code>... <code>note30</code>) serait un cauchemar. Et comment calculer la moyenne de toutes ces variables ? Les <strong>listes</strong> résolvent ce problème : elles permettent de stocker plusieurs valeurs dans une seule variable, dans l'ordre.</p>
 
-        <h2>Accéder aux éléments</h2>
-        <p>Chaque élément a un <strong>indice</strong> (position), qui commence à 0 :</p>
-        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
-print(fruits[0])   # pomme (premier)
-print(fruits[1])   # banane (deuxième)
-print(fruits[-1])  # cerise (dernier)</code></pre>
+        <h2>Créer une liste</h2>
+        <p>Une liste s'écrit entre crochets <code>[ ]</code>, avec les éléments séparés par des virgules. Elle peut contenir n'importe quel type de données, même mélangés :</p>
+        <pre><code class="language-python">fruits  = ["pomme", "banane", "cerise"]   # liste de str
+notes   = [14, 17, 12, 15, 18]            # liste de int
+vide    = []                               # liste vide
+mixte   = [42, "bonjour", True, 3.14]     # types mélangés (déconseillé)</code></pre>
 
+        <h2>Accéder aux éléments — les indices</h2>
+        <p>Chaque élément d'une liste a un <strong>indice</strong> (sa position). En Python, les indices commencent à <strong>0</strong>, pas à 1. C'est une convention universelle en informatique.</p>
+        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
+#          index 0   index 1   index 2
+
+print(fruits[0])   # pomme   ← premier élément
+print(fruits[1])   # banane  ← deuxième
+print(fruits[2])   # cerise  ← troisième (et dernier ici)</code></pre>
+        <p>Les indices négatifs permettent de compter depuis la fin, très pratique :</p>
+        <pre><code class="language-python">print(fruits[-1])  # cerise  ← dernier élément
+print(fruits[-2])  # banane  ← avant-dernier</code></pre>
         <div class="info-box">
-          <p>🔢 En Python, on compte à partir de 0 ! Le premier élément est à l'index 0, le deuxième à l'index 1, etc.</p>
+          <p>⚠️ Si tu essaies d'accéder à un index qui n'existe pas (<code>fruits[10]</code> sur une liste de 3 éléments), Python génère une <code>IndexError</code>. Vérifie toujours que ton index est dans les bornes !</p>
         </div>
 
         <h2>Modifier une liste</h2>
+        <p>Contrairement aux chaînes de texte, les listes sont <strong>modifiables</strong> après leur création :</p>
         <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
 
-fruits[0] = "fraise"    # Modifier
-fruits.append("mangue") # Ajouter à la fin
-fruits.remove("banane") # Supprimer par valeur
-fruits.sort()           # Trier
+fruits[0] = "fraise"      # Remplace "pomme" par "fraise"
+print(fruits)              # ["fraise", "banane", "cerise"]
 
-print(len(fruits))      # Nombre d'éléments</code></pre>
+fruits.append("mangue")   # Ajoute à la FIN
+print(fruits)              # ["fraise", "banane", "cerise", "mangue"]
 
-        <h2>Parcourir une liste</h2>
-        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
+fruits.remove("banane")   # Supprime la première occurrence
+print(fruits)              # ["fraise", "cerise", "mangue"]
 
-for fruit in fruits:
-    print(fruit)
+print(len(fruits))         # 3 — nombre d'éléments</code></pre>
 
-# Avec l'indice
-for i in range(len(fruits)):
-    print(i, fruits[i])</code></pre>
+        <h2>Méthodes utiles</h2>
+        <pre><code class="language-python">nombres = [5, 2, 8, 1, 9, 3]
 
+nombres.sort()             # Trie en place (modifie la liste)
+print(nombres)             # [1, 2, 3, 5, 8, 9]
+
+print(nombres.index(8))    # 4 — indice de la valeur 8
+print(8 in nombres)        # True — 8 est bien dans la liste
+print(nombres.count(3))    # 1 — combien de fois 3 apparaît</code></pre>
+
+        <h2>Parcourir une liste avec for</h2>
+        <p>Les listes et les boucles <code>for</code> sont faites pour aller ensemble. C'est la façon la plus naturelle de traiter tous les éléments :</p>
+        <pre><code class="language-python">notes = [14, 17, 12, 15, 18]
+
+# Méthode 1 : parcourir les valeurs directement
+for note in notes:
+    print(note)
+
+# Méthode 2 : parcourir avec l'index (si on en a besoin)
+for i in range(len(notes)):
+    print(f"Élève {i+1} : {notes[i]}/20")
+
+# Calculer la moyenne
+total = 0
+for note in notes:
+    total += note
+moyenne = total / len(notes)
+print("Moyenne :", moyenne)</code></pre>
         <div class="tip-box">
-          <p>💡 <code>len(liste)</code> donne le nombre d'éléments. <code>liste[-1]</code> donne le dernier élément. Pratique !</p>
+          <p>✅ Astuce : Python a une fonction intégrée <code>sum(liste)</code> qui additionne tous les éléments. Donc la moyenne s'écrit simplement : <code>sum(notes) / len(notes)</code></p>
         </div>
       `
     },
@@ -630,49 +801,84 @@ for fruit in fruits:
     lesson: {
       title: 'Les fonctions',
       content: `
-        <h2>Qu'est-ce qu'une fonction ?</h2>
-        <p>Une fonction, c'est comme une <strong>recette réutilisable</strong>. Tu la définis une fois, et tu peux l'utiliser autant de fois que tu veux !</p>
-        <div class="info-box">
-          <p>🔧 Tu utilises déjà des fonctions intégrées : <code>print()</code>, <code>len()</code>, <code>range()</code>. Maintenant tu vas créer les tiennes !</p>
-        </div>
+        <h2>Le problème du code dupliqué</h2>
+        <p>Imagine que tu calcules la moyenne dans ton programme à 5 endroits différents. Si tu te rends compte qu'il y a un bug dans ta formule, tu dois corriger 5 fois. Et si tu oublies un endroit ? Les <strong>fonctions</strong> résolvent ce problème : tu écris la logique une seule fois, tu lui donnes un nom, et tu l'utilises autant de fois que tu veux. C'est le principe DRY : <em>Don't Repeat Yourself</em>.</p>
 
-        <h2>Définir une fonction</h2>
-        <pre><code class="language-python">def saluer():
-    print("Bonjour tout le monde !")
+        <h2>Tu utilises déjà des fonctions !</h2>
+        <p>En fait, tu connais déjà des fonctions : <code>print()</code>, <code>len()</code>, <code>range()</code>, <code>int()</code>... Ce sont des fonctions que Python t'offre. Maintenant tu vas <strong>créer les tiennes</strong>.</p>
 
-# Appeler la fonction
-saluer()  # Affiche : Bonjour tout le monde !</code></pre>
+        <h2>Définir une fonction avec def</h2>
+        <p>Le mot-clé <code>def</code> (abréviation de "define") crée une fonction. La fonction ne s'exécute pas au moment où tu la définis — elle attend d'être <strong>appelée</strong>.</p>
+        <pre><code class="language-python">def dire_bonjour():           # définition — rien ne s'exécute ici
+    print("Bonjour !")
+    print("Comment vas-tu ?")
 
-        <h2>Les paramètres</h2>
-        <p>Les paramètres permettent de passer des données à la fonction :</p>
-        <pre><code class="language-python">def saluer(prenom):
+# La fonction n'a encore rien fait...
+dire_bonjour()   # ← appel : maintenant ça s'exécute !
+dire_bonjour()   # ← deuxième appel, même résultat
+dire_bonjour()   # ← troisième appel</code></pre>
+        <p>La fonction est définie une fois mais appelée 3 fois. Si tu modifies le corps de la fonction, les 3 appels bénéficient automatiquement de la modification.</p>
+
+        <h2>Les paramètres — personnaliser la fonction</h2>
+        <p>Les <strong>paramètres</strong> sont des variables locales que tu passes à la fonction pour qu'elle puisse travailler avec des données variables :</p>
+        <pre><code class="language-python">def saluer(prenom):          # "prenom" est le paramètre
     print("Bonjour " + prenom + " !")
 
-saluer("Alice")  # Bonjour Alice !
-saluer("Bob")    # Bonjour Bob !</code></pre>
+saluer("Alice")   # prenom = "Alice" → Bonjour Alice !
+saluer("Bob")     # prenom = "Bob"   → Bonjour Bob !
+saluer("Chloé")   # prenom = "Chloé" → Bonjour Chloé !</code></pre>
+        <p>La même fonction, 3 comportements différents selon ce qu'on lui passe. On peut avoir plusieurs paramètres :</p>
+        <pre><code class="language-python">def se_presenter(prenom, age, ville):
+    print(f"Je m'appelle {prenom}, j'ai {age} ans, j'habite à {ville}.")
 
-        <h2>Le return</h2>
-        <p><code>return</code> permet de <strong>renvoyer</strong> une valeur depuis la fonction :</p>
+se_presenter("Alice", 15, "Paris")
+se_presenter("Bob", 14, "Lyon")</code></pre>
+
+        <h2>return — renvoyer un résultat</h2>
+        <p>Jusqu'ici nos fonctions affichent des choses mais ne <strong>renvoient</strong> rien. Avec <code>return</code>, la fonction peut calculer un résultat et le renvoyer pour qu'on puisse l'utiliser :</p>
         <pre><code class="language-python">def calculer_carre(nombre):
-    return nombre * nombre
+    return nombre * nombre    # renvoie le résultat
 
+# La valeur retournée peut être stockée dans une variable
 resultat = calculer_carre(5)
-print(resultat)  # 25
+print(resultat)               # 25
 
-print(calculer_carre(7))  # 49</code></pre>
+# Ou utilisée directement
+print(calculer_carre(7) + calculer_carre(3))  # 49 + 9 = 58</code></pre>
+        <div class="info-box">
+          <p>💡 Différence fondamentale : <code>print()</code> affiche un texte à l'écran pour toi. <code>return</code> renvoie une valeur au code qui a appelé la fonction. Seul <code>return</code> permet d'utiliser le résultat dans un calcul.</p>
+        </div>
 
-        <h2>Plusieurs paramètres</h2>
-        <pre><code class="language-python">def additionner(a, b):
-    return a + b
+        <h2>Fonctions avec plusieurs paramètres et return</h2>
+        <pre><code class="language-python">def calculer_moyenne(notes):
+    if len(notes) == 0:
+        return 0
+    return sum(notes) / len(notes)
 
-def aire_rectangle(longueur, largeur):
-    return longueur * largeur
+def mention(moyenne):
+    if moyenne >= 16:
+        return "Très bien"
+    elif moyenne >= 14:
+        return "Bien"
+    elif moyenne >= 10:
+        return "Passable"
+    else:
+        return "Insuffisant"
 
-print(additionner(3, 5))         # 8
-print(aire_rectangle(4, 6))      # 24</code></pre>
+mes_notes = [14, 17, 12, 15, 18]
+moy = calculer_moyenne(mes_notes)
+print(f"Moyenne : {moy:.1f} → {mention(moy)}")</code></pre>
 
+        <h2>Variables locales</h2>
+        <p>Les variables créées à l'intérieur d'une fonction sont <strong>locales</strong> — elles n'existent que pendant l'exécution de la fonction et disparaissent ensuite. Ça évite les conflits de noms entre fonctions :</p>
+        <pre><code class="language-python">def ma_fonction():
+    x = 10    # variable locale : existe seulement ici
+    print(x)
+
+ma_fonction()
+# print(x)  ← NameError : x n'existe pas ici !</code></pre>
         <div class="tip-box">
-          <p>💡 Une bonne fonction fait <strong>une seule chose</strong> mais la fait bien. Ça rend le code lisible et réutilisable !</p>
+          <p>✅ Règle d'or : une bonne fonction fait <strong>une seule chose</strong>, a un nom clair qui dit ce qu'elle fait, et peut être réutilisée n'importe où. Si ta fonction fait 50 lignes, c'est souvent signe qu'il faut la découper en plusieurs petites fonctions.</p>
         </div>
       `
     },
@@ -746,42 +952,109 @@ print("Ma moyenne:", moyenne)`,
     lesson: {
       title: 'Les chaînes de caractères en profondeur',
       content: `
-        <h2>Les f-strings</h2>
-        <p>Les <strong>f-strings</strong> sont la façon la plus moderne et lisible d'insérer des variables dans du texte. Il suffit de mettre un <code>f</code> devant les guillemets :</p>
+        <h2>Pourquoi maîtriser les chaînes de caractères ?</h2>
+        <p>Presque tout ce qu'un programme traite passe un jour par du texte : des noms d'utilisateurs, des messages, des fichiers CSV, des pages web… En Python, les chaînes sont partout. Maîtriser leurs outils, c'est maîtriser une grande partie de la programmation réelle.</p>
+        <p>Dans ce module, tu vas découvrir trois grandes catégories d'outils : les <strong>f-strings</strong> pour formater du texte, le <strong>slicing</strong> pour découper, et les <strong>méthodes</strong> pour transformer et rechercher.</p>
+
+        <h2>Les f-strings — formater du texte proprement</h2>
+        <p>Avant les f-strings, il fallait concaténer les chaînes avec <code>+</code>, ce qui était fastidieux et source d'erreurs. Les <strong>f-strings</strong> (introduites en Python 3.6) permettent d'insérer n'importe quelle expression directement dans une chaîne en mettant un <code>f</code> devant les guillemets :</p>
         <pre><code class="language-python">prenom = "Alice"
 age = 15
+# Ancienne méthode (à éviter)
+print("Bonjour " + prenom + ", tu as " + str(age) + " ans !")
+
+# Avec f-string (moderne et lisible)
 print(f"Bonjour {prenom}, tu as {age} ans !")
 print(f"Dans 5 ans, tu auras {age + 5} ans.")</code></pre>
-        <div class="tip-box"><p>✅ Tu peux même faire des calculs directement entre les accolades !</p></div>
+        <p>Entre les accolades <code>{}</code>, tu peux mettre n'importe quelle expression Python : une variable, un calcul, un appel de fonction !</p>
+        <pre><code class="language-python">prix = 12.5
+quantite = 3
+print(f"Total : {prix * quantite:.2f} €")  # :.2f = 2 décimales
 
-        <h2>Le slicing (découpage)</h2>
-        <p>On peut extraire une partie d'une chaîne avec <code>[début:fin:pas]</code> :</p>
+score = 87
+print(f"Tu as {score}/100 ({score/100*100:.0f}%)")
+
+nom = "alice"
+print(f"Bienvenue, {nom.capitalize()} !")</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Le format <code>:.2f</code> après une variable dans une f-string contrôle l'affichage des nombres décimaux. <code>:.0f</code> = 0 décimale, <code>:.3f</code> = 3 décimales. Très utile pour les prix et les pourcentages !</div>
+
+        <h2>Le slicing (découpage de chaîne)</h2>
+        <p>Imagine une chaîne comme un tableau de cases numérotées. Chaque case a un <strong>indice</strong> qui commence à 0. Le slicing permet d'extraire une tranche de cases avec la syntaxe <code>[début:fin:pas]</code> :</p>
         <pre><code class="language-python">mot = "Python"
-print(mot[0:3])   # Pyt  (indices 0, 1, 2)
+#      P y t h o n
+#      0 1 2 3 4 5  (indices positifs)
+#     -6-5-4-3-2-1  (indices négatifs)
+
+print(mot[0])     # P (premier caractère)
+print(mot[-1])    # n (dernier caractère)
+print(mot[0:3])   # Pyt  (indices 0, 1, 2 — la fin est EXCLUE)
 print(mot[2:])    # thon (du 3ème jusqu'à la fin)
-print(mot[:4])    # Pyth (du début jusqu'au 4ème)
-print(mot[-3:])   # hon  (les 3 derniers)
-print(mot[::-1])  # nohtyP (inversé !)</code></pre>
+print(mot[:4])    # Pyth (du début jusqu'au 4ème exclu)
+print(mot[-3:])   # hon  (les 3 derniers caractères)
+print(mot[::-1])  # nohtyP (pas -1 = inversé !)</code></pre>
+        <p>Le troisième paramètre (le <strong>pas</strong>) contrôle de combien d'indices on saute à chaque étape. <code>[::-1]</code> signifie "de la fin jusqu'au début en reculant de 1 à chaque fois" — c'est l'astuce classique pour inverser une chaîne !</p>
+        <pre><code class="language-python">texte = "abcdefghij"
+print(texte[::2])    # acegi (un sur deux)
+print(texte[1::2])   # bdfhj (un sur deux, en commençant à 1)
+print(texte[7:2:-1]) # hgfed (de l'indice 7 à 2, à reculons)</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — L'indice de fin est <strong>toujours exclu</strong>. <code>"Python"[0:3]</code> donne <code>"Pyt"</code> (indices 0, 1, 2), PAS "Pyth". Retiens : <code>[début inclus : fin exclue]</code>.</div>
 
-        <h2>Méthodes essentielles</h2>
+        <h2>Méthodes essentielles des chaînes</h2>
+        <p>Les chaînes Python ont des dizaines de méthodes intégrées. Voici les plus utiles :</p>
+
+        <h3>Changer la casse</h3>
         <pre><code class="language-python">texte = "  Bonjour le Monde  "
-print(texte.upper())          # BONJOUR LE MONDE
-print(texte.lower())          # bonjour le monde
-print(texte.strip())          # Bonjour le Monde (sans espaces)
-print(texte.replace("Monde", "Python"))  # Bonjour le Python
+print(texte.upper())          # "  BONJOUR LE MONDE  "
+print(texte.lower())          # "  bonjour le monde  "
+print(texte.title())          # "  Bonjour Le Monde  " (majuscule à chaque mot)
+print(texte.capitalize())     # "  bonjour le monde  " (majuscule seulement au début)</code></pre>
 
+        <h3>Nettoyer les espaces</h3>
+        <pre><code class="language-python">texte = "  Bonjour le Monde  "
+print(texte.strip())          # "Bonjour le Monde" (enlève les espaces aux deux bouts)
+print(texte.lstrip())         # "Bonjour le Monde  " (seulement à gauche)
+print(texte.rstrip())         # "  Bonjour le Monde" (seulement à droite)</code></pre>
+
+        <h3>Remplacer et découper</h3>
+        <pre><code class="language-python">texte = "Bonjour le Monde"
+print(texte.replace("Monde", "Python"))  # "Bonjour le Python"
+print(texte.replace("o", "0"))           # "B0nj0ur le M0nde" (remplace TOUTES les occurrences)
+
+# split() découpe une chaîne selon un séparateur
 mots = "pomme,banane,cerise"
 liste = mots.split(",")       # ['pomme', 'banane', 'cerise']
 print(liste)
-print(" - ".join(liste))      # pomme - banane - cerise</code></pre>
+
+# join() fait l'inverse : colle une liste en chaîne
+print(" - ".join(liste))      # pomme - banane - cerise
+print(", ".join(["a", "b", "c"]))  # a, b, c</code></pre>
 
         <h2>Rechercher dans une chaîne</h2>
-        <pre><code class="language-python">phrase = "Python est super"
-print(len(phrase))             # 16 (longueur)
-print("est" in phrase)         # True (contient "est" ?)
-print(phrase.startswith("Py")) # True
-print(phrase.count("e"))       # 2 (nombre de "e")</code></pre>
-        <div class="info-box"><p>💡 Les chaînes sont immuables : tu ne peux pas modifier un caractère directement, mais tu peux créer une nouvelle chaîne.</p></div>
+        <pre><code class="language-python">phrase = "Python est super et puissant"
+print(len(phrase))                 # 28 (nombre de caractères)
+print("est" in phrase)             # True (contient "est" ?)
+print("java" in phrase)            # False
+print(phrase.startswith("Python")) # True (commence par...)
+print(phrase.endswith("ant"))      # True (finit par...)
+print(phrase.find("super"))        # 11 (indice du début, -1 si absent)
+print(phrase.count("e"))           # 3 (nombre d'occurrences de "e")</code></pre>
+
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Les chaînes sont <strong>immuables</strong> : une fois créée, tu ne peux pas modifier un caractère. Mais toutes les méthodes retournent une <em>nouvelle</em> chaîne. Donc <code>texte.upper()</code> ne modifie pas <code>texte</code>, il retourne une nouvelle chaîne en majuscules. Pour "modifier", tu dois réassigner : <code>texte = texte.upper()</code>.</div>
+
+        <h2>Exemple concret : traiter des données textuelles</h2>
+        <pre><code class="language-python"># Nettoyer et formater une liste de prénoms saisis par l'utilisateur
+prenoms_bruts = ["  alice  ", "BOB", "chloé ", "  DAVID"]
+
+prenoms_propres = []
+for prenom in prenoms_bruts:
+    prenom_net = prenom.strip().capitalize()  # Nettoie + capitalise
+    prenoms_propres.append(prenom_net)
+
+print(prenoms_propres)  # ['Alice', 'Bob', 'Chloé', 'David']
+
+# Version en une ligne (on verra les compréhensions plus tard)
+propres = [p.strip().capitalize() for p in prenoms_bruts]
+print(propres)</code></pre>
       `
     },
     interactiveCode: `prenom = "Alice"
@@ -846,43 +1119,103 @@ print(phrase.title())`,
     lesson: {
       title: 'Les dictionnaires',
       content: `
-        <h2>Qu'est-ce qu'un dictionnaire ?</h2>
-        <p>Un dictionnaire, c'est comme un vrai dictionnaire : tu cherches un <strong>mot (clé)</strong> et tu trouves sa <strong>définition (valeur)</strong>. En Python, on associe des clés à des valeurs avec <code>{ clé: valeur }</code>.</p>
+        <h2>Pourquoi les dictionnaires existent-ils ?</h2>
+        <p>Imagine que tu veux stocker les informations d'un élève. Avec une liste, tu pourrais faire <code>["Alice", 15, "Paris", 14.5]</code>. Mais comment te souvenir que l'indice 0 est le prénom, l'indice 2 est la ville ? C'est vite le chaos.</p>
+        <p>Les <strong>dictionnaires</strong> résolvent ce problème en remplaçant les indices numériques par des <strong>clés descriptives</strong>. Au lieu de <code>eleve[0]</code>, tu écris <code>eleve["prenom"]</code>. Le code se comprend tout seul !</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Un dictionnaire Python c'est comme un vrai dictionnaire : tu cherches un <strong>mot (clé)</strong> et tu trouves sa <strong>définition (valeur)</strong>. On l'appelle aussi <em>dict</em> ou <em>hashmap</em> dans d'autres langages.</div>
+
+        <h2>Créer et accéder à un dictionnaire</h2>
+        <p>Un dictionnaire se crée avec des accolades <code>{}</code> et la notation <code>clé: valeur</code>. Les clés sont généralement des chaînes, les valeurs peuvent être de n'importe quel type :</p>
         <pre><code class="language-python">eleve = {
     "prenom": "Alice",
     "age": 15,
     "moyenne": 14.5,
-    "redoublant": False
+    "redoublant": False,
+    "matieres": ["Maths", "Français", "Histoire"]  # valeur peut être une liste !
 }
-print(eleve["prenom"])  # Alice
-print(eleve["age"])     # 15</code></pre>
-        <div class="info-box"><p>💡 Contrairement aux listes, on accède aux éléments par leur clé, pas par leur position.</p></div>
+
+# Accéder à une valeur avec sa clé
+print(eleve["prenom"])   # Alice
+print(eleve["age"])      # 15
+print(eleve["matieres"]) # ['Maths', 'Français', 'Histoire']</code></pre>
+        <p>Si tu essaies d'accéder à une clé qui n'existe pas, Python lève une <code>KeyError</code>. Pour éviter ça, utilise <code>.get()</code> :</p>
+        <pre><code class="language-python">print(eleve["ville"])       # KeyError : 'ville' n'existe pas !
+print(eleve.get("ville"))   # None (pas d'erreur)
+print(eleve.get("ville", "Non renseignée"))  # "Non renseignée" (valeur par défaut)</code></pre>
 
         <h2>Modifier un dictionnaire</h2>
+        <p>Les dictionnaires sont <strong>mutables</strong> : on peut ajouter, modifier et supprimer des clés à tout moment :</p>
         <pre><code class="language-python">eleve = {"prenom": "Alice", "age": 15}
-eleve["age"] = 16          # Modifier une valeur
-eleve["ville"] = "Paris"   # Ajouter une nouvelle clé
-del eleve["ville"]         # Supprimer une clé
-print(eleve)</code></pre>
+
+# Modifier une valeur existante
+eleve["age"] = 16
+print(eleve["age"])  # 16
+
+# Ajouter une nouvelle clé (même syntaxe que modifier !)
+eleve["ville"] = "Paris"
+eleve["note_python"] = 18
+
+# Supprimer une clé
+del eleve["note_python"]
+
+# Afficher tout le dictionnaire
+print(eleve)  # {'prenom': 'Alice', 'age': 16, 'ville': 'Paris'}</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — <code>eleve["cle"] = valeur</code> fait deux choses selon si la clé existe : si elle existe, ça la <strong>modifie</strong> ; si elle n'existe pas, ça <strong>l'ajoute</strong>. Python ne fait pas la différence, alors fais attention à ne pas écraser par accident une valeur existante !</div>
 
         <h2>Parcourir un dictionnaire</h2>
+        <p>Il existe plusieurs façons de boucler sur un dictionnaire selon ce dont tu as besoin :</p>
         <pre><code class="language-python">scores = {"Alice": 18, "Bob": 14, "Chloé": 16}
 
+# Boucle sur les clés seulement (comportement par défaut)
 for prenom in scores:
-    print(prenom)                          # clés seulement
+    print(prenom)  # Alice, puis Bob, puis Chloé
 
+# Boucle sur les valeurs seulement
+for note in scores.values():
+    print(note)    # 18, 14, 16
+
+# Boucle sur les clés ET les valeurs (le plus courant)
 for prenom, note in scores.items():
-    print(f"{prenom} : {note}/20")        # clés + valeurs
+    print(f"{prenom} : {note}/20")
 
-print(list(scores.keys()))   # ['Alice', 'Bob', 'Chloé']
-print(list(scores.values())) # [18, 14, 16]</code></pre>
+# Accéder aux clés et valeurs comme des listes
+print(list(scores.keys()))    # ['Alice', 'Bob', 'Chloé']
+print(list(scores.values()))  # [18, 14, 16]</code></pre>
 
         <h2>Méthodes utiles</h2>
-        <pre><code class="language-python">d = {"a": 1, "b": 2}
-print(d.get("c", 0))  # 0 (valeur par défaut si clé absente)
+        <pre><code class="language-python">d = {"a": 1, "b": 2, "c": 3}
+
+# Vérifier si une clé existe
 print("a" in d)       # True
-print(len(d))         # 2</code></pre>
-        <div class="tip-box"><p>✅ Utilise .get() pour éviter une erreur si la clé n'existe pas.</p></div>
+print("z" in d)       # False
+
+# Nombre de paires clé-valeur
+print(len(d))         # 3
+
+# Fusionner deux dictionnaires (Python 3.9+)
+d2 = {"d": 4, "e": 5}
+d3 = d | d2  # {a:1, b:2, c:3, d:4, e:5}
+
+# Mettre à jour en place
+d.update({"f": 6, "a": 99})  # Ajoute "f" et remplace "a"
+print(d)</code></pre>
+
+        <h2>Dictionnaires imbriqués — la vraie puissance</h2>
+        <p>Les valeurs d'un dictionnaire peuvent elles-mêmes être des dictionnaires ! C'est comme ça que les vraies données sont structurées (JSON d'une API, profil utilisateur, etc.) :</p>
+        <pre><code class="language-python">classe = {
+    "Alice": {"age": 15, "notes": [14, 16, 18], "ville": "Paris"},
+    "Bob":   {"age": 14, "notes": [11, 12, 10], "ville": "Lyon"},
+}
+
+# Accéder à une donnée imbriquée
+print(classe["Alice"]["ville"])   # Paris
+print(classe["Bob"]["notes"][0])  # 11 (première note de Bob)
+
+# Calculer la moyenne d'Alice
+notes_alice = classe["Alice"]["notes"]
+moyenne = sum(notes_alice) / len(notes_alice)
+print(f"Moyenne d'Alice : {moyenne:.1f}")</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Les dictionnaires Python sont <strong>ordonnés depuis Python 3.7</strong> : ils conservent l'ordre d'insertion des clés. C'est pratique quand l'ordre a de l'importance !</div>
       `
     },
     interactiveCode: `# Crée un dictionnaire élève
