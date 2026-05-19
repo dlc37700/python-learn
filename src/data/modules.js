@@ -2383,5 +2383,1177 @@ print(f"\\nDict : {dico}")`,
         explanation: 'all() retourne True uniquement si TOUS les éléments sont vrais. Ici False est présent → retourne False.'
       }
     ]
+  },
+
+  // ─── NIVEAU 4 ────────────────────────────────────────────────────────────────
+
+  {
+    id: 22,
+    emoji: '🌐',
+    title: 'Le Web & HTML',
+    level: 4,
+    description: 'Comment fonctionne Internet et le rôle de Python dedans !',
+    color: '#3b82f6',
+    lesson: {
+      title: 'Le Web, HTML et Python',
+      content: `
+        <h2>Comment fonctionne le Web ?</h2>
+        <p>Quand tu tapes une URL dans ton navigateur, voici ce qui se passe :</p>
+        <ul>
+          <li>Ton navigateur envoie une <strong>requête HTTP</strong> à un serveur</li>
+          <li>Le serveur (qui peut tourner Python !) reçoit la requête</li>
+          <li>Il répond avec du <strong>HTML + CSS + JS</strong></li>
+          <li>Ton navigateur <strong>affiche</strong> le résultat</li>
+        </ul>
+        <div class="info-box"><p>💡 <strong>Frontend</strong> = ce que l'utilisateur voit (HTML/CSS/JS dans le navigateur). <strong>Backend</strong> = le serveur qui traite les données (Python, base de données…).</p></div>
+
+        <h2>HTML — la structure d'une page</h2>
+        <p>HTML (HyperText Markup Language) décrit la structure d'une page avec des <strong>balises</strong> :</p>
+        <pre><code class="language-python"># Python peut générer du HTML !
+page = """&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;title&gt;Ma page&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Bonjour le monde !&lt;/h1&gt;
+    &lt;p&gt;C'est ma première page web.&lt;/p&gt;
+  &lt;/body&gt;
+&lt;/html&gt;"""
+print(page)</code></pre>
+
+        <h2>Les balises HTML essentielles</h2>
+        <pre><code class="language-python">balises = {
+    "h1 à h6": "Titres (h1 = le plus grand)",
+    "p":        "Paragraphe",
+    "a":        "Lien : &lt;a href='url'&gt;texte&lt;/a&gt;",
+    "img":      "Image : &lt;img src='url' alt='desc'&gt;",
+    "ul/li":    "Liste à puces",
+    "div":      "Conteneur générique",
+    "form":     "Formulaire de saisie",
+    "input":    "Champ de saisie",
+    "button":   "Bouton cliquable",
+}
+for balise, role in balises.items():
+    print(f"  &lt;{balise}&gt; → {role}")</code></pre>
+
+        <h2>Python génère du HTML dynamique</h2>
+        <p>L'intérêt de Python c'est de générer du HTML <strong>dynamiquement</strong>, avec de vraies données :</p>
+        <pre><code class="language-python">eleves = [
+    {"nom": "Alice", "note": 15},
+    {"nom": "Bob",   "note": 12},
+    {"nom": "Chloé", "note": 18},
+]
+
+# Génère un tableau HTML
+html = "&lt;table&gt;\\n"
+html += "  &lt;tr&gt;&lt;th&gt;Nom&lt;/th&gt;&lt;th&gt;Note&lt;/th&gt;&lt;/tr&gt;\\n"
+for e in eleves:
+    html += f"  &lt;tr&gt;&lt;td&gt;{e['nom']}&lt;/td&gt;&lt;td&gt;{e['note']}/20&lt;/td&gt;&lt;/tr&gt;\\n"
+html += "&lt;/table&gt;"
+print(html)</code></pre>
+
+        <h2>HTTP — le protocole du Web</h2>
+        <ul>
+          <li><strong>GET</strong> : demander une page ou des données</li>
+          <li><strong>POST</strong> : envoyer des données au serveur (formulaire)</li>
+          <li><strong>200 OK</strong> : tout s'est bien passé</li>
+          <li><strong>404 Not Found</strong> : page introuvable</li>
+          <li><strong>500 Internal Server Error</strong> : erreur côté serveur</li>
+        </ul>
+        <div class="tip-box"><p>✅ Dans ce niveau, tu vas créer ton propre serveur Python avec Flask — il recevra des requêtes HTTP et renverra du HTML !</p></div>
+      `
+    },
+    interactiveCode: `eleves = [
+    {"nom": "Alice", "note": 15, "mention": "Bien"},
+    {"nom": "Bob",   "note": 12, "mention": "Assez bien"},
+    {"nom": "Chloé", "note": 18, "mention": "Très bien"},
+]
+
+# Génère une page HTML complète
+def generer_html(titre, eleves):
+    lignes = ""
+    for e in eleves:
+        couleur = "green" if e["note"] >= 14 else "orange" if e["note"] >= 10 else "red"
+        lignes += f'  <tr><td>{e["nom"]}</td><td style="color:{couleur}">{e["note"]}/20</td><td>{e["mention"]}</td></tr>\\n'
+
+    return f"""<!DOCTYPE html>
+<html>
+<head><title>{titre}</title></head>
+<body>
+  <h1>{titre}</h1>
+  <table border="1">
+    <tr><th>Nom</th><th>Note</th><th>Mention</th></tr>
+{lignes}  </table>
+</body>
+</html>"""
+
+print(generer_html("Résultats du trimestre", eleves))`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Générateur de liste HTML',
+        description: 'Crée une fonction <code>liste_html(items)</code> qui prend une liste Python et retourne une chaîne HTML avec des balises <code>&lt;ul&gt;</code> et <code>&lt;li&gt;</code>.',
+        starter: 'def liste_html(items):\n    # Génère <ul><li>item1</li><li>item2</li>...</ul>\n    pass\n\nfruits = ["pomme", "banane", "cerise"]\nprint(liste_html(fruits))\n',
+        solution: 'def liste_html(items):\n    html = "<ul>\\n"\n    for item in items:\n        html += f"  <li>{item}</li>\\n"\n    html += "</ul>"\n    return html\n\nfruits = ["pomme", "banane", "cerise"]\nprint(liste_html(fruits))',
+        hint: 'Commence par "<ul>\\n", ajoute chaque <li>item</li>, termine par "</ul>"'
+      },
+      {
+        id: 2,
+        title: 'Codes HTTP',
+        description: 'Crée un dictionnaire des codes HTTP principaux, puis une fonction <code>statut(code)</code> qui retourne la description. Teste avec 200, 404, 500.',
+        starter: 'codes_http = {\n    200: "OK",\n    # Ajoute 201, 400, 401, 403, 404, 500\n}\n\ndef statut(code):\n    # Retourne la description ou "Inconnu"\n    pass\n\nprint(statut(200))  # OK\nprint(statut(404))  # Not Found\nprint(statut(999))  # Inconnu\n',
+        solution: 'codes_http = {\n    200: "OK",\n    201: "Created",\n    400: "Bad Request",\n    401: "Unauthorized",\n    403: "Forbidden",\n    404: "Not Found",\n    500: "Internal Server Error",\n}\n\ndef statut(code):\n    return codes_http.get(code, "Inconnu")\n\nprint(statut(200))\nprint(statut(404))\nprint(statut(999))',
+        hint: 'Utilise .get(code, "Inconnu") pour retourner une valeur par défaut'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Quelle est la différence entre Frontend et Backend ?',
+        options: [
+          'Frontend = Python, Backend = JavaScript',
+          'Frontend = ce que l\'utilisateur voit (navigateur), Backend = serveur qui traite les données',
+          'Frontend = la base de données, Backend = l\'interface',
+          'Il n\'y a pas de différence'
+        ],
+        answer: 1,
+        explanation: 'Le frontend (HTML/CSS/JS) s\'exécute dans le navigateur. Le backend (Python, etc.) tourne sur le serveur et traite la logique métier et les données.'
+      },
+      {
+        id: 2,
+        question: 'Que signifie une réponse HTTP 404 ?',
+        options: ['Tout va bien', 'Erreur serveur interne', 'Page ou ressource introuvable', 'Accès non autorisé'],
+        answer: 2,
+        explanation: '404 Not Found signifie que la ressource demandée n\'existe pas sur le serveur. C\'est l\'erreur web la plus connue !'
+      },
+      {
+        id: 3,
+        question: 'Quelle méthode HTTP envoie des données de formulaire au serveur ?',
+        options: ['GET', 'POST', 'SEND', 'PUSH'],
+        answer: 1,
+        explanation: 'POST envoie des données dans le corps de la requête (formulaire, login…). GET passe les données dans l\'URL (?param=valeur).'
+      }
+    ]
+  },
+  {
+    id: 23,
+    emoji: '⚗️',
+    title: 'Flask : premiers pas',
+    level: 4,
+    description: 'Crée ton premier serveur web avec Python !',
+    color: '#6366f1',
+    lesson: {
+      title: 'Flask — le micro-framework web Python',
+      content: `
+        <h2>Qu'est-ce que Flask ?</h2>
+        <p><strong>Flask</strong> est un mini-framework Python pour créer des applications web. Il est léger, simple à apprendre, et très utilisé. Avec Flask, Python devient ton serveur web !</p>
+        <div class="info-box"><p>⚠️ Flask s'installe et s'exécute sur ton ordinateur, pas dans ce navigateur. Les exemples ci-dessous montrent comment ça marche — tu peux les tester localement avec <code>pip install flask</code>.</p></div>
+
+        <h2>Installation</h2>
+        <pre><code class="language-python"># Dans ton terminal :
+# pip install flask</code></pre>
+
+        <h2>Ton premier serveur Flask</h2>
+        <pre><code class="language-python">from flask import Flask
+
+app = Flask(__name__)   # Crée l'application
+
+@app.route("/")         # Route : URL "/"
+def accueil():
+    return "&lt;h1&gt;Bonjour le monde !&lt;/h1&gt;"
+
+@app.route("/hello")    # Route : URL "/hello"
+def hello():
+    return "&lt;p&gt;Page hello !&lt;/p&gt;"
+
+if __name__ == "__main__":
+    app.run(debug=True)  # Lance le serveur sur http://localhost:5000</code></pre>
+
+        <h2>Les routes avec paramètres</h2>
+        <pre><code class="language-python">from flask import Flask
+app = Flask(__name__)
+
+@app.route("/bonjour/&lt;prenom&gt;")
+def bonjour(prenom):
+    return f"&lt;h1&gt;Bonjour {prenom} !&lt;/h1&gt;"
+
+# http://localhost:5000/bonjour/Alice → Bonjour Alice !
+# http://localhost:5000/bonjour/Bob  → Bonjour Bob !</code></pre>
+
+        <h2>Retourner du JSON (API)</h2>
+        <pre><code class="language-python">from flask import Flask, jsonify
+app = Flask(__name__)
+
+eleves = [
+    {"nom": "Alice", "note": 15},
+    {"nom": "Bob",   "note": 12},
+]
+
+@app.route("/api/eleves")
+def get_eleves():
+    return jsonify(eleves)   # Retourne du JSON automatiquement
+
+# http://localhost:5000/api/eleves
+# → [{"nom": "Alice", "note": 15}, ...]</code></pre>
+
+        <h2>Le décorateur @app.route</h2>
+        <p>Le <code>@app.route("/url")</code> est un <strong>décorateur</strong> — il dit à Flask : "quand quelqu'un visite cette URL, exécute cette fonction". La fonction retourne ce que le navigateur reçoit.</p>
+        <div class="tip-box"><p>✅ Chaque fonction associée à une route s'appelle une <strong>vue</strong> (view). Elle reçoit la requête et retourne une réponse.</p></div>
+      `
+    },
+    interactiveCode: `# Simulation du système de routing Flask en Python pur
+# (Flask lui-même ne tourne pas dans le navigateur)
+
+class MiniFlask:
+    def __init__(self):
+        self.routes = {}
+
+    def route(self, path):
+        def decorator(func):
+            self.routes[path] = func
+            return func
+        return decorator
+
+    def simuler_requete(self, path, **kwargs):
+        if path in self.routes:
+            return self.routes[path](**kwargs)
+        return "404 - Page introuvable"
+
+app = MiniFlask()
+
+@app.route("/")
+def accueil():
+    return "<h1>Bienvenue !</h1>"
+
+@app.route("/about")
+def about():
+    return "<p>À propos de ce site.</p>"
+
+# Simuler des requêtes
+print("GET /       →", app.simuler_requete("/"))
+print("GET /about  →", app.simuler_requete("/about"))
+print("GET /autre  →", app.simuler_requete("/inconnu"))`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Routeur simple',
+        description: 'Complète la classe <code>Routeur</code> pour qu\'elle stocke et exécute des routes. Ajoute les routes "/" → "Page d\'accueil" et "/contact" → "Contactez-nous".',
+        starter: 'class Routeur:\n    def __init__(self):\n        self.routes = {}\n\n    def ajouter(self, chemin, fonction):\n        # Stocke la fonction pour ce chemin\n        pass\n\n    def traiter(self, chemin):\n        # Appelle la fonction si le chemin existe, sinon retourne "404"\n        pass\n\nr = Routeur()\nr.ajouter("/", lambda: "Page d\'accueil")\nr.ajouter("/contact", lambda: "Contactez-nous")\nprint(r.traiter("/"))         # Page d\'accueil\nprint(r.traiter("/contact"))  # Contactez-nous\nprint(r.traiter("/xyz"))      # 404\n',
+        solution: 'class Routeur:\n    def __init__(self):\n        self.routes = {}\n\n    def ajouter(self, chemin, fonction):\n        self.routes[chemin] = fonction\n\n    def traiter(self, chemin):\n        if chemin in self.routes:\n            return self.routes[chemin]()\n        return "404 - Page introuvable"\n\nr = Routeur()\nr.ajouter("/", lambda: "Page d\'accueil")\nr.ajouter("/contact", lambda: "Contactez-nous")\nprint(r.traiter("/"))\nprint(r.traiter("/contact"))\nprint(r.traiter("/xyz"))',
+        hint: 'self.routes[chemin] = fonction pour stocker, self.routes.get(chemin) pour récupérer'
+      },
+      {
+        id: 2,
+        title: 'Générateur de réponse HTTP',
+        description: 'Crée une fonction <code>reponse_http(code, corps)</code> qui retourne une chaîne formatée comme une vraie réponse HTTP.',
+        starter: 'def reponse_http(code, corps):\n    messages = {200: "OK", 404: "Not Found", 500: "Internal Server Error"}\n    # Retourne : "HTTP/1.1 200 OK\\nContent-Type: text/html\\n\\n<corps>"\n    pass\n\nprint(reponse_http(200, "<h1>Bonjour</h1>"))\nprint(reponse_http(404, "<h1>Page introuvable</h1>"))\n',
+        solution: 'def reponse_http(code, corps):\n    messages = {200: "OK", 404: "Not Found", 500: "Internal Server Error"}\n    msg = messages.get(code, "Unknown")\n    return f"HTTP/1.1 {code} {msg}\\nContent-Type: text/html\\n\\n{corps}"\n\nprint(reponse_http(200, "<h1>Bonjour</h1>"))\nprint(reponse_http(404, "<h1>Page introuvable</h1>"))',
+        hint: 'f"HTTP/1.1 {code} {messages[code]}\\nContent-Type: text/html\\n\\n{corps}"'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Que fait le décorateur @app.route("/") dans Flask ?',
+        options: [
+          'Importe Flask',
+          'Associe l\'URL "/" à la fonction qui suit',
+          'Lance le serveur',
+          'Crée une base de données'
+        ],
+        answer: 1,
+        explanation: '@app.route("/") dit à Flask : "quand un navigateur demande l\'URL /, exécute la fonction suivante et retourne son résultat".'
+      },
+      {
+        id: 2,
+        question: 'Sur quelle adresse Flask démarre-t-il par défaut ?',
+        options: ['http://localhost:3000', 'http://localhost:8080', 'http://localhost:5000', 'http://127.0.0.1:80'],
+        answer: 2,
+        explanation: 'Flask utilise le port 5000 par défaut : http://localhost:5000 ou http://127.0.0.1:5000.'
+      },
+      {
+        id: 3,
+        question: 'Que retourne jsonify(données) dans Flask ?',
+        options: ['Une chaîne Python', 'Une réponse HTTP avec le contenu en JSON', 'Un fichier .json', 'Un dictionnaire Python'],
+        answer: 1,
+        explanation: 'jsonify() convertit les données Python (dict, list) en réponse HTTP avec Content-Type: application/json — parfait pour créer une API.'
+      }
+    ]
+  },
+  {
+    id: 24,
+    emoji: '🎨',
+    title: 'Templates Jinja2',
+    level: 4,
+    description: 'Génère des pages HTML dynamiques avec des templates !',
+    color: '#f59e0b',
+    lesson: {
+      title: 'Templates HTML avec Jinja2',
+      content: `
+        <h2>Pourquoi des templates ?</h2>
+        <p>Écrire du HTML directement dans Python devient vite illisible. Les <strong>templates</strong> séparent le code Python de la présentation HTML. Flask utilise le moteur de templates <strong>Jinja2</strong>.</p>
+        <div class="info-box"><p>💡 Structure Flask : <code>app.py</code> (logique Python) + <code>templates/</code> (fichiers HTML avec Jinja2).</p></div>
+
+        <h2>Structure d'un projet Flask avec templates</h2>
+        <pre><code class="language-python">mon_app/
+├── app.py
+└── templates/
+    ├── base.html        ← template parent
+    ├── index.html       ← hérite de base.html
+    └── eleves.html</code></pre>
+
+        <h2>Utiliser render_template</h2>
+        <pre><code class="language-python"># app.py
+from flask import Flask, render_template
+app = Flask(__name__)
+
+@app.route("/")
+def accueil():
+    prenom = "Alice"
+    notes = [15, 12, 18, 14]
+    return render_template("index.html",
+                           prenom=prenom,
+                           notes=notes)</code></pre>
+
+        <h2>Syntaxe Jinja2 dans le HTML</h2>
+        <pre><code class="language-python"># templates/index.html
+# {{ variable }}         → afficher une variable
+# {% if condition %}     → condition
+# {% for x in liste %}  → boucle
+# {{ variable | filtre }} → appliquer un filtre
+
+# Exemple :
+"""
+&lt;h1&gt;Bonjour {{ prenom }} !&lt;/h1&gt;
+
+&lt;ul&gt;
+{% for note in notes %}
+  &lt;li&gt;{{ note }}/20&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+{% if notes | sum / notes | length >= 12 %}
+  &lt;p&gt;Félicitations !&lt;/p&gt;
+{% else %}
+  &lt;p&gt;Continue tes efforts.&lt;/p&gt;
+{% endif %}
+"""</code></pre>
+
+        <h2>Template parent (héritage)</h2>
+        <pre><code class="language-python"># templates/base.html
+"""
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;&lt;title&gt;{% block titre %}Mon Site{% endblock %}&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;nav&gt;&lt;a href="/"&gt;Accueil&lt;/a&gt;&lt;/nav&gt;
+  {% block contenu %}{% endblock %}
+&lt;/body&gt;
+&lt;/html&gt;
+"""
+
+# templates/index.html
+"""
+{% extends "base.html" %}
+{% block titre %}Accueil{% endblock %}
+{% block contenu %}
+  &lt;h1&gt;Bienvenue !&lt;/h1&gt;
+{% endblock %}
+"""</code></pre>
+        <div class="tip-box"><p>✅ L'héritage de templates évite de répéter le header/footer/nav sur chaque page — DRY (Don't Repeat Yourself) !</p></div>
+      `
+    },
+    interactiveCode: `# Simulation du moteur Jinja2 en Python pur
+import re
+
+def render(template, **context):
+    """Mini moteur de templates façon Jinja2"""
+    result = template
+
+    # {{ variable }}
+    for key, val in context.items():
+        result = result.replace("{{ " + key + " }}", str(val))
+
+    # {% for item in liste %} ... {% endfor %}
+    for_pattern = r"\\{%\\s*for\\s+(\\w+)\\s+in\\s+(\\w+)\\s*%\\}(.+?)\\{%\\s*endfor\\s*%\\}"
+    def expand_for(m):
+        var, lst_name, body = m.group(1), m.group(2), m.group(3)
+        lst = context.get(lst_name, [])
+        return "".join(body.replace("{{ " + var + " }}", str(item)) for item in lst)
+    result = re.sub(for_pattern, expand_for, result, flags=re.DOTALL)
+
+    return result.strip()
+
+template = """
+Bonjour {{ prenom }} !
+Tes notes :
+{% for note in notes %}  - {{ note }}/20
+{% endfor %}
+Moyenne : {{ moyenne }}
+"""
+
+notes = [15, 12, 18, 14]
+html = render(template,
+    prenom="Alice",
+    notes=notes,
+    moyenne=f"{sum(notes)/len(notes):.1f}"
+)
+print(html)`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Générateur de template',
+        description: 'Crée une fonction <code>remplir(template, variables)</code> qui remplace les <code>{{clé}}</code> dans le template par les valeurs du dictionnaire.',
+        starter: 'def remplir(template, variables):\n    # Remplace {{cle}} par variables["cle"]\n    pass\n\nt = "Bonjour {{prenom}}, tu as {{age}} ans et tu habites à {{ville}}."\nresultat = remplir(t, {"prenom": "Alice", "age": "15", "ville": "Paris"})\nprint(resultat)\n',
+        solution: 'def remplir(template, variables):\n    for cle, valeur in variables.items():\n        template = template.replace("{{" + cle + "}}", valeur)\n    return template\n\nt = "Bonjour {{prenom}}, tu as {{age}} ans et tu habites à {{ville}}."\nresultat = remplir(t, {"prenom": "Alice", "age": "15", "ville": "Paris"})\nprint(resultat)',
+        hint: 'Boucle sur variables.items() et fais template.replace("{{" + cle + "}}", valeur)'
+      },
+      {
+        id: 2,
+        title: 'Table HTML dynamique',
+        description: 'Crée une fonction <code>table_html(colonnes, lignes)</code> qui génère un tableau HTML à partir d\'une liste de colonnes et d\'une liste de listes de valeurs.',
+        starter: 'def table_html(colonnes, lignes):\n    # Génère <table><tr><th>...</th></tr><tr><td>...</td></tr>...</table>\n    pass\n\ncols = ["Nom", "Note", "Mention"]\ndata = [["Alice", 15, "Bien"], ["Bob", 12, "AB"], ["Chloé", 18, "TB"]]\nprint(table_html(cols, data))\n',
+        solution: 'def table_html(colonnes, lignes):\n    html = "<table>\\n"\n    html += "  <tr>" + "".join(f"<th>{c}</th>" for c in colonnes) + "</tr>\\n"\n    for ligne in lignes:\n        html += "  <tr>" + "".join(f"<td>{v}</td>" for v in ligne) + "</tr>\\n"\n    html += "</table>"\n    return html\n\ncols = ["Nom", "Note", "Mention"]\ndata = [["Alice", 15, "Bien"], ["Bob", 12, "AB"], ["Chloé", 18, "TB"]]\nprint(table_html(cols, data))',
+        hint: 'Commence par les en-têtes <th>, puis boucle sur lignes pour les <td>'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Quelle syntaxe Jinja2 affiche une variable ?',
+        options: ['<% variable %>', '${variable}', '{{ variable }}', '#{variable}'],
+        answer: 2,
+        explanation: 'Jinja2 utilise {{ }} pour les expressions/variables, et {% %} pour les instructions (if, for, etc.).'
+      },
+      {
+        id: 2,
+        question: 'Que fait {% extends "base.html" %} ?',
+        options: [
+          'Importe base.html comme module Python',
+          'Le template hérite de base.html et peut remplir ses blocs',
+          'Copie le contenu de base.html',
+          'Crée un nouveau fichier base.html'
+        ],
+        answer: 1,
+        explanation: 'extends permet l\'héritage de templates : le fichier enfant réutilise la structure du parent et remplit les blocs {% block %}.'
+      },
+      {
+        id: 3,
+        question: 'Quelle fonction Flask envoie un template HTML en réponse ?',
+        options: ['send_html()', 'render_template()', 'template_response()', 'return_html()'],
+        answer: 1,
+        explanation: 'render_template("fichier.html", variable=valeur) charge le fichier Jinja2, injecte les variables, et retourne le HTML généré.'
+      }
+    ]
+  },
+  {
+    id: 25,
+    emoji: '📝',
+    title: 'Formulaires & requêtes',
+    level: 4,
+    description: 'Reçois et traite les données envoyées par l\'utilisateur !',
+    color: '#10b981',
+    lesson: {
+      title: 'Formulaires HTML et Flask',
+      content: `
+        <h2>Les formulaires HTML</h2>
+        <p>Un formulaire permet à l'utilisateur d'envoyer des données au serveur. Il a deux attributs importants : <code>action</code> (l'URL cible) et <code>method</code> (GET ou POST).</p>
+        <pre><code class="language-python"># Template HTML du formulaire :
+"""
+&lt;form action="/connexion" method="POST"&gt;
+  &lt;label&gt;Nom d\'utilisateur :&lt;/label&gt;
+  &lt;input type="text" name="username"&gt;
+
+  &lt;label&gt;Mot de passe :&lt;/label&gt;
+  &lt;input type="password" name="password"&gt;
+
+  &lt;button type="submit"&gt;Se connecter&lt;/button&gt;
+&lt;/form&gt;
+"""</code></pre>
+
+        <h2>Recevoir les données avec Flask</h2>
+        <pre><code class="language-python">from flask import Flask, request, render_template, redirect
+app = Flask(__name__)
+
+@app.route("/connexion", methods=["GET", "POST"])
+def connexion():
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        if username == "admin" and password == "1234":
+            return f"&lt;h1&gt;Bienvenue {username} !&lt;/h1&gt;"
+        else:
+            return render_template("login.html",
+                                   erreur="Identifiants incorrects")
+
+    return render_template("login.html")</code></pre>
+
+        <h2>GET vs POST</h2>
+        <ul>
+          <li><strong>GET</strong> : données dans l'URL (<code>?nom=Alice&age=15</code>) — pour des recherches, filtres</li>
+          <li><strong>POST</strong> : données dans le corps de la requête — pour les formulaires sensibles (login, données personnelles)</li>
+        </ul>
+
+        <h2>Paramètres GET (query strings)</h2>
+        <pre><code class="language-python">@app.route("/recherche")
+def recherche():
+    # URL : /recherche?mot=python&page=2
+    mot = request.args.get("mot", "")       # "python"
+    page = request.args.get("page", "1")    # "2"
+    return f"Recherche : {mot}, page {page}"</code></pre>
+
+        <h2>Validation des données</h2>
+        <pre><code class="language-python">def valider_formulaire(data):
+    erreurs = []
+    if not data.get("nom"):
+        erreurs.append("Le nom est obligatoire")
+    if len(data.get("password", "")) < 6:
+        erreurs.append("Mot de passe trop court (min 6 caractères)")
+    if "@" not in data.get("email", ""):
+        erreurs.append("Email invalide")
+    return erreurs</code></pre>
+        <div class="tip-box"><p>✅ Valide TOUJOURS les données côté serveur. Ne fais jamais confiance aux données venant du navigateur !</p></div>
+      `
+    },
+    interactiveCode: `# Simulation de traitement de formulaire
+
+def valider_inscription(data):
+    """Valide un formulaire d'inscription"""
+    erreurs = []
+
+    if not data.get("prenom", "").strip():
+        erreurs.append("Le prénom est obligatoire")
+
+    if not data.get("email", "").strip():
+        erreurs.append("L'email est obligatoire")
+    elif "@" not in data["email"] or "." not in data["email"].split("@")[-1]:
+        erreurs.append("Format d'email invalide")
+
+    mdp = data.get("mot_de_passe", "")
+    if len(mdp) < 8:
+        erreurs.append("Mot de passe trop court (min 8 caractères)")
+    elif not any(c.isdigit() for c in mdp):
+        erreurs.append("Le mot de passe doit contenir au moins un chiffre")
+
+    return erreurs
+
+# Test avec différentes données
+cas_tests = [
+    {"prenom": "Alice", "email": "alice@example.com", "mot_de_passe": "Python123"},
+    {"prenom": "",      "email": "invalide",          "mot_de_passe": "court"},
+    {"prenom": "Bob",   "email": "bob@test.fr",       "mot_de_passe": "sansChiffre"},
+]
+
+for i, data in enumerate(cas_tests, 1):
+    erreurs = valider_inscription(data)
+    print(f"\\nTest {i} :")
+    if erreurs:
+        for e in erreurs:
+            print(f"  ✗ {e}")
+    else:
+        print(f"  ✓ Formulaire valide !")`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Parser une query string',
+        description: 'Crée une fonction <code>parser_url(query)</code> qui transforme une query string comme <code>"nom=Alice&age=15&ville=Paris"</code> en dictionnaire Python.',
+        starter: 'def parser_url(query):\n    # Transforme "cle1=val1&cle2=val2" en {"cle1": "val1", "cle2": "val2"}\n    pass\n\nprint(parser_url("nom=Alice&age=15&ville=Paris"))\n# {"nom": "Alice", "age": "15", "ville": "Paris"}\nprint(parser_url("q=python&page=2"))\n',
+        solution: 'def parser_url(query):\n    resultat = {}\n    for paire in query.split("&"):\n        if "=" in paire:\n            cle, valeur = paire.split("=", 1)\n            resultat[cle] = valeur\n    return resultat\n\nprint(parser_url("nom=Alice&age=15&ville=Paris"))\nprint(parser_url("q=python&page=2"))',
+        hint: 'Sépare par "&", puis chaque partie par "=". split("=", 1) évite les problèmes si la valeur contient "="'
+      },
+      {
+        id: 2,
+        title: 'Validation de formulaire',
+        description: 'Crée une fonction <code>valider(data)</code> qui vérifie qu\'un dict contient "nom" (non vide), "age" (entre 10 et 120) et "email" (contient @). Retourne la liste des erreurs.',
+        starter: 'def valider(data):\n    erreurs = []\n    # Vérifie nom, age (10-120), email (contient @)\n    return erreurs\n\nprint(valider({"nom": "Alice", "age": 15, "email": "a@b.fr"}))  # []\nprint(valider({"nom": "", "age": 200, "email": "invalide"}))    # 3 erreurs\n',
+        solution: 'def valider(data):\n    erreurs = []\n    if not str(data.get("nom", "")).strip():\n        erreurs.append("Nom obligatoire")\n    age = data.get("age", 0)\n    if not (10 <= age <= 120):\n        erreurs.append("Âge invalide (10-120)")\n    if "@" not in str(data.get("email", "")):\n        erreurs.append("Email invalide")\n    return erreurs\n\nprint(valider({"nom": "Alice", "age": 15, "email": "a@b.fr"}))\nprint(valider({"nom": "", "age": 200, "email": "invalide"}))',
+        hint: 'Vérifie chaque champ et ajoute un message à erreurs si invalide'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Comment récupère-t-on un champ POST nommé "email" dans Flask ?',
+        options: ['request.get("email")', 'request.form["email"]', 'request.post.email', 'form.get_field("email")'],
+        answer: 1,
+        explanation: 'request.form["email"] accède aux données d\'un formulaire POST. Pour GET, c\'est request.args.get("email").'
+      },
+      {
+        id: 2,
+        question: 'Pourquoi valider les données côté serveur (Python) et pas seulement côté client (HTML) ?',
+        options: [
+          'Python est plus rapide',
+          'Un utilisateur peut contourner les validations HTML et envoyer n\'importe quoi',
+          'HTML ne peut pas valider',
+          'C\'est juste une convention'
+        ],
+        answer: 1,
+        explanation: 'La validation HTML (required, type...) peut être contournée en modifiant la page ou en envoyant des requêtes directement. La validation serveur est la vraie sécurité.'
+      },
+      {
+        id: 3,
+        question: 'Dans une URL /recherche?q=python&page=2, comment lire "page" avec Flask ?',
+        options: ['request.form["page"]', 'request.url["page"]', 'request.args.get("page")', 'request.params["page"]'],
+        answer: 2,
+        explanation: 'Les paramètres de l\'URL (après ?) sont des paramètres GET accessibles via request.args.get("clé").'
+      }
+    ]
+  },
+  {
+    id: 26,
+    emoji: '🗄️',
+    title: 'Bases de données',
+    level: 4,
+    description: 'Stocke tes données durablement avec SQLite !',
+    color: '#8b5cf6',
+    lesson: {
+      title: 'SQLite avec Python',
+      content: `
+        <h2>Pourquoi une base de données ?</h2>
+        <p>Une variable ou un fichier JSON suffit pour peu de données. Mais pour stocker des milliers d'utilisateurs, de messages ou de produits, on utilise une <strong>base de données</strong>.</p>
+        <div class="info-box"><p>💡 <strong>SQLite</strong> est une base de données légère, stockée dans un seul fichier, idéale pour apprendre. Python l'inclut directement avec le module <code>sqlite3</code>.</p></div>
+
+        <h2>Créer une base et une table</h2>
+        <pre><code class="language-python">import sqlite3
+
+# Connexion (crée le fichier si inexistant)
+conn = sqlite3.connect("ecole.db")
+cursor = conn.cursor()
+
+# Créer une table
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS eleves (
+        id      INTEGER PRIMARY KEY AUTOINCREMENT,
+        nom     TEXT    NOT NULL,
+        age     INTEGER,
+        note    REAL
+    )
+""")
+conn.commit()
+conn.close()</code></pre>
+
+        <h2>Insérer des données</h2>
+        <pre><code class="language-python">conn = sqlite3.connect("ecole.db")
+cursor = conn.cursor()
+
+# Insérer un élève (jamais concatener directement → injection SQL !)
+cursor.execute(
+    "INSERT INTO eleves (nom, age, note) VALUES (?, ?, ?)",
+    ("Alice", 15, 14.5)
+)
+
+# Insérer plusieurs à la fois
+eleves = [("Bob", 14, 12.0), ("Chloé", 15, 17.5)]
+cursor.executemany(
+    "INSERT INTO eleves (nom, age, note) VALUES (?, ?, ?)",
+    eleves
+)
+conn.commit()
+conn.close()</code></pre>
+
+        <h2>Lire des données (SELECT)</h2>
+        <pre><code class="language-python">conn = sqlite3.connect("ecole.db")
+cursor = conn.cursor()
+
+# Tous les élèves
+cursor.execute("SELECT * FROM eleves")
+tous = cursor.fetchall()
+for eleve in tous:
+    print(eleve)   # (1, 'Alice', 15, 14.5)
+
+# Filtrer
+cursor.execute("SELECT nom, note FROM eleves WHERE note >= ?", (14,))
+bons = cursor.fetchall()
+print(bons)   # [('Alice', 14.5), ('Chloé', 17.5)]
+
+conn.close()</code></pre>
+
+        <h2>Modifier et supprimer</h2>
+        <pre><code class="language-python">cursor.execute("UPDATE eleves SET note = ? WHERE nom = ?", (15.0, "Alice"))
+cursor.execute("DELETE FROM eleves WHERE note < ?", (10,))
+conn.commit()</code></pre>
+        <div class="tip-box"><p>✅ Utilise toujours des <code>?</code> pour les valeurs — jamais du f-string dans du SQL, c'est la faille d'injection SQL !</p></div>
+      `
+    },
+    interactiveCode: `import sqlite3
+
+# SQLite fonctionne en mémoire dans Pyodide avec ":memory:"
+conn = sqlite3.connect(":memory:")
+cursor = conn.cursor()
+
+# Créer la table
+cursor.execute("""
+    CREATE TABLE eleves (
+        id    INTEGER PRIMARY KEY AUTOINCREMENT,
+        nom   TEXT NOT NULL,
+        note  REAL
+    )
+""")
+
+# Insérer des données
+eleves = [("Alice", 15.0), ("Bob", 12.5), ("Chloé", 18.0),
+          ("David", 9.5), ("Emma", 14.0)]
+cursor.executemany("INSERT INTO eleves (nom, note) VALUES (?, ?)", eleves)
+conn.commit()
+
+# Lire tous les élèves
+print("=== Tous les élèves ===")
+cursor.execute("SELECT nom, note FROM eleves ORDER BY note DESC")
+for nom, note in cursor.fetchall():
+    print(f"  {nom} : {note}/20")
+
+# Statistiques SQL
+cursor.execute("SELECT COUNT(*), AVG(note), MAX(note), MIN(note) FROM eleves")
+count, avg, maxi, mini = cursor.fetchone()
+print(f"\\n=== Stats ===")
+print(f"Effectif : {count} | Moyenne : {avg:.1f} | Max : {maxi} | Min : {mini}")
+
+conn.close()`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Base de données produits',
+        description: 'Crée une table <code>produits</code> (id, nom, prix, stock), insère 4 produits, puis affiche ceux dont le stock est supérieur à 0.',
+        starter: 'import sqlite3\n\nconn = sqlite3.connect(":memory:")\ncursor = conn.cursor()\n\n# Crée la table produits\n# Insère 4 produits\n# Affiche les produits disponibles (stock > 0)\n\nconn.close()\n',
+        solution: 'import sqlite3\n\nconn = sqlite3.connect(":memory:")\ncursor = conn.cursor()\n\ncursor.execute("""\n    CREATE TABLE produits (\n        id INTEGER PRIMARY KEY AUTOINCREMENT,\n        nom TEXT, prix REAL, stock INTEGER\n    )\n""")\n\nproduits = [("Pomme", 0.50, 100), ("Banane", 0.30, 0),\n            ("Cerise", 2.00, 50), ("Kiwi", 0.80, 0)]\ncursor.executemany("INSERT INTO produits (nom, prix, stock) VALUES (?,?,?)", produits)\nconn.commit()\n\ncursor.execute("SELECT nom, prix, stock FROM produits WHERE stock > 0")\nprint("Produits disponibles :")\nfor nom, prix, stock in cursor.fetchall():\n    print(f"  {nom} : {prix}€ (stock: {stock})")\n\nconn.close()',
+        hint: 'CREATE TABLE produits (...), executemany pour les inserts, SELECT ... WHERE stock > 0'
+      },
+      {
+        id: 2,
+        title: 'Mise à jour et statistiques',
+        description: 'Reprends la base élèves de l\'exemple. Met à jour la note de "Bob" à 15. Puis affiche le nombre d\'élèves admis (note >= 10) et la moyenne de la classe.',
+        starter: 'import sqlite3\n\nconn = sqlite3.connect(":memory:")\ncursor = conn.cursor()\ncursor.execute("CREATE TABLE eleves (nom TEXT, note REAL)")\ndata = [("Alice",15),("Bob",12),("Chloé",18),("David",9)]\ncursor.executemany("INSERT INTO eleves VALUES (?,?)", data)\nconn.commit()\n\n# Met à jour la note de Bob à 15\n# Affiche le nombre d\'admis et la moyenne\n\nconn.close()\n',
+        solution: 'import sqlite3\n\nconn = sqlite3.connect(":memory:")\ncursor = conn.cursor()\ncursor.execute("CREATE TABLE eleves (nom TEXT, note REAL)")\ndata = [("Alice",15),("Bob",12),("Chloé",18),("David",9)]\ncursor.executemany("INSERT INTO eleves VALUES (?,?)", data)\nconn.commit()\n\ncursor.execute("UPDATE eleves SET note = ? WHERE nom = ?", (15, "Bob"))\nconn.commit()\n\ncursor.execute("SELECT COUNT(*) FROM eleves WHERE note >= 10")\nadmis = cursor.fetchone()[0]\ncursor.execute("SELECT AVG(note) FROM eleves")\nmoyenne = cursor.fetchone()[0]\nprint(f"Admis : {admis}/4")\nprint(f"Moyenne : {moyenne:.1f}/20")\nconn.close()',
+        hint: 'UPDATE eleves SET note=? WHERE nom=? — puis SELECT COUNT(*) et AVG(note)'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Pourquoi utiliser ? au lieu de f-string dans une requête SQL ?',
+        options: [
+          'C\'est plus court',
+          'Pour éviter les injections SQL (faille de sécurité)',
+          'Python l\'exige syntaxiquement',
+          'Les f-strings ne fonctionnent pas dans sqlite3'
+        ],
+        answer: 1,
+        explanation: 'Une injection SQL peut détruire la base ou voler des données. Les ? sont des paramètres liés que sqlite3 sécurise automatiquement.'
+      },
+      {
+        id: 2,
+        question: 'Que fait cursor.fetchall() ?',
+        options: [
+          'Supprime tous les résultats',
+          'Récupère toutes les lignes du résultat SELECT en une liste',
+          'Exécute toutes les requêtes en attente',
+          'Crée toutes les tables'
+        ],
+        answer: 1,
+        explanation: 'fetchall() retourne toutes les lignes du dernier SELECT comme liste de tuples. fetchone() retourne seulement la première ligne.'
+      },
+      {
+        id: 3,
+        question: 'Quel avantage a SQLite par rapport à un fichier JSON ?',
+        options: [
+          'SQLite est plus facile à lire',
+          'JSON est plus rapide',
+          'SQLite permet les requêtes (filtres, tris, agrégats) et gère les grands volumes',
+          'SQLite ne nécessite pas Python'
+        ],
+        answer: 2,
+        explanation: 'SQLite permet des requêtes complexes (WHERE, ORDER BY, COUNT, AVG…) efficacement sur de grands volumes. JSON recharge tout en mémoire.'
+      }
+    ]
+  },
+  {
+    id: 27,
+    emoji: '🔌',
+    title: 'API REST & JSON',
+    level: 4,
+    description: 'Crée une API que n\'importe quel client peut consommer !',
+    color: '#06b6d4',
+    lesson: {
+      title: 'Construire une API REST avec Flask',
+      content: `
+        <h2>Qu'est-ce qu'une API REST ?</h2>
+        <p>Une <strong>API REST</strong> est une interface qui permet à des applications de communiquer entre elles via HTTP en échangeant du JSON. C'est ainsi que les apps mobiles parlent à leurs serveurs, que les sites web chargent des données dynamiquement, etc.</p>
+        <div class="info-box"><p>💡 REST = Representational State Transfer. Les <strong>ressources</strong> sont identifiées par des URLs, et les <strong>opérations</strong> par les méthodes HTTP (GET/POST/PUT/DELETE).</p></div>
+
+        <h2>Les méthodes HTTP CRUD</h2>
+        <pre><code class="language-python"># CRUD = Create Read Update Delete
+GET    /api/eleves       → lire tous les élèves
+GET    /api/eleves/1     → lire l'élève n°1
+POST   /api/eleves       → créer un nouvel élève
+PUT    /api/eleves/1     → modifier l'élève n°1
+DELETE /api/eleves/1     → supprimer l'élève n°1</code></pre>
+
+        <h2>API complète avec Flask</h2>
+        <pre><code class="language-python">from flask import Flask, jsonify, request
+app = Flask(__name__)
+
+eleves = [
+    {"id": 1, "nom": "Alice", "note": 15},
+    {"id": 2, "nom": "Bob",   "note": 12},
+]
+
+@app.route("/api/eleves", methods=["GET"])
+def get_eleves():
+    return jsonify(eleves), 200   # 200 OK
+
+@app.route("/api/eleves/&lt;int:id&gt;", methods=["GET"])
+def get_eleve(id):
+    eleve = next((e for e in eleves if e["id"] == id), None)
+    if eleve is None:
+        return jsonify({"erreur": "Introuvable"}), 404
+    return jsonify(eleve), 200
+
+@app.route("/api/eleves", methods=["POST"])
+def creer_eleve():
+    data = request.get_json()
+    nouvel = {"id": len(eleves) + 1, **data}
+    eleves.append(nouvel)
+    return jsonify(nouvel), 201   # 201 Created
+
+@app.route("/api/eleves/&lt;int:id&gt;", methods=["DELETE"])
+def supprimer_eleve(id):
+    global eleves
+    eleves = [e for e in eleves if e["id"] != id]
+    return jsonify({"message": "Supprimé"}), 200</code></pre>
+
+        <h2>Consommer une API (côté frontend)</h2>
+        <pre><code class="language-python"># En JavaScript (fetch API) :
+"""
+fetch('/api/eleves')
+  .then(r => r.json())
+  .then(data => console.log(data))
+
+// Créer un élève :
+fetch('/api/eleves', {
+  method: 'POST',
+  headers: {'Content-Type': 'application/json'},
+  body: JSON.stringify({nom: 'Chloé', note: 18})
+})
+"""</code></pre>
+        <div class="tip-box"><p>✅ Une bonne API retourne toujours le bon code HTTP : 200 (OK), 201 (créé), 400 (mauvaise requête), 404 (introuvable), 500 (erreur serveur).</p></div>
+      `
+    },
+    interactiveCode: `import json
+
+# Simulation d'une mini API REST en mémoire
+class MiniAPI:
+    def __init__(self):
+        self.data = {}
+        self.next_id = 1
+
+    def get_all(self, ressource):
+        return 200, list(self.data.get(ressource, {}).values())
+
+    def get_one(self, ressource, id):
+        item = self.data.get(ressource, {}).get(id)
+        if item is None:
+            return 404, {"erreur": f"{ressource}/{id} introuvable"}
+        return 200, item
+
+    def create(self, ressource, body):
+        if ressource not in self.data:
+            self.data[ressource] = {}
+        item = {"id": self.next_id, **body}
+        self.data[ressource][self.next_id] = item
+        self.next_id += 1
+        return 201, item
+
+    def delete(self, ressource, id):
+        if id in self.data.get(ressource, {}):
+            del self.data[ressource][id]
+            return 200, {"message": "Supprimé"}
+        return 404, {"erreur": "Introuvable"}
+
+api = MiniAPI()
+
+# POST /eleves
+code, r = api.create("eleves", {"nom": "Alice", "note": 15})
+print(f"POST   {code}: {r}")
+api.create("eleves", {"nom": "Bob", "note": 12})
+
+# GET /eleves
+code, r = api.get_all("eleves")
+print(f"GET    {code}: {json.dumps(r)}")
+
+# GET /eleves/1
+code, r = api.get_one("eleves", 1)
+print(f"GET/1  {code}: {r}")
+
+# DELETE /eleves/1
+code, r = api.delete("eleves", 1)
+print(f"DELETE {code}: {r}")
+
+# GET après delete
+code, r = api.get_one("eleves", 1)
+print(f"GET/1  {code}: {r}")`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Sérialiser une API response',
+        description: 'Crée une fonction <code>api_response(code, données, message=None)</code> qui retourne un dict JSON standardisé avec status, data et message.',
+        starter: 'import json\n\ndef api_response(code, donnees, message=None):\n    # Retourne {"status": code, "data": donnees, "message": message}\n    pass\n\nprint(json.dumps(api_response(200, [{"id":1,"nom":"Alice"}])))\nprint(json.dumps(api_response(404, None, "Élève introuvable")))\nprint(json.dumps(api_response(201, {"id":2,"nom":"Bob"}, "Créé avec succès")))\n',
+        solution: 'import json\n\ndef api_response(code, donnees, message=None):\n    return {"status": code, "data": donnees, "message": message}\n\nprint(json.dumps(api_response(200, [{"id":1,"nom":"Alice"}])))\nprint(json.dumps(api_response(404, None, "Élève introuvable")))\nprint(json.dumps(api_response(201, {"id":2,"nom":"Bob"}, "Créé avec succès")))',
+        hint: 'Retourne simplement {"status": code, "data": donnees, "message": message}'
+      },
+      {
+        id: 2,
+        title: 'Filtrer une API',
+        description: 'Simule un endpoint GET /api/produits avec des filtres. La fonction reçoit une liste de produits et des paramètres (categorie, prix_max) et retourne les produits filtrés.',
+        starter: 'def endpoint_produits(produits, categorie=None, prix_max=None):\n    # Filtre par categorie si fourni\n    # Filtre par prix <= prix_max si fourni\n    # Retourne la liste filtrée\n    pass\n\nproduits = [\n    {"nom": "Pomme",  "prix": 0.5,  "categorie": "fruit"},\n    {"nom": "Lait",   "prix": 1.2,  "categorie": "dairy"},\n    {"nom": "Banane", "prix": 0.3,  "categorie": "fruit"},\n    {"nom": "Beurre", "prix": 2.5,  "categorie": "dairy"},\n]\nprint(endpoint_produits(produits, categorie="fruit"))\nprint(endpoint_produits(produits, prix_max=1.0))\n',
+        solution: 'def endpoint_produits(produits, categorie=None, prix_max=None):\n    result = produits\n    if categorie:\n        result = [p for p in result if p["categorie"] == categorie]\n    if prix_max is not None:\n        result = [p for p in result if p["prix"] <= prix_max]\n    return result\n\nproduits = [\n    {"nom": "Pomme",  "prix": 0.5,  "categorie": "fruit"},\n    {"nom": "Lait",   "prix": 1.2,  "categorie": "dairy"},\n    {"nom": "Banane", "prix": 0.3,  "categorie": "fruit"},\n    {"nom": "Beurre", "prix": 2.5,  "categorie": "dairy"},\n]\nprint(endpoint_produits(produits, categorie="fruit"))\nprint(endpoint_produits(produits, prix_max=1.0))',
+        hint: 'Utilise des compréhensions de liste avec des conditions if sur categorie et prix'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Quelle méthode HTTP crée une nouvelle ressource ?',
+        options: ['GET', 'POST', 'CREATE', 'NEW'],
+        answer: 1,
+        explanation: 'POST crée une nouvelle ressource. GET lit, PUT/PATCH modifie, DELETE supprime. C\'est la convention REST CRUD.'
+      },
+      {
+        id: 2,
+        question: 'Quel code HTTP retourner après une création réussie ?',
+        options: ['200 OK', '201 Created', '204 No Content', '302 Found'],
+        answer: 1,
+        explanation: '201 Created indique qu\'une ressource a été créée avec succès. 200 OK est pour les requêtes réussies sans création.'
+      },
+      {
+        id: 3,
+        question: 'Comment une API REST transmet-elle généralement ses données ?',
+        options: ['XML seulement', 'HTML', 'JSON', 'CSV'],
+        answer: 2,
+        explanation: 'JSON est le format standard des APIs REST modernes — léger, lisible, et supporté nativement par tous les langages.'
+      }
+    ]
+  },
+  {
+    id: 28,
+    emoji: '🚀',
+    title: 'Projet Full-Stack',
+    level: 4,
+    description: 'Assemble tout : frontend HTML + backend Flask + base de données !',
+    color: '#f97316',
+    lesson: {
+      title: 'Mini app web full-stack',
+      content: `
+        <h2>Architecture d'une app web complète</h2>
+        <p>Voici comment les pièces s'assemblent dans une vraie application web :</p>
+        <pre><code class="language-python">mon_app/
+├── app.py           ← Backend Flask (routes, logique)
+├── database.py      ← Gestion SQLite
+├── templates/
+│   ├── base.html    ← Structure commune
+│   ├── index.html   ← Page d'accueil
+│   └── formulaire.html
+└── static/
+    ├── style.css    ← CSS
+    └── script.js    ← JavaScript (appels API)</code></pre>
+
+        <h2>La couche base de données (database.py)</h2>
+        <pre><code class="language-python"># database.py
+import sqlite3
+
+def get_db():
+    conn = sqlite3.connect("app.db")
+    conn.row_factory = sqlite3.Row   # → dictionnaires au lieu de tuples
+    return conn
+
+def init_db():
+    db = get_db()
+    db.execute("""CREATE TABLE IF NOT EXISTS messages (
+        id        INTEGER PRIMARY KEY AUTOINCREMENT,
+        auteur    TEXT NOT NULL,
+        contenu   TEXT NOT NULL,
+        date      TEXT DEFAULT CURRENT_TIMESTAMP
+    )""")
+    db.commit()
+    db.close()</code></pre>
+
+        <h2>Le backend (app.py)</h2>
+        <pre><code class="language-python"># app.py
+from flask import Flask, jsonify, request, render_template
+from database import get_db, init_db
+
+app = Flask(__name__)
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/api/messages", methods=["GET"])
+def get_messages():
+    db = get_db()
+    msgs = db.execute("SELECT * FROM messages ORDER BY date DESC").fetchall()
+    db.close()
+    return jsonify([dict(m) for m in msgs])
+
+@app.route("/api/messages", methods=["POST"])
+def post_message():
+    data = request.get_json()
+    if not data.get("auteur") or not data.get("contenu"):
+        return jsonify({"erreur": "Champs manquants"}), 400
+    db = get_db()
+    db.execute("INSERT INTO messages (auteur, contenu) VALUES (?, ?)",
+               (data["auteur"], data["contenu"]))
+    db.commit()
+    db.close()
+    return jsonify({"message": "Publié !"}), 201
+
+if __name__ == "__main__":
+    init_db()
+    app.run(debug=True)</code></pre>
+
+        <h2>Le frontend (templates/index.html)</h2>
+        <pre><code class="language-python">"""
+&lt;!-- Charger les messages depuis l'API --&gt;
+&lt;div id="messages"&gt;&lt;/div&gt;
+
+&lt;form id="form"&gt;
+  &lt;input id="auteur" placeholder="Ton pseudo"&gt;
+  &lt;input id="contenu" placeholder="Ton message"&gt;
+  &lt;button type="submit"&gt;Envoyer&lt;/button&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+async function charger() {
+  const res = await fetch('/api/messages');
+  const msgs = await res.json();
+  document.getElementById('messages').innerHTML =
+    msgs.map(m => \`&lt;p&gt;&lt;b&gt;\${m.auteur}&lt;/b&gt; : \${m.contenu}&lt;/p&gt;\`).join('');
+}
+
+document.getElementById('form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  await fetch('/api/messages', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      auteur: document.getElementById('auteur').value,
+      contenu: document.getElementById('contenu').value
+    })
+  });
+  charger();
+});
+
+charger();  // Charger au démarrage
+&lt;/script&gt;
+"""</code></pre>
+        <div class="tip-box"><p>✅ Ce pattern (Flask API + frontend JavaScript qui appelle l'API) est utilisé par des milliers d'applications en production. Tu connais maintenant l'architecture de base !</p></div>
+      `
+    },
+    interactiveCode: `import sqlite3, json
+from datetime import datetime
+
+# Simulation complète d'une mini app de messages
+
+# --- Couche base de données ---
+conn = sqlite3.connect(":memory:")
+conn.row_factory = sqlite3.Row
+conn.execute("""
+    CREATE TABLE messages (
+        id      INTEGER PRIMARY KEY AUTOINCREMENT,
+        auteur  TEXT NOT NULL,
+        contenu TEXT NOT NULL,
+        date    TEXT
+    )
+""")
+conn.commit()
+
+def ajouter_message(auteur, contenu):
+    conn.execute("INSERT INTO messages (auteur, contenu, date) VALUES (?,?,?)",
+                 (auteur, contenu, datetime.now().strftime("%H:%M:%S")))
+    conn.commit()
+
+def get_messages():
+    rows = conn.execute("SELECT * FROM messages ORDER BY id DESC").fetchall()
+    return [dict(r) for r in rows]
+
+# --- Simulation du backend (logique Flask) ---
+def api_post_message(body):
+    if not body.get("auteur") or not body.get("contenu"):
+        return 400, {"erreur": "Champs manquants"}
+    ajouter_message(body["auteur"], body["contenu"])
+    return 201, {"message": "Publié !"}
+
+def api_get_messages():
+    return 200, get_messages()
+
+# --- Simulation du frontend ---
+print("=== POST messages ===")
+for msg in [
+    {"auteur": "Alice",  "contenu": "Salut tout le monde !"},
+    {"auteur": "Bob",    "contenu": "Coucou Alice !"},
+    {"auteur": "Chloé",  "contenu": "Python c'est trop bien"},
+    {"auteur": "",       "contenu": "test"},  # invalide
+]:
+    code, r = api_post_message(msg)
+    print(f"  {code}: {r}")
+
+print("\\n=== GET messages ===")
+code, msgs = api_get_messages()
+for m in msgs:
+    print(f"  [{m['date']}] {m['auteur']}: {m['contenu']}")
+
+conn.close()`,
+    exercises: [
+      {
+        id: 1,
+        title: 'Mini gestionnaire de tâches',
+        description: 'Crée un mini backend en mémoire avec SQLite pour gérer des tâches (titre, statut done/todo). Implémente add_task(titre), complete_task(id), get_tasks(only_todo=False).',
+        starter: 'import sqlite3\n\nconn = sqlite3.connect(":memory:")\nconn.execute("CREATE TABLE taches (id INTEGER PRIMARY KEY AUTOINCREMENT, titre TEXT, done INTEGER DEFAULT 0)")\nconn.commit()\n\ndef add_task(titre):\n    pass\n\ndef complete_task(id):\n    pass\n\ndef get_tasks(only_todo=False):\n    pass\n\nadd_task("Apprendre Flask")\nadd_task("Créer une API")\nadd_task("Déployer l\'app")\ncomplete_task(1)\nprint("Toutes :", get_tasks())\nprint("À faire :", get_tasks(only_todo=True))\n',
+        solution: 'import sqlite3\n\nconn = sqlite3.connect(":memory:")\nconn.execute("CREATE TABLE taches (id INTEGER PRIMARY KEY AUTOINCREMENT, titre TEXT, done INTEGER DEFAULT 0)")\nconn.commit()\n\ndef add_task(titre):\n    conn.execute("INSERT INTO taches (titre) VALUES (?)", (titre,))\n    conn.commit()\n\ndef complete_task(id):\n    conn.execute("UPDATE taches SET done=1 WHERE id=?", (id,))\n    conn.commit()\n\ndef get_tasks(only_todo=False):\n    if only_todo:\n        rows = conn.execute("SELECT * FROM taches WHERE done=0").fetchall()\n    else:\n        rows = conn.execute("SELECT * FROM taches").fetchall()\n    return [{"id": r[0], "titre": r[1], "done": bool(r[2])} for r in rows]\n\nadd_task("Apprendre Flask")\nadd_task("Créer une API")\nadd_task("Déployer l\'app")\ncomplete_task(1)\nprint("Toutes :", get_tasks())\nprint("À faire :", get_tasks(only_todo=True))',
+        hint: 'INSERT INTO taches (titre) VALUES (?), UPDATE ... SET done=1 WHERE id=?, SELECT ... WHERE done=0'
+      },
+      {
+        id: 2,
+        title: 'Pipeline données complet',
+        description: 'Crée une fonction qui lit une liste de dicts (comme une API JSON), filtre les valides (nom non vide + score >= 0), les insère en base SQLite, et retourne les stats (count, avg).',
+        starter: 'import sqlite3\n\ndef pipeline(donnees_json):\n    conn = sqlite3.connect(":memory:")\n    conn.execute("CREATE TABLE scores (nom TEXT, score INTEGER)")\n    # 1. Filtre les données valides\n    # 2. Insère en base\n    # 3. Retourne {"count": ..., "moyenne": ...}\n    pass\n\ndonnees = [\n    {"nom": "Alice", "score": 85},\n    {"nom": "",      "score": 90},\n    {"nom": "Bob",   "score": -5},\n    {"nom": "Chloé", "score": 92},\n    {"nom": "David", "score": 78},\n]\nprint(pipeline(donnees))\n',
+        solution: 'import sqlite3\n\ndef pipeline(donnees_json):\n    conn = sqlite3.connect(":memory:")\n    conn.execute("CREATE TABLE scores (nom TEXT, score INTEGER)")\n    valides = [d for d in donnees_json if d.get("nom") and d.get("score", -1) >= 0]\n    conn.executemany("INSERT INTO scores VALUES (?,?)", [(d["nom"], d["score"]) for d in valides])\n    conn.commit()\n    row = conn.execute("SELECT COUNT(*), AVG(score) FROM scores").fetchone()\n    conn.close()\n    return {"count": row[0], "moyenne": round(row[1], 1) if row[1] else 0}\n\ndonnees = [\n    {"nom": "Alice", "score": 85},\n    {"nom": "",      "score": 90},\n    {"nom": "Bob",   "score": -5},\n    {"nom": "Chloé", "score": 92},\n    {"nom": "David", "score": 78},\n]\nprint(pipeline(donnees))',
+        hint: 'Filtre avec compréhension, executemany pour insérer, SELECT COUNT(*), AVG(score) pour les stats'
+      }
+    ],
+    quiz: [
+      {
+        id: 1,
+        question: 'Dans une app Flask full-stack, que contient le dossier templates/ ?',
+        options: ['Les fichiers Python', 'Les fichiers HTML avec Jinja2', 'Les fichiers CSS', 'La base de données'],
+        answer: 1,
+        explanation: 'templates/ contient les fichiers .html avec la syntaxe Jinja2. static/ contient les CSS, JS et images.'
+      },
+      {
+        id: 2,
+        question: 'Que fait conn.row_factory = sqlite3.Row ?',
+        options: [
+          'Crée les colonnes automatiquement',
+          'Retourne les résultats comme des dictionnaires accessibles par nom',
+          'Accélère les requêtes',
+          'Active les transactions'
+        ],
+        answer: 1,
+        explanation: 'sqlite3.Row permet d\'accéder aux colonnes par nom (row["nom"]) au lieu de par index (row[0]). Plus lisible.'
+      },
+      {
+        id: 3,
+        question: 'Quel est le flux d\'une requête dans une app Flask full-stack ?',
+        options: [
+          'Navigateur → HTML → Python → DB → HTML → Navigateur',
+          'DB → Flask → Navigateur → HTML',
+          'Navigateur → Flask (route) → DB → JSON/HTML → Navigateur',
+          'Python → HTML → DB → Navigateur'
+        ],
+        answer: 2,
+        explanation: 'Le navigateur envoie une requête HTTP → Flask trouve la route correspondante → interroge la DB si besoin → retourne HTML (render_template) ou JSON (jsonify) → le navigateur affiche.'
+      }
+    ]
   }
 ];

@@ -5,12 +5,14 @@ const byLevel = {
   1: modules.filter(m => !m.level || m.level === 1),
   2: modules.filter(m => m.level === 2),
   3: modules.filter(m => m.level === 3),
+  4: modules.filter(m => m.level === 4),
 }
 
 const levelLabels = {
-  1: { label: 'Niveau 1', color: 'text-cyan-400', line: 'bg-cyan-900/50' },
+  1: { label: 'Niveau 1', color: 'text-cyan-400',   line: 'bg-cyan-900/50' },
   2: { label: 'Niveau 2', color: 'text-purple-400', line: 'bg-purple-900/50' },
   3: { label: 'Niveau 3', color: 'text-orange-400', line: 'bg-orange-900/50' },
+  4: { label: 'Niveau 4', color: 'text-pink-400',   line: 'bg-pink-900/50' },
 }
 
 function ModuleButton({ mod, isActive, progress, onSelect }) {
@@ -80,7 +82,7 @@ export default function Sidebar({ currentModule, currentView, onSelect, onTermin
     <aside className="flex-1 flex flex-col overflow-hidden">
       {/* Module list — scrollable */}
       <nav className="flex-1 overflow-y-auto p-3">
-        {[1, 2, 3].map(lvl => (
+        {[1, 2, 3, 4].map(lvl => (
           <LevelSection
             key={lvl}
             level={lvl}
