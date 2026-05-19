@@ -43,8 +43,7 @@ function ModuleButton({ mod, isActive, progress, onSelect }) {
   )
 }
 
-function LevelSection({ level, mods, isActive, progress, onSelect, defaultOpen }) {
-  const [open, setOpen] = useState(defaultOpen)
+function LevelSection({ level, mods, isActive, progress, onSelect, open, onToggle }) {
   const { label, color, line } = levelLabels[level]
   const doneCount = mods.filter(m => {
     const p = progress[m.id] || {}
@@ -54,7 +53,7 @@ function LevelSection({ level, mods, isActive, progress, onSelect, defaultOpen }
   return (
     <div className="mb-1">
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={onToggle}
         className="w-full flex items-center gap-2 px-2 py-2 rounded-lg hover:bg-gray-800/40 transition-all group"
       >
         <span className={`text-xs font-bold uppercase tracking-widest ${color}`}>{label}</span>
@@ -74,6 +73,7 @@ function LevelSection({ level, mods, isActive, progress, onSelect, defaultOpen }
 }
 
 export default function Sidebar({ currentModule, currentView, onSelect, onTerminal, progress }) {
+  const [openLevel, setOpenLevel] = useState(1)
   const isActive = (id) => currentModule === id && currentView !== 'terminal' && currentView !== 'home'
 
   return (
@@ -88,7 +88,8 @@ export default function Sidebar({ currentModule, currentView, onSelect, onTermin
             isActive={isActive}
             progress={progress}
             onSelect={onSelect}
-            defaultOpen={lvl === 1}
+            open={openLevel === lvl}
+            onToggle={() => setOpenLevel(o => o === lvl ? null : lvl)}
           />
         ))}
       </nav>
