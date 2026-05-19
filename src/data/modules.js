@@ -1283,42 +1283,141 @@ for cle, valeur in eleve.items():
       title: 'try, except, finally',
       content: `
         <h2>Pourquoi gérer les erreurs ?</h2>
-        <p>Quand Python rencontre une erreur, il s'arrête. Mais avec <strong>try / except</strong>, tu peux <em>attraper</em> l'erreur et décider quoi faire — comme un filet de sécurité !</p>
+        <p>Imagine que ton programme demande à l'utilisateur de taper un nombre, et il tape "bonjour" à la place. Sans protection, Python s'arrête brutalement avec un message d'erreur rouge et effrayant. C'est une mauvaise expérience utilisateur !</p>
+        <p>La <strong>gestion des erreurs</strong> est l'art d'anticiper les problèmes et d'y répondre gracieusement plutôt que de laisser le programme planter. Dans la vraie vie, c'est la différence entre un site qui affiche "Oops, quelque chose s'est mal passé" et un site qui se fige complètement.</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — En Python, les erreurs s'appellent des <strong>exceptions</strong>. Une exception est un objet qui représente quelque chose qui a mal tourné. Python en a des dizaines prédéfinies, et tu peux même en créer de nouvelles !</div>
+
+        <h2>La structure try / except — ton filet de sécurité</h2>
+        <p>Le principe : tu "tentes" du code dans un bloc <code>try</code>. Si une exception survient, Python saute immédiatement dans le bloc <code>except</code> correspondant, sans planter.</p>
         <pre><code class="language-python">try:
     resultat = 10 / 0
 except ZeroDivisionError:
-    print("Impossible de diviser par zéro !")</code></pre>
-        <div class="info-box"><p>💡 Python essaie d'exécuter le bloc <code>try</code>. Si une erreur survient, il saute dans le bloc <code>except</code> correspondant.</p></div>
+    print("Impossible de diviser par zéro !")
 
-        <h2>Attraper plusieurs erreurs</h2>
-        <pre><code class="language-python">try:
-    x = int("abc")     # ValueError : "abc" n'est pas un entier
-    y = 10 / 0         # ZeroDivisionError
+# Sans try/except, ce code produirait :
+# ZeroDivisionError: division by zero
+# (et le programme s'arrêterait)</code></pre>
+        <p>Avec <code>try/except</code>, le programme continue après le bloc — il ne plante pas !</p>
+        <pre><code class="language-python"># Exemple concret : convertir une saisie utilisateur
+saisie = "quarante-deux"
+
+try:
+    nombre = int(saisie)
+    print(f"Le nombre est : {nombre}")
 except ValueError:
-    print("Ce n'est pas un nombre valide !")
-except ZeroDivisionError:
-    print("Division par zéro impossible !")
-except Exception as e:
-    print(f"Erreur inattendue : {e}")</code></pre>
+    print(f"'{saisie}' n'est pas un nombre valide !")
+    nombre = 0  # Valeur par défaut
 
-        <h2>else et finally</h2>
-        <pre><code class="language-python">try:
-    nombre = int("42")
-except ValueError:
-    print("Erreur de conversion")
-else:
-    print(f"Conversion réussie : {nombre}")  # Si pas d'erreur
-finally:
-    print("Ce bloc s'exécute toujours !")    # Toujours exécuté</code></pre>
+print(f"Résultat utilisé : {nombre}")  # Le programme continue !</code></pre>
 
-        <h2>Erreurs courantes en Python</h2>
-        <pre><code class="language-python">NameError       # Variable inexistante
-TypeError       # Mauvais type (ex: 1 + "a")
-ValueError      # Valeur invalide (ex: int("abc"))
-IndexError      # Index hors limite (ex: liste[99])
-KeyError        # Clé absente dans un dictionnaire
-ZeroDivisionError  # Division par zéro</code></pre>
-        <div class="tip-box"><p>✅ Utilise <code>except Exception as e: print(e)</code> pour afficher le message d'erreur et comprendre ce qui se passe.</p></div>
+        <h2>Attraper plusieurs types d'erreurs</h2>
+        <p>Tu peux avoir plusieurs blocs <code>except</code> pour gérer différents types d'erreurs séparément :</p>
+        <pre><code class="language-python">def diviser_saisie(texte_a, texte_b):
+    try:
+        a = int(texte_a)
+        b = int(texte_b)
+        resultat = a / b
+        return resultat
+    except ValueError:
+        print("Erreur : l'un des deux n'est pas un entier !")
+    except ZeroDivisionError:
+        print("Erreur : division par zéro impossible !")
+    except Exception as e:
+        print(f"Erreur inattendue : {e}")
+    return None
+
+print(diviser_saisie("10", "2"))     # 5.0
+print(diviser_saisie("abc", "2"))    # Erreur : pas un entier
+print(diviser_saisie("10", "0"))     # Erreur : division par zéro</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — Ne jamais écrire <code>except:</code> ou <code>except Exception:</code> sans préciser le type d'erreur (sauf en dernier recours) ! Attraper toutes les erreurs peut masquer des bugs graves. Sois précis : attrape uniquement les erreurs que tu sais gérer.</div>
+
+        <h2>else et finally — les blocs complémentaires</h2>
+        <p>Le bloc <code>try/except</code> a deux extensions utiles :</p>
+        <ul>
+          <li><code>else</code> : s'exécute <em>uniquement</em> si aucune exception n'a été levée dans le <code>try</code></li>
+          <li><code>finally</code> : s'exécute <em>toujours</em>, qu'il y ait eu une erreur ou non — idéal pour libérer des ressources</li>
+        </ul>
+        <pre><code class="language-python">def lire_nombre(texte):
+    try:
+        nombre = int(texte)
+    except ValueError:
+        print(f"Conversion échouée : '{texte}' n'est pas un entier")
+        return None
+    else:
+        print(f"Conversion réussie : {nombre}")
+        return nombre
+    finally:
+        print("(bloc finally toujours exécuté)")
+
+lire_nombre("42")    # Réussit → else s'exécute, puis finally
+lire_nombre("oups")  # Échoue → except s'exécute, puis finally</code></pre>
+        <pre><code class="language-python"># finally est crucial pour libérer des ressources
+def lire_fichier(nom):
+    fichier = None
+    try:
+        fichier = open(nom, "r")
+        return fichier.read()
+    except FileNotFoundError:
+        print(f"Fichier '{nom}' introuvable !")
+        return ""
+    finally:
+        if fichier:
+            fichier.close()  # Toujours fermé, même en cas d'erreur</code></pre>
+
+        <h2>Les exceptions les plus courantes</h2>
+        <p>Python a de nombreuses exceptions prédéfinies. Voici les plus fréquentes :</p>
+        <pre><code class="language-python"># ValueError : valeur du bon type mais invalide
+int("abc")          # ValueError: invalid literal for int()
+
+# TypeError : mauvais type d'argument
+"hello" + 5         # TypeError: can only concatenate str (not "int") to str
+
+# NameError : variable inexistante
+print(variable_inconnue)  # NameError: name 'variable_inconnue' is not defined
+
+# IndexError : index hors limites
+liste = [1, 2, 3]
+liste[10]           # IndexError: list index out of range
+
+# KeyError : clé absente dans un dict
+d = {"a": 1}
+d["b"]              # KeyError: 'b'
+
+# ZeroDivisionError : division par zéro
+10 / 0              # ZeroDivisionError: division by zero
+
+# FileNotFoundError : fichier introuvable
+open("inexistant.txt")  # FileNotFoundError: No such file or directory</code></pre>
+
+        <h2>Lever ses propres exceptions avec raise</h2>
+        <p>Tu peux toi-même déclencher une exception avec le mot-clé <code>raise</code>. C'est utile pour valider des données dans tes fonctions :</p>
+        <pre><code class="language-python">def calculer_racine(n):
+    if n < 0:
+        raise ValueError(f"Impossible : racine de {n} (nombre négatif !)")
+    return n ** 0.5
+
+try:
+    print(calculer_racine(16))   # 4.0
+    print(calculer_racine(-1))   # Lève ValueError
+except ValueError as e:
+    print(f"Erreur : {e}")</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Avec <code>except Exception as e</code>, la variable <code>e</code> contient le message d'erreur. Tu peux l'afficher avec <code>print(e)</code> ou l'inclure dans une f-string : <code>f"Erreur : {e}"</code>. C'est très pratique pour déboguer !</div>
+
+        <h2>Exemple complet : saisie sécurisée</h2>
+        <pre><code class="language-python">def demander_age():
+    """Demande un âge valide à l'utilisateur (simulation)"""
+    saisies = ["quinze", "-3", "200", "15"]  # Simule les saisies utilisateur
+
+    for saisie in saisies:
+        try:
+            age = int(saisie)
+            if age < 0 or age > 150:
+                raise ValueError(f"Âge irréaliste : {age}")
+            print(f"Âge valide : {age} ans")
+        except ValueError as e:
+            print(f"Saisie invalide '{saisie}' : {e}")
+
+demander_age()</code></pre>
       `
     },
     interactiveCode: `# Exemple : division sécurisée
@@ -1385,50 +1484,102 @@ print(diviser(10, 0))   # Erreur : division par zéro !`,
     lesson: {
       title: 'List comprehensions',
       content: `
-        <h2>Une liste en une ligne</h2>
-        <p>Les <strong>compréhensions de listes</strong> permettent de créer une liste à partir d'une autre en une seule ligne élégante. C'est l'une des fonctionnalités préférées des développeurs Python !</p>
+        <h2>Le problème des boucles répétitives</h2>
+        <p>En Python, il arrive souvent qu'on veuille créer une liste en transformant ou filtrant une autre. La façon classique avec une boucle <code>for</code> fonctionne, mais elle prend 3 à 5 lignes pour quelque chose de simple. Les <strong>compréhensions de listes</strong> permettent de faire ça en <em>une seule ligne élégante</em>.</p>
+        <p>C'est l'une des fonctionnalités les plus aimées de Python — une fois que tu l'as comprise, tu ne pourras plus t'en passer !</p>
 
-        <h2>La syntaxe</h2>
-        <pre><code class="language-python"># Syntaxe : [expression for élément in itérable]
-
-# Méthode classique (3 lignes)
+        <h2>La syntaxe de base</h2>
+        <p>La forme générale est : <code>[expression for élément in itérable]</code></p>
+        <pre><code class="language-python"># Méthode classique avec boucle (3 lignes)
 carres = []
 for i in range(1, 6):
     carres.append(i ** 2)
+print(carres)  # [1, 4, 9, 16, 25]
 
-# Compréhension de liste (1 ligne !)
+# Compréhension de liste (1 ligne, même résultat !)
 carres = [i ** 2 for i in range(1, 6)]
 print(carres)  # [1, 4, 9, 16, 25]</code></pre>
-        <div class="info-box"><p>💡 C'est exactement la même chose, juste écrit plus élégamment. Python préfère la version compacte !</p></div>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — La compréhension se lit de gauche à droite comme une phrase : "crée une liste de <strong>i au carré</strong>, pour chaque <strong>i</strong> dans <strong>range(1, 6)</strong>". L'ordre est : ce qu'on veut produire, puis la boucle.</div>
 
-        <h2>Avec une condition (filtre)</h2>
-        <pre><code class="language-python"># [expression for élément in itérable if condition]
-
-nombres = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-
-# Nombres pairs uniquement
-pairs = [n for n in nombres if n % 2 == 0]
-print(pairs)   # [2, 4, 6, 8, 10]
-
-# Nombres pairs au carré
-pairs_carres = [n ** 2 for n in nombres if n % 2 == 0]
-print(pairs_carres)  # [4, 16, 36, 64, 100]</code></pre>
-
-        <h2>Transformer du texte</h2>
-        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
+        <h2>Transformer des éléments</h2>
+        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise", "kiwi"]
 
 # Mettre en majuscules
 majuscules = [f.upper() for f in fruits]
-print(majuscules)  # ['POMME', 'BANANE', 'CERISE']
+print(majuscules)  # ['POMME', 'BANANE', 'CERISE', 'KIWI']
 
 # Longueur de chaque mot
 longueurs = [len(f) for f in fruits]
-print(longueurs)   # [5, 6, 6]
+print(longueurs)   # [5, 6, 6, 4]
 
-# Filtrer les mots de plus de 5 lettres
+# Construire des chaînes
+annonces = [f"J'adore les {f}s !" for f in fruits]
+print(annonces[0])  # J'adore les pommes !
+
+# Convertir des types
+textes = ["1", "2", "3", "4", "5"]
+nombres = [int(t) for t in textes]
+print(nombres)  # [1, 2, 3, 4, 5]</code></pre>
+
+        <h2>Ajouter un filtre avec if</h2>
+        <p>On peut ajouter une condition à la fin pour ne garder que certains éléments. La forme est : <code>[expression for élément in itérable if condition]</code></p>
+        <pre><code class="language-python">nombres = list(range(1, 21))  # [1, 2, 3, ..., 20]
+
+# Nombres pairs uniquement
+pairs = [n for n in nombres if n % 2 == 0]
+print(pairs)   # [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+
+# Multiples de 3
+mult3 = [n for n in nombres if n % 3 == 0]
+print(mult3)   # [3, 6, 9, 12, 15, 18]
+
+# Filtrer ET transformer : carrés des pairs seulement
+pairs_carres = [n ** 2 for n in nombres if n % 2 == 0]
+print(pairs_carres)  # [4, 16, 36, 64, 100, 144, 196, 256, 324, 400]
+
+# Filtrer des mots
+fruits = ["pomme", "banane", "cerise", "kiwi", "ananas"]
 longs = [f for f in fruits if len(f) > 5]
-print(longs)       # ['banane', 'cerise']</code></pre>
-        <div class="tip-box"><p>✅ Utilise une compréhension quand tu transformes ou filtres une liste. Pour les opérations complexes, la boucle for reste plus lisible.</p></div>
+print(longs)  # ['banane', 'cerise', 'ananas']</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — L'ordre dans une compréhension avec filtre est : expression → for → if. On met d'abord ce qu'on veut calculer, puis la boucle, puis la condition. C'est différent d'une phrase française mais logique une fois habituée !</div>
+
+        <h2>Cas d'utilisation réels</h2>
+        <pre><code class="language-python"># Nettoyer une liste de données
+donnees_brutes = ["  Alice  ", "BOB", " chloé", "DAVID  "]
+propres = [d.strip().capitalize() for d in donnees_brutes]
+print(propres)  # ['Alice', 'Bob', 'Chloé', 'David']
+
+# Extraire des informations d'une liste de dicts
+eleves = [
+    {"nom": "Alice", "note": 15},
+    {"nom": "Bob",   "note": 9},
+    {"nom": "Chloé", "note": 17},
+]
+noms_admis = [e["nom"] for e in eleves if e["note"] >= 10]
+print(noms_admis)  # ['Alice', 'Chloé']
+
+# Générer des données
+table_multiplication_7 = [7 * i for i in range(1, 11)]
+print(table_multiplication_7)  # [7, 14, 21, 28, 35, 42, 49, 56, 63, 70]</code></pre>
+
+        <h2>Quand ne PAS utiliser les compréhensions</h2>
+        <p>Les compréhensions sont géniales, mais pas pour tout !</p>
+        <ul>
+          <li>Si la logique est complexe (plusieurs conditions imbriquées) → préfère une boucle for classique</li>
+          <li>Si tu dois exécuter plusieurs actions par élément → préfère une boucle</li>
+          <li>Si quelqu'un doit comprendre ton code facilement → la lisibilité prime sur la concision</li>
+        </ul>
+        <pre><code class="language-python"># Trop complexe en compréhension → utilise une boucle
+# À éviter :
+resultat = [a * b for a in range(5) for b in range(5) if a != b if a + b > 4]
+
+# Plus lisible avec une boucle :
+resultat = []
+for a in range(5):
+    for b in range(5):
+        if a != b and a + b > 4:
+            resultat.append(a * b)</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Les compréhensions sont aussi légèrement plus rapides que les boucles for équivalentes en Python, car elles sont optimisées par l'interpréteur. Mais la lisibilité doit toujours primer sur la performance !</div>
       `
     },
     interactiveCode: `# Exemples de compréhensions de listes
@@ -1496,47 +1647,123 @@ print("Longs en majuscules :", majuscules)`,
     lesson: {
       title: 'Importer des modules',
       content: `
-        <h2>Qu'est-ce qu'un module ?</h2>
-        <p>Python est livré avec des <strong>centaines de modules</strong> prêts à l'emploi — des boîtes à outils que tu peux "importer" pour avoir de nouvelles fonctionnalités sans rien installer.</p>
-        <pre><code class="language-python">import random   # importe le module entier
-from math import sqrt  # importe une seule fonction</code></pre>
+        <h2>Ne pas réinventer la roue !</h2>
+        <p>Imagine que tu doives écrire un programme qui génère des nombres aléatoires, fait des calculs mathématiques complexes, ou lit la date d'aujourd'hui. Tu pourrais tout coder toi-même... mais d'autres l'ont déjà fait, en mieux, et en optimisé !</p>
+        <p>Python est livré avec une <strong>bibliothèque standard</strong> de plusieurs centaines de modules prêts à l'emploi. Un module, c'est un fichier Python contenant des fonctions et des classes que tu peux <em>importer</em> dans ton code.</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — On dit que Python est livré avec "batteries incluses" (batteries included). Presque tout ce dont tu as besoin est déjà là, sans rien installer !</div>
 
-        <h2>Le module random</h2>
+        <h2>Les deux façons d'importer</h2>
+        <pre><code class="language-python"># Méthode 1 : importer le module entier
+import math
+print(math.sqrt(16))  # On préfixe avec "math."
+print(math.pi)
+
+# Méthode 2 : importer seulement ce dont on a besoin
+from math import sqrt, pi
+print(sqrt(16))  # Plus besoin du préfixe
+print(pi)
+
+# Méthode 3 : donner un alias (raccourci)
+import random as rd
+print(rd.randint(1, 6))  # "rd" à la place de "random"</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — Évite <code>from module import *</code> (qui importe tout). Ça peut créer des conflits de noms et rend le code difficile à lire. Préfère importer spécifiquement ce dont tu as besoin.</div>
+
+        <h2>Le module random — les dés du programmeur</h2>
+        <p>Le module <code>random</code> génère des valeurs aléatoires. Indispensable pour les jeux, les simulations et les tests !</p>
         <pre><code class="language-python">import random
 
-# Nombre entier aléatoire entre 1 et 6 (dé)
+# Entier aléatoire entre 1 et 6 inclus (comme un dé)
 de = random.randint(1, 6)
 print(f"Tu as lancé un {de}")
 
-# Nombre décimal entre 0 et 1
-print(random.random())
+# Nombre décimal entre 0.0 et 1.0 (exclus)
+print(random.random())   # ex: 0.7432...
 
 # Choisir un élément au hasard dans une liste
 fruits = ["pomme", "banane", "cerise", "kiwi"]
-print(random.choice(fruits))
+print(random.choice(fruits))   # ex: "banane"
 
-# Mélanger une liste
+# Mélanger une liste (modifie la liste en place !)
 random.shuffle(fruits)
-print(fruits)</code></pre>
+print(fruits)   # Ordre aléatoire
 
-        <h2>Le module math</h2>
+# Choisir plusieurs éléments sans remise
+echantillon = random.sample(range(1, 50), 6)  # Loto : 6 numéros parmi 1-49
+print(sorted(echantillon))</code></pre>
+
+        <h2>Le module math — les maths avancées</h2>
+        <p>Pour tout ce que les opérateurs de base ne peuvent pas faire :</p>
         <pre><code class="language-python">import math
 
-print(math.sqrt(16))    # 4.0 (racine carrée)
-print(math.pi)          # 3.141592...
-print(math.floor(3.7))  # 3 (arrondi bas)
-print(math.ceil(3.2))   # 4 (arrondi haut)
-print(math.pow(2, 8))   # 256.0 (puissance)</code></pre>
+print(math.sqrt(16))      # 4.0 (racine carrée)
+print(math.sqrt(2))       # 1.4142... (irrrationnel)
+print(math.pi)            # 3.14159265358979...
+print(math.e)             # 2.71828... (constante d'Euler)
+print(math.floor(3.7))    # 3 (arrondi vers le bas)
+print(math.ceil(3.2))     # 4 (arrondi vers le haut)
+print(math.pow(2, 10))    # 1024.0 (2 puissance 10)
+print(math.log(100, 10))  # 2.0 (logarithme base 10)
+print(math.factorial(5))  # 120 (5! = 5×4×3×2×1)
+print(math.gcd(12, 8))    # 4 (plus grand commun diviseur)
+print(math.sin(math.pi / 2))  # 1.0 (sinus de 90°)</code></pre>
 
-        <h2>Le module datetime</h2>
-        <pre><code class="language-python">from datetime import datetime
+        <h2>Le module datetime — travailler avec les dates</h2>
+        <pre><code class="language-python">from datetime import datetime, date, timedelta
 
+# Date et heure actuelles
 maintenant = datetime.now()
-print(maintenant)
+print(maintenant)                # 2024-01-15 14:30:25.123456
 print(f"Année : {maintenant.year}")
-print(f"Mois : {maintenant.month}")
-print(f"Jour : {maintenant.day}")</code></pre>
-        <div class="tip-box"><p>✅ Il existe aussi os, json, collections, itertools... Chaque module est une boîte à outils spécialisée !</p></div>
+print(f"Mois  : {maintenant.month}")
+print(f"Jour  : {maintenant.day}")
+print(f"Heure : {maintenant.hour}:{maintenant.minute:02d}")
+
+# Formater une date
+print(maintenant.strftime("%d/%m/%Y"))   # 15/01/2024
+print(maintenant.strftime("%A %d %B"))   # Monday 15 January
+
+# Date actuelle (sans l'heure)
+aujourd_hui = date.today()
+print(aujourd_hui)   # 2024-01-15
+
+# Calculs de dates
+dans_30_jours = aujourd_hui + timedelta(days=30)
+print(f"Dans 30 jours : {dans_30_jours}")</code></pre>
+
+        <h2>Le module os — interagir avec le système</h2>
+        <pre><code class="language-python">import os
+
+# Répertoire courant
+print(os.getcwd())  # ex: /home/user/monprojet
+
+# Lister les fichiers d'un dossier
+fichiers = os.listdir(".")
+print(fichiers)
+
+# Vérifier l'existence d'un fichier
+print(os.path.exists("fichier.txt"))   # True ou False
+print(os.path.isfile("fichier.txt"))   # C'est bien un fichier ?
+print(os.path.isdir("dossier"))        # C'est bien un dossier ?
+
+# Variables d'environnement
+print(os.environ.get("HOME", "inconnu"))  # Répertoire home</code></pre>
+
+        <h2>Le module collections — structures de données avancées</h2>
+        <pre><code class="language-python">from collections import Counter, defaultdict
+
+# Counter : compter facilement
+mots = ["chat", "chien", "chat", "oiseau", "chien", "chat"]
+compte = Counter(mots)
+print(compte)          # Counter({'chat': 3, 'chien': 2, 'oiseau': 1})
+print(compte.most_common(2))  # [('chat', 3), ('chien', 2)]
+
+# defaultdict : dict avec valeur par défaut automatique
+scores = defaultdict(list)  # Chaque valeur est une liste vide par défaut
+scores["Alice"].append(15)
+scores["Alice"].append(18)
+scores["Bob"].append(12)
+print(dict(scores))  # {'Alice': [15, 18], 'Bob': [12]}</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Pour les modules non inclus dans Python (comme Flask, NumPy, Pandas...), il faut les installer avec <code>pip install nom_module</code> dans le terminal. La bibliothèque standard, elle, est toujours disponible sans installation !</div>
       `
     },
     interactiveCode: `import random
@@ -1608,49 +1835,137 @@ print(f"\\nMot choisi : {mot.upper()}")`,
     lesson: {
       title: 'Aller plus loin avec les fonctions',
       content: `
+        <h2>Les fonctions, au niveau suivant</h2>
+        <p>Tu sais déjà créer des fonctions de base avec <code>def</code>. Ce module explore les fonctionnalités avancées qui rendent tes fonctions vraiment flexibles et puissantes : les paramètres optionnels, les arguments en nombre variable, et les fonctions lambda.</p>
+
         <h2>Paramètres par défaut</h2>
-        <p>Tu peux donner une valeur par défaut à un paramètre. Si l'appelant ne passe pas cet argument, la valeur par défaut est utilisée :</p>
+        <p>Parfois tu veux qu'un paramètre soit optionnel — s'il n'est pas fourni, une valeur par défaut est utilisée automatiquement :</p>
         <pre><code class="language-python">def saluer(prenom, message="Bonjour"):
     print(f"{message} {prenom} !")
 
-saluer("Alice")              # Bonjour Alice !
-saluer("Bob", "Salut")       # Salut Bob !
-saluer("Chloé", "Coucou")    # Coucou Chloé !</code></pre>
+saluer("Alice")              # Bonjour Alice !  (message par défaut)
+saluer("Bob", "Salut")       # Salut Bob !      (message fourni)
+saluer("Chloé", "Coucou")   # Coucou Chloé !   (message fourni)</code></pre>
+        <p>C'est très utile pour les fonctions avec de nombreuses options, où la plupart du temps on veut les valeurs standard :</p>
+        <pre><code class="language-python">def afficher_note(note, total=20, emoji=True):
+    pourcentage = note / total * 100
+    base = f"{note}/{total} ({pourcentage:.0f}%)"
+    if emoji:
+        if note >= 16: base += " 🌟"
+        elif note >= 12: base += " ✓"
+        else: base += " ✗"
+    return base
 
-        <h2>Arguments nommés (kwargs)</h2>
-        <pre><code class="language-python">def creer_profil(nom, age, ville="Paris"):
-    print(f"{nom}, {age} ans, habite à {ville}")
+print(afficher_note(15))          # 15/20 (75%) ✓
+print(afficher_note(18))          # 18/20 (90%) 🌟
+print(afficher_note(15, emoji=False))  # 15/20 (75%)
+print(afficher_note(75, total=100))    # 75/100 (75%) ✓</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — Les paramètres avec valeur par défaut doivent toujours venir <em>après</em> les paramètres sans défaut ! <code>def f(x=1, y)</code> est une erreur. La règle : d'abord les obligatoires, ensuite les optionnels.</div>
 
-creer_profil("Alice", 15)
-creer_profil(age=16, nom="Bob", ville="Lyon")</code></pre>
-        <div class="info-box"><p>💡 Avec les arguments nommés, l'ordre n'a plus d'importance !</p></div>
+        <h2>Arguments nommés (keyword arguments)</h2>
+        <p>Quand tu appelles une fonction, tu peux nommer tes arguments. L'ordre n'a alors plus d'importance !</p>
+        <pre><code class="language-python">def creer_profil(nom, age, ville="Paris", sport="inconnu"):
+    print(f"{nom}, {age} ans, {ville}, sport : {sport}")
 
-        <h2>*args : nombre variable d'arguments</h2>
+# Ordre classique
+creer_profil("Alice", 15, "Lyon", "tennis")
+
+# Avec noms : ordre libre !
+creer_profil(age=16, nom="Bob", sport="foot", ville="Bordeaux")
+
+# Mix : positionnels d'abord, nommés ensuite
+creer_profil("Chloé", 14, sport="natation")  # ville reste "Paris"</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Les arguments nommés rendent le code plus lisible, surtout pour les fonctions avec beaucoup de paramètres. <code>afficher(texte, couleur="rouge", taille=14)</code> se comprend immédiatement même sans regarder la définition de la fonction !</div>
+
+        <h2>*args — nombre variable d'arguments positionnels</h2>
+        <p>Et si tu ne sais pas à l'avance combien d'arguments ta fonction va recevoir ? <code>*args</code> capture tous les arguments dans un tuple :</p>
         <pre><code class="language-python">def somme(*nombres):
+    # nombres est un tuple de tous les arguments passés
     total = 0
     for n in nombres:
         total += n
     return total
 
-print(somme(1, 2, 3))       # 6
-print(somme(10, 20, 30, 40)) # 100
-print(somme(5))              # 5</code></pre>
+print(somme(1, 2, 3))           # 6
+print(somme(10, 20, 30, 40))    # 100
+print(somme(5))                  # 5
+print(somme())                   # 0
 
-        <h2>Les fonctions lambda</h2>
-        <p>Une <strong>lambda</strong> est une petite fonction anonyme en une ligne, utile pour les opérations simples :</p>
-        <pre><code class="language-python"># Syntaxe : lambda paramètres: expression
+# Utilisation avec sum() intégré
+def ma_somme(*args):
+    return sum(args)   # Plus élégant !
 
-doubler = lambda x: x * 2
-print(doubler(5))    # 10
+# Exemple : calculer la moyenne de n nombres
+def moyenne(*notes):
+    if not notes:
+        return 0
+    return sum(notes) / len(notes)
 
+print(moyenne(14, 16, 12, 18))  # 15.0</code></pre>
+
+        <h2>**kwargs — arguments nommés variables</h2>
+        <p><code>**kwargs</code> capture tous les arguments nommés dans un dictionnaire :</p>
+        <pre><code class="language-python">def afficher_infos(**infos):
+    # infos est un dict de tous les arguments nommés
+    for cle, valeur in infos.items():
+        print(f"  {cle} : {valeur}")
+
+afficher_infos(nom="Alice", age=15, ville="Paris")
+# nom : Alice
+# age : 15
+# ville : Paris
+
+# Combiner *args et **kwargs
+def tout_afficher(*args, **kwargs):
+    print("Positionnels :", args)
+    print("Nommés      :", kwargs)
+
+tout_afficher(1, 2, 3, couleur="rouge", taille=14)
+# Positionnels : (1, 2, 3)
+# Nommés      : {'couleur': 'rouge', 'taille': 14}</code></pre>
+
+        <h2>Les fonctions lambda — fonctions anonymes</h2>
+        <p>Une <strong>lambda</strong> est une fonction sans nom, définie en une seule ligne. Parfaite pour les petites opérations utilisées une seule fois :</p>
+        <pre><code class="language-python"># Syntaxe : lambda paramètres: expression (une seule !)
+
+# Équivalences :
+def doubler(x):
+    return x * 2
+
+doubler_lambda = lambda x: x * 2
+
+print(doubler(5))        # 10
+print(doubler_lambda(5)) # 10
+
+# Lambda avec plusieurs paramètres
 additionner = lambda a, b: a + b
 print(additionner(3, 7))  # 10
 
-# Très utile avec sorted()
-eleves = [("Alice", 15), ("Bob", 18), ("Chloé", 12)]
-tries = sorted(eleves, key=lambda e: e[1])
-print(tries)  # Trié par âge</code></pre>
-        <div class="tip-box"><p>✅ Utilise lambda pour des fonctions courtes et ponctuelles. Pour tout ce qui est complexe, préfère def.</p></div>
+# Lambda avec condition (ternaire)
+signe = lambda n: "positif" if n > 0 else "négatif" if n < 0 else "zéro"
+print(signe(5))    # positif
+print(signe(-3))   # négatif</code></pre>
+
+        <h2>Lambda + sorted() — le duo gagnant</h2>
+        <p>L'usage le plus fréquent des lambdas est avec <code>sorted()</code> ou <code>sort()</code> pour définir le critère de tri :</p>
+        <pre><code class="language-python"># Trier des tuples par le deuxième élément (la note)
+eleves = [("Alice", 15), ("Bob", 18), ("Chloé", 12), ("David", 16)]
+
+par_note = sorted(eleves, key=lambda e: e[1])
+print(par_note)  # [('Chloé', 12), ('Alice', 15), ('David', 16), ('Bob', 18)]
+
+par_note_desc = sorted(eleves, key=lambda e: e[1], reverse=True)
+print(par_note_desc)  # [('Bob', 18), ('David', 16), ...]
+
+# Trier des dicts
+produits = [
+    {"nom": "pomme", "prix": 0.5},
+    {"nom": "kiwi",  "prix": 1.2},
+    {"nom": "banane","prix": 0.3},
+]
+par_prix = sorted(produits, key=lambda p: p["prix"])
+print([p["nom"] for p in par_prix])  # ['banane', 'pomme', 'kiwi']</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Utilise <code>lambda</code> pour des fonctions courtes et ponctuelles (surtout comme argument de <code>sorted</code>, <code>map</code>, <code>filter</code>). Pour tout ce qui a plus d'une ligne ou qui sera réutilisé, crée une vraie fonction avec <code>def</code>.</div>
       `
     },
     interactiveCode: `# Paramètre par défaut
@@ -1722,51 +2037,119 @@ print("\\nTriés par longueur :", par_longueur)`,
     lesson: {
       title: 'Tuples et ensembles (sets)',
       content: `
-        <h2>Les tuples</h2>
-        <p>Un tuple ressemble à une liste, mais il est <strong>immuable</strong> : on ne peut pas le modifier après création. On l'écrit avec des parenthèses.</p>
-        <pre><code class="language-python">coordonnees = (48.8566, 2.3522)  # Paris
-couleurs = ("rouge", "vert", "bleu")
-point = (10, 20)
+        <h2>Deux structures de données méconnues mais essentielles</h2>
+        <p>Tu connais les listes et les dictionnaires. Python offre deux autres structures fondamentales : les <strong>tuples</strong> (données immuables groupées) et les <strong>sets</strong> (collections sans doublon). Chacune a ses cas d'usage précis !</p>
 
+        <h2>Les tuples — des données figées dans le temps</h2>
+        <p>Un tuple ressemble à une liste, mais avec une différence cruciale : il est <strong>immuable</strong>. Une fois créé, tu ne peux plus le modifier. On l'écrit avec des parenthèses (ou même sans !).</p>
+        <pre><code class="language-python">coordonnees = (48.8566, 2.3522)  # Paris : lat, lon
+couleurs_rgb = (255, 128, 0)     # Orange en RGB
+dimensions = (1920, 1080)        # Résolution Full HD
+point = 10, 20                   # Parenthèses optionnelles !
+
+# Accès identique aux listes
 print(coordonnees[0])  # 48.8566
-print(len(couleurs))   # 3</code></pre>
-        <div class="info-box"><p>💡 Utilise un tuple quand les données ne doivent pas changer : coordonnées GPS, dimensions, couleurs RGB, etc.</p></div>
+print(len(couleurs_rgb))  # 3
 
-        <h2>Déballage de tuple</h2>
-        <pre><code class="language-python">x, y = (10, 20)        # déballage
-print(x, y)             # 10 20
+# Mais impossible de modifier !
+# coordonnees[0] = 99  → TypeError !</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Quand utiliser un tuple plutôt qu'une liste ? Quand les données ne devraient <em>pas</em> changer : coordonnées GPS, dimensions d'une image, jours de la semaine, codes de couleurs RGB. L'immuabilité protège contre les modifications accidentelles !</div>
 
-prenom, age, ville = ("Alice", 15, "Paris")
+        <h2>Le déballage (unpacking) — la magie des tuples</h2>
+        <p>Le déballage permet d'assigner les éléments d'un tuple à plusieurs variables d'un coup :</p>
+        <pre><code class="language-python"># Déballage simple
+x, y = (10, 20)
+print(x, y)  # 10 20
+
+# Sans parenthèses, même résultat
+prenom, age, ville = "Alice", 15, "Paris"
 print(f"{prenom}, {age} ans, {ville}")
 
-# Swap de deux variables !
-a, b = 1, 2
-a, b = b, a
-print(a, b)  # 2 1</code></pre>
+# Swap de deux variables en une ligne (Python est magique !)
+a, b = 5, 10
+print(f"Avant : a={a}, b={b}")
+a, b = b, a   # Échange les valeurs !
+print(f"Après : a={a}, b={b}")
 
-        <h2>Les sets (ensembles)</h2>
-        <p>Un set est une collection <strong>sans doublon et sans ordre</strong>. Parfait pour tester l'appartenance ou éliminer les doublons !</p>
-        <pre><code class="language-python">nombres = {1, 2, 3, 4, 4, 2, 1}
-print(nombres)   # {1, 2, 3, 4} — pas de doublons !
+# Ignorer certaines valeurs avec _
+lat, _, ville = (48.8566, 2.3522, "Paris")
+print(f"Ville : {ville}")
 
-# Ajouter / supprimer
+# Déballage partiel avec *
+premier, *reste = (1, 2, 3, 4, 5)
+print(premier)  # 1
+print(reste)    # [2, 3, 4, 5]
+
+*debut, dernier = (1, 2, 3, 4, 5)
+print(debut)    # [1, 2, 3, 4]
+print(dernier)  # 5</code></pre>
+
+        <h2>Tuples dans les boucles</h2>
+        <p>Les tuples s'utilisent beaucoup avec les boucles, surtout pour retourner plusieurs valeurs d'une fonction :</p>
+        <pre><code class="language-python"># Retourner plusieurs valeurs d'une fonction (retourne un tuple)
+def min_max(liste):
+    return min(liste), max(liste)  # Tuple implicite !
+
+notes = [14, 8, 17, 12, 15]
+mini, maxi = min_max(notes)
+print(f"Min : {mini}, Max : {maxi}")
+
+# Boucle sur une liste de tuples
+classement = [("Alice", 15), ("Bob", 18), ("Chloé", 12)]
+for prenom, note in classement:   # Déballage automatique !
+    print(f"  {prenom} : {note}/20")</code></pre>
+
+        <h2>Les sets (ensembles) — collections sans doublon</h2>
+        <p>Un set est une collection non ordonnée qui <strong>n'accepte pas les doublons</strong>. Parfait pour les opérations sur des ensembles et les tests d'appartenance ultra-rapides !</p>
+        <pre><code class="language-python"># Créer un set (attention : {} vide crée un dict, pas un set !)
+nombres = {1, 2, 3, 4, 4, 2, 1}
+print(nombres)   # {1, 2, 3, 4} — les doublons disparaissent !
+
+ensemble_vide = set()  # Création d'un set vide
+
+# Ajouter et supprimer
 nombres.add(5)
-nombres.remove(1)
+nombres.remove(3)      # Erreur si absent
+nombres.discard(99)    # Pas d'erreur si absent
 print(nombres)</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — <code>{}</code> crée un <em>dictionnaire</em> vide, pas un set vide ! Pour un set vide, utilise <code>set()</code>. En revanche <code>{1, 2, 3}</code> crée bien un set, car il n'y a pas de paires clé:valeur.</div>
 
-        <h2>Opérations sur les sets</h2>
-        <pre><code class="language-python">a = {1, 2, 3, 4}
-b = {3, 4, 5, 6}
+        <h2>Les opérations ensemblistes</h2>
+        <p>Les sets supportent les opérations mathématiques sur les ensembles — comme en cours de maths !</p>
+        <pre><code class="language-python">a = {1, 2, 3, 4, 5}
+b = {3, 4, 5, 6, 7}
 
-print(a | b)   # Union : {1, 2, 3, 4, 5, 6}
-print(a & b)   # Intersection : {3, 4}
-print(a - b)   # Différence : {1, 2}
+print(a | b)   # Union : {1, 2, 3, 4, 5, 6, 7}  (tout ce qui est dans a OU b)
+print(a & b)   # Intersection : {3, 4, 5}       (ce qui est dans a ET b)
+print(a - b)   # Différence : {1, 2}             (dans a mais pas dans b)
+print(b - a)   # Différence : {6, 7}             (dans b mais pas dans a)
+print(a ^ b)   # Différence symétrique : {1, 2, 6, 7}  (dans l'un mais pas les deux)
 
-# Éliminer les doublons d'une liste
-mots = ["chat", "chien", "chat", "oiseau", "chien"]
+# Vérifier des sous-ensembles
+print({1, 2} <= a)   # True ({1,2} est inclus dans a)
+print(a >= {2, 4})   # True (a contient {2,4})</code></pre>
+
+        <h2>Cas d'usage pratiques des sets</h2>
+        <pre><code class="language-python"># Éliminer les doublons d'une liste (sans doute l'usage le plus courant !)
+mots = ["python", "java", "python", "c", "java", "python", "ruby"]
 uniques = list(set(mots))
-print(uniques)</code></pre>
-        <div class="tip-box"><p>✅ set() est très rapide pour vérifier si un élément existe (<code>x in mon_set</code> est quasi instantané).</p></div>
+print(sorted(uniques))  # ['c', 'java', 'python', 'ruby']
+print(f"Doublons supprimés : {len(mots) - len(set(mots))}")  # 3
+
+# Test d'appartenance ultra-rapide (bien plus rapide qu'une liste !)
+prenoms_interdits = {"admin", "root", "system", "null"}
+prenom_saisi = "alice"
+if prenom_saisi in prenoms_interdits:
+    print("Ce prénom est réservé !")
+else:
+    print("Prénom disponible !")
+
+# Trouver les éléments communs à deux listes
+liste_a = [1, 2, 3, 4, 5, 6]
+liste_b = [4, 5, 6, 7, 8, 9]
+communs = set(liste_a) & set(liste_b)
+print(communs)  # {4, 5, 6}</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Les sets sont <em>extrêmement rapides</em> pour tester si un élément est présent (<code>x in mon_set</code>). Sur une liste de 1 million d'éléments, une liste parcourt jusqu'à 1 million de cases ; un set trouve la réponse en quasi-temps constant. C'est la structure idéale pour les "listes d'interdits" ou les "éléments déjà vus" !</div>
       `
     },
     interactiveCode: `# Tuples
@@ -1840,55 +2223,138 @@ print(f"Nombre de valeurs uniques : {len(set(notes))}")`,
     lesson: {
       title: 'Introduction à la Programmation Orientée Objet',
       content: `
-        <h2>Qu'est-ce qu'un objet ?</h2>
-        <p>Jusqu'ici, on a utilisé des données séparées : une variable <code>prenom</code>, une autre <code>age</code>... La <strong>Programmation Orientée Objet (POO)</strong> permet de regrouper des données ET des fonctions dans une seule entité : un <strong>objet</strong>.</p>
-        <div class="info-box"><p>💡 Une <strong>classe</strong>, c'est le plan de construction. Un <strong>objet</strong>, c'est la maison construite à partir du plan.</p></div>
+        <h2>Pourquoi la Programmation Orientée Objet ?</h2>
+        <p>Imagine que tu dois gérer un jeu avec 20 personnages, chacun avec un nom, des points de vie, une arme, des compétences... Avec ce qu'on a vu jusqu'ici, tu aurais 20 séries de variables : <code>nom1, pv1, arme1, nom2, pv2, arme2...</code> C'est ingérable !</p>
+        <p>La <strong>Programmation Orientée Objet (POO)</strong> résout ce problème en regroupant des données (attributs) ET des comportements (méthodes) dans une seule entité : un <strong>objet</strong>. C'est la façon de programmer utilisée dans presque tous les grands logiciels.</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Analogie avec la cuisine : une <strong>classe</strong> c'est la recette (le plan), un <strong>objet</strong> c'est le gâteau fabriqué à partir de cette recette. Avec une recette, tu peux faire autant de gâteaux (objets) que tu veux, chacun différent !</div>
 
-        <h2>Créer une classe</h2>
+        <h2>Définir une classe</h2>
+        <p>Une classe se définit avec le mot-clé <code>class</code>. Par convention, les noms de classes commencent par une majuscule :</p>
         <pre><code class="language-python">class Eleve:
+    """Représente un élève avec ses informations."""
+
     def __init__(self, prenom, age):
-        self.prenom = prenom   # attribut
-        self.age = age         # attribut
+        # self.prenom et self.age sont des ATTRIBUTS d'instance
+        self.prenom = prenom
+        self.age = age
+        self.notes = []     # Liste vide par défaut pour chaque élève
 
     def se_presenter(self):
         print(f"Je m'appelle {self.prenom}, j'ai {self.age} ans.")
 
-# Créer des objets (instances)
+    def ajouter_note(self, note):
+        self.notes.append(note)
+
+    def calculer_moyenne(self):
+        if not self.notes:
+            return 0
+        return sum(self.notes) / len(self.notes)
+
+# Créer des INSTANCES (objets) à partir de la classe
 e1 = Eleve("Alice", 15)
 e2 = Eleve("Bob", 14)
 
+# Chaque objet est INDÉPENDANT
 e1.se_presenter()   # Je m'appelle Alice, j'ai 15 ans.
 e2.se_presenter()   # Je m'appelle Bob, j'ai 14 ans.
-print(e1.prenom)    # Alice</code></pre>
 
-        <h2>Le rôle de self et __init__</h2>
+e1.ajouter_note(15)
+e1.ajouter_note(18)
+e2.ajouter_note(12)
+
+print(f"Moyenne Alice : {e1.calculer_moyenne():.1f}")  # 16.5
+print(f"Moyenne Bob   : {e2.calculer_moyenne():.1f}")  # 12.0
+print(f"Notes Alice   : {e1.notes}")   # [15, 18]
+print(f"Notes Bob     : {e2.notes}")   # [12]  (liste différente !)</code></pre>
+
+        <h2>Le rôle de __init__ et self</h2>
+        <p>Ces deux éléments sont au cœur de la POO en Python :</p>
         <ul>
-          <li><code>__init__</code> est la méthode constructeur — elle est appelée automatiquement à la création</li>
-          <li><code>self</code> représente l'objet lui-même — il permet d'accéder à ses propres attributs</li>
+          <li><strong><code>__init__</code></strong> est le <em>constructeur</em> — cette méthode spéciale est appelée <em>automatiquement</em> quand tu crées un objet. C'est là qu'on initialise les attributs.</li>
+          <li><strong><code>self</code></strong> représente l'objet lui-même. C'est obligatoire en premier paramètre de chaque méthode. Quand tu écris <code>self.prenom</code>, tu accèdes à <em>l'attribut prenom de cet objet précis</em>.</li>
         </ul>
+        <pre><code class="language-python">class Voiture:
+    def __init__(self, marque, modele, annee):
+        self.marque = marque    # Attribut
+        self.modele = modele    # Attribut
+        self.annee = annee      # Attribut
+        self.km = 0             # Attribut avec valeur par défaut
+        self.allumee = False    # État de la voiture
 
-        <h2>Attributs et méthodes</h2>
-        <pre><code class="language-python">class Compteur:
-    def __init__(self):
-        self.valeur = 0         # attribut d'instance
+    def allumer(self):
+        if not self.allumee:
+            self.allumee = True
+            print(f"Vroom ! {self.marque} {self.modele} démarrée.")
+        else:
+            print("La voiture est déjà allumée !")
 
-    def incrementer(self):
-        self.valeur += 1
+    def rouler(self, kilometres):
+        if self.allumee:
+            self.km += kilometres
+            print(f"Tu as roulé {kilometres} km. Total : {self.km} km.")
+        else:
+            print("Allume d'abord la voiture !")
 
-    def reinitialiser(self):
-        self.valeur = 0
+    def __str__(self):
+        return f"{self.marque} {self.modele} ({self.annee}) — {self.km} km"
 
-    def afficher(self):
-        print(f"Compteur : {self.valeur}")
+ma_voiture = Voiture("Renault", "Clio", 2020)
+ma_voiture.allumer()        # Vroom ! Renault Clio démarrée.
+ma_voiture.rouler(150)      # Tu as roulé 150 km. Total : 150 km.
+ma_voiture.rouler(50)       # Tu as roulé 50 km. Total : 200 km.
+print(ma_voiture)           # Renault Clio (2020) — 200 km</code></pre>
 
-c = Compteur()
-c.incrementer()
-c.incrementer()
-c.incrementer()
-c.afficher()        # Compteur : 3
-c.reinitialiser()
-c.afficher()        # Compteur : 0</code></pre>
-        <div class="tip-box"><p>✅ Chaque objet a ses propres attributs indépendants. Deux Eleve n'ont pas le même prenom.</p></div>
+        <h2>Attributs de classe vs. attributs d'instance</h2>
+        <p>Les attributs peuvent appartenir à la classe entière (partagés par tous les objets) ou à chaque instance individuellement :</p>
+        <pre><code class="language-python">class Eleve:
+    # Attribut de CLASSE (partagé par tous les élèves)
+    etablissement = "Collège Victor Hugo"
+    nombre_eleves = 0
+
+    def __init__(self, prenom):
+        # Attribut d'INSTANCE (propre à cet objet)
+        self.prenom = prenom
+        Eleve.nombre_eleves += 1   # Incrémente le compteur global
+
+e1 = Eleve("Alice")
+e2 = Eleve("Bob")
+e3 = Eleve("Chloé")
+
+print(e1.etablissement)        # Collège Victor Hugo (attribut de classe)
+print(Eleve.nombre_eleves)     # 3 (3 élèves créés)
+print(e1.prenom)               # Alice (attribut d'instance)
+print(e2.prenom)               # Bob   (attribut d'instance différent)</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — N'utilise pas une liste ou un dict mutable comme valeur par défaut dans <code>__init__</code> de cette façon : <code>def __init__(self, notes=[])</code>. Cette liste serait <em>partagée</em> entre tous les objets ! Écris toujours <code>self.notes = []</code> à l'intérieur de <code>__init__</code>.</div>
+
+        <h2>Encapsulation — protéger les données</h2>
+        <p>En POO, on essaie de cacher les détails internes d'un objet. Par convention en Python, un attribut préfixé par <code>_</code> est "privé" (ne devrait pas être accédé directement depuis l'extérieur) :</p>
+        <pre><code class="language-python">class CompteBancaire:
+    def __init__(self, titulaire, solde_initial=0):
+        self.titulaire = titulaire
+        self._solde = solde_initial  # "privé" par convention
+
+    def deposer(self, montant):
+        if montant <= 0:
+            raise ValueError("Le montant doit être positif")
+        self._solde += montant
+        print(f"Dépôt de {montant}€. Nouveau solde : {self._solde}€")
+
+    def retirer(self, montant):
+        if montant > self._solde:
+            print("Fonds insuffisants !")
+        else:
+            self._solde -= montant
+            print(f"Retrait de {montant}€. Nouveau solde : {self._solde}€")
+
+    def consulter_solde(self):
+        print(f"Solde de {self.titulaire} : {self._solde}€")
+
+compte = CompteBancaire("Alice", 100)
+compte.deposer(50)           # Dépôt de 50€. Nouveau solde : 150€
+compte.retirer(30)           # Retrait de 30€. Nouveau solde : 120€
+compte.retirer(200)          # Fonds insuffisants !
+compte.consulter_solde()     # Solde de Alice : 120€</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — La POO organise le code autour de concepts du monde réel. Python, les jeux vidéo, les sites web, les apps mobiles — tout est construit avec des objets. Maîtriser les classes, c'est apprendre à penser comme un développeur professionnel !</div>
       `
     },
     interactiveCode: `class Animal:
@@ -1964,65 +2430,151 @@ chat.decrire()`,
     lesson: {
       title: 'Héritage et polymorphisme',
       content: `
-        <h2>Qu'est-ce que l'héritage ?</h2>
-        <p>L'héritage permet à une classe <strong>enfant</strong> de récupérer tous les attributs et méthodes d'une classe <strong>parent</strong>, puis de les spécialiser ou d'en ajouter de nouveaux.</p>
-        <div class="info-box"><p>💡 Analogie : <code>Animal</code> est le parent. <code>Chien</code> et <code>Chat</code> héritent d'<code>Animal</code> — ils ont tout ce qu'un animal a, plus leurs propres spécificités.</p></div>
+        <h2>Pourquoi l'héritage ?</h2>
+        <p>Imagine que tu codes un jeu avec des <code>Guerrier</code>, des <code>Mage</code> et des <code>Archer</code>. Tous ont un nom, des points de vie, et peuvent attaquer. Si tu crées trois classes séparées, tu vas copier-coller beaucoup de code commun. Et si tu dois corriger un bug dans "attaquer", tu devras le corriger trois fois !</p>
+        <p>L'<strong>héritage</strong> résout ce problème : tu écris une fois le code commun dans une classe <strong>parent</strong>, puis les classes <strong>enfants</strong> héritent de tout ça et peuvent ajouter ou modifier ce dont elles ont besoin.</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Le principe DRY (Don't Repeat Yourself) est fondamental en programmation. L'héritage est l'un des outils clés pour éviter la répétition. "Un Chien EST un Animal" — c'est la question à se poser pour savoir si l'héritage est approprié !</div>
 
-        <h2>Syntaxe de base</h2>
-        <pre><code class="language-python">class Animal:
-    def __init__(self, nom):
+        <h2>Syntaxe de l'héritage</h2>
+        <p>Pour faire hériter une classe, on met la classe parent entre parenthèses :</p>
+        <pre><code class="language-python">class Animal:           # Classe PARENT (ou base, ou superclasse)
+    def __init__(self, nom, espece):
         self.nom = nom
+        self.espece = espece
+        self.pv = 100   # Points de vie
 
     def respirer(self):
         print(f"{self.nom} respire.")
 
-class Chien(Animal):           # Chien hérite d'Animal
-    def aboyer(self):
+    def decrire(self):
+        print(f"{self.nom} est un(e) {self.espece} ({self.pv} PV)")
+
+class Chien(Animal):    # Chien HÉRITE d'Animal
+    def aboyer(self):   # Méthode PROPRE à Chien
         print(f"{self.nom} dit : Woof !")
 
-rex = Chien("Rex")
-rex.respirer()   # Méthode héritée d'Animal
-rex.aboyer()     # Méthode propre à Chien</code></pre>
+class Chat(Animal):     # Chat HÉRITE d'Animal
+    def ronronner(self): # Méthode PROPRE à Chat
+        print(f"{self.nom} ronronne...")
 
-        <h2>super() — appeler le parent</h2>
+# Utilisation
+rex = Chien("Rex", "chien")
+mimi = Chat("Mimi", "chat")
+
+rex.respirer()    # Méthode héritée d'Animal ✓
+rex.aboyer()      # Méthode propre à Chien ✓
+mimi.decrire()    # Méthode héritée d'Animal ✓
+mimi.ronronner()  # Méthode propre à Chat ✓
+
+# Un Chien EST un Animal
+print(isinstance(rex, Chien))   # True
+print(isinstance(rex, Animal))  # True !</code></pre>
+
+        <h2>super() — appeler le constructeur du parent</h2>
+        <p>Quand la classe enfant a son propre <code>__init__</code>, elle doit appeler celui du parent avec <code>super()</code> pour ne pas perdre l'initialisation du parent :</p>
         <pre><code class="language-python">class Animal:
     def __init__(self, nom, espece):
         self.nom = nom
         self.espece = espece
-
-    def decrire(self):
-        print(f"{self.nom} est un {self.espece}")
+        self.pv = 100
 
 class Chien(Animal):
     def __init__(self, nom, race):
-        super().__init__(nom, "chien")  # appelle Animal.__init__
-        self.race = race
+        # Appelle Animal.__init__ avec les bons arguments
+        super().__init__(nom, "chien")   # ← CRUCIAL !
+        self.race = race                  # Attribut supplémentaire
 
     def decrire(self):
-        super().decrire()               # appelle Animal.decrire()
-        print(f"Race : {self.race}")
+        # On peut aussi appeler les méthodes du parent avec super()
+        print(f"{self.nom} ({self.race}) — {self.pv} PV")
 
 rex = Chien("Rex", "Berger Allemand")
-rex.decrire()</code></pre>
+rex.decrire()    # Rex (Berger Allemand) — 100 PV
+print(rex.nom)   # Rex      (attribut du parent)
+print(rex.race)  # Berger Allemand (attribut de l'enfant)</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — Si ta classe enfant définit <code>__init__</code> mais n'appelle pas <code>super().__init__(...)</code>, les attributs du parent ne seront pas initialisés ! Tu auras des <code>AttributeError</code> en essayant d'accéder à <code>self.nom</code>, <code>self.pv</code>, etc.</div>
 
-        <h2>Polymorphisme</h2>
-        <p>Chaque sous-classe peut redéfinir une méthode du parent — c'est le <strong>polymorphisme</strong> :</p>
+        <h2>Surcharger (override) des méthodes</h2>
+        <p>Un enfant peut <em>remplacer</em> une méthode du parent par sa propre version. C'est la <strong>surcharge</strong> (override) :</p>
         <pre><code class="language-python">class Animal:
     def parler(self):
-        print("...")
+        print("...")    # Son générique
 
 class Chien(Animal):
-    def parler(self):
+    def parler(self):   # REMPLACE la version du parent
         print("Woof !")
 
 class Chat(Animal):
-    def parler(self):
+    def parler(self):   # REMPLACE aussi
         print("Miaou !")
 
-animaux = [Chien(), Chat(), Animal()]
+class Vache(Animal):
+    pass                # N'override pas → utilise la version parent
+
+# Test
+animaux = [Chien("Rex", "chien"), Chat("Mimi", "chat"), Vache("Marguerite", "vache")]
 for a in animaux:
-    a.parler()   # Woof ! / Miaou ! / ...</code></pre>
-        <div class="tip-box"><p>✅ isinstance(rex, Animal) retourne True — un Chien EST un Animal.</p></div>
+    print(f"{a.nom} : ", end="")
+    a.parler()
+# Rex : Woof !
+# Mimi : Miaou !
+# Marguerite : ...   (version parent)</code></pre>
+
+        <h2>Le polymorphisme — la puissance réelle</h2>
+        <p>Le <strong>polymorphisme</strong> signifie qu'on peut appeler la même méthode sur des objets différents, et chacun réagit à sa façon. C'est ce qui rend le code flexible et extensible :</p>
+        <pre><code class="language-python">class Personnage:
+    def __init__(self, nom, pv):
+        self.nom = nom
+        self.pv = pv
+
+    def attaquer(self, cible):
+        degats = 10    # Attaque de base
+        cible.pv -= degats
+        print(f"{self.nom} attaque {cible.nom} → {degats} dégâts")
+
+class Guerrier(Personnage):
+    def attaquer(self, cible):
+        degats = 25   # Plus fort !
+        cible.pv -= degats
+        print(f"⚔️  {self.nom} frappe {cible.nom} → {degats} dégâts")
+
+class Mage(Personnage):
+    def attaquer(self, cible):
+        degats = 40   # Encore plus fort !
+        cible.pv -= degats
+        print(f"🔮 {self.nom} lance un sort sur {cible.nom} → {degats} dégâts")
+
+# On peut traiter tous les personnages de la même façon
+equipe = [Guerrier("Arthur", 100), Mage("Merlin", 80)]
+boss = Personnage("Dragon", 500)
+
+for perso in equipe:
+    perso.attaquer(boss)   # Chacun attaque à sa façon
+
+print(f"PV du boss : {boss.pv}")  # 500 - 25 - 40 = 435</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Tu peux vérifier la hiérarchie d'héritage avec <code>isinstance(obj, Classe)</code> et <code>issubclass(ClasseEnfant, ClasseParent)</code>. En Python, toutes les classes héritent en dernier de <code>object</code>, la classe mère de tout !</div>
+
+        <h2>Héritage multiple</h2>
+        <p>Python permet à une classe d'hériter de <em>plusieurs</em> parents en même temps :</p>
+        <pre><code class="language-python">class Volant:
+    def voler(self):
+        print(f"{self.nom} vole !")
+
+class Nageur:
+    def nager(self):
+        print(f"{self.nom} nage !")
+
+class Canard(Animal, Volant, Nageur):
+    def __init__(self, nom):
+        Animal.__init__(self, nom, "canard")
+    def coin_coin(self):
+        print(f"{self.nom} : Coin coin !")
+
+donald = Canard("Donald")
+donald.voler()      # Donald vole !
+donald.nager()      # Donald nage !
+donald.coin_coin()  # Donald : Coin coin !
+donald.respirer()   # Méthode d'Animal</code></pre>
       `
     },
     interactiveCode: `class Vehicule:
@@ -2107,57 +2659,130 @@ m.rouler()`,
     lesson: {
       title: 'Lire et écrire des fichiers',
       content: `
-        <h2>Lire un fichier</h2>
-        <p>Python peut lire et écrire des fichiers texte. On utilise toujours <strong>with open()</strong> qui ferme le fichier automatiquement.</p>
-        <pre><code class="language-python"># Lire tout le contenu
+        <h2>Pourquoi lire et écrire des fichiers ?</h2>
+        <p>Jusqu'ici, toutes tes données disparaissaient à la fin du programme. Les variables ne survivent pas ! Pour conserver des données entre deux exécutions (scores d'un jeu, liste de contacts, configuration...), il faut les écrire dans des <strong>fichiers</strong>.</p>
+        <p>Python rend la gestion des fichiers simple et sécurisée. Et le format <strong>JSON</strong> est devenu le standard mondial pour échanger des données structurées — entre Python et une base de données, entre un serveur et un navigateur web, etc.</p>
+
+        <h2>Ouvrir un fichier avec with open()</h2>
+        <p>La façon recommandée d'ouvrir des fichiers en Python est avec <code>with open(...)</code>. Ce gestionnaire de contexte garantit que le fichier est <em>toujours fermé</em> après utilisation, même si une erreur survient :</p>
+        <pre><code class="language-python"># Syntaxe : with open(chemin, mode, encoding) as variable:
+# Modes :
+#   "r"  → lecture seule (défaut)
+#   "w"  → écriture (écrase le fichier si existant)
+#   "a"  → ajout à la fin (ne supprime pas)
+#   "x"  → création (erreur si fichier déjà existant)
+#   "r+" → lecture et écriture
+
+# Lire tout le contenu d'un coup
 with open("notes.txt", "r", encoding="utf-8") as f:
-    contenu = f.read()
+    contenu = f.read()        # Une seule grande chaîne
     print(contenu)
 
-# Lire ligne par ligne
+# Lire ligne par ligne (économise la mémoire pour les grands fichiers)
 with open("notes.txt", "r", encoding="utf-8") as f:
     for ligne in f:
-        print(ligne.strip())  # strip() enlève \\n</code></pre>
-        <div class="info-box"><p>💡 Les modes : "r" = lecture, "w" = écriture (écrase), "a" = ajout, "r+" = lecture + écriture.</p></div>
+        print(ligne.strip())  # strip() enlève le \n en fin de ligne
+
+# Lire toutes les lignes dans une liste
+with open("notes.txt", "r", encoding="utf-8") as f:
+    lignes = f.readlines()    # ['ligne1\n', 'ligne2\n', ...]
+    print(len(lignes), "lignes")</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — Toujours préciser <code>encoding="utf-8"</code> pour les fichiers texte ! Sans ça, Python utilise l'encodage du système (qui varie selon l'OS et la configuration). Les accents et caractères spéciaux peuvent s'afficher bizarrement.</div>
 
         <h2>Écrire dans un fichier</h2>
-        <pre><code class="language-python"># Créer/écraser le fichier
-with open("output.txt", "w", encoding="utf-8") as f:
-    f.write("Bonjour !\\n")
-    f.write("Deuxième ligne\\n")
+        <pre><code class="language-python"># Créer ou écraser un fichier
+with open("scores.txt", "w", encoding="utf-8") as f:
+    f.write("Alice : 150 points\n")
+    f.write("Bob   : 120 points\n")
+    f.write("Chloé : 180 points\n")
 
-# Ajouter sans effacer
-with open("output.txt", "a", encoding="utf-8") as f:
-    f.write("Ligne ajoutée\\n")</code></pre>
+# Ajouter sans effacer le contenu existant
+with open("scores.txt", "a", encoding="utf-8") as f:
+    f.write("David : 95 points\n")
 
-        <h2>Le format JSON</h2>
-        <p><strong>JSON</strong> est le format universel pour stocker des données structurées (listes, dictionnaires) :</p>
+# Écrire plusieurs lignes d'un coup avec writelines()
+nouvelles_lignes = ["Emma : 160\n", "Félix : 140\n"]
+with open("scores.txt", "a", encoding="utf-8") as f:
+    f.writelines(nouvelles_lignes)</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Le mode <code>"w"</code> efface tout le contenu existant avant d'écrire ! Si tu veux conserver ce qui est déjà dans le fichier, utilise <code>"a"</code> (append). Vérifie toujours le mode avant d'écrire !</div>
+
+        <h2>Gestion des erreurs avec les fichiers</h2>
+        <pre><code class="language-python">def lire_fichier(nom):
+    try:
+        with open(nom, "r", encoding="utf-8") as f:
+            return f.read()
+    except FileNotFoundError:
+        print(f"Fichier '{nom}' introuvable !")
+        return ""
+    except PermissionError:
+        print(f"Pas de droits pour lire '{nom}' !")
+        return ""
+
+contenu = lire_fichier("notes.txt")
+if contenu:
+    print(f"Fichier lu : {len(contenu)} caractères")</code></pre>
+
+        <h2>JSON — le format universel des données structurées</h2>
+        <p>JSON (JavaScript Object Notation) est un format texte qui ressemble aux dictionnaires Python. Il est utilisé partout : APIs web, fichiers de configuration, stockage de données...</p>
         <pre><code class="language-python">import json
 
-# Convertir Python → JSON (écriture)
+# Python → JSON (sérialisation)
 eleves = [
-    {"nom": "Alice", "note": 15},
-    {"nom": "Bob",   "note": 12}
+    {"nom": "Alice", "note": 15, "admis": True},
+    {"nom": "Bob",   "note": 12, "admis": True},
+    {"nom": "Eve",   "note": 8,  "admis": False},
 ]
-with open("eleves.json", "w") as f:
-    json.dump(eleves, f, indent=2)
 
-# Lire JSON → Python
-with open("eleves.json", "r") as f:
+# Écrire dans un fichier JSON
+with open("eleves.json", "w", encoding="utf-8") as f:
+    json.dump(eleves, f, indent=2, ensure_ascii=False)
+
+# Lire depuis un fichier JSON
+with open("eleves.json", "r", encoding="utf-8") as f:
     data = json.load(f)
-print(data[0]["nom"])   # Alice</code></pre>
 
-        <h2>JSON sans fichier</h2>
+print(data[0]["nom"])   # Alice
+print(type(data))       # list</code></pre>
+
+        <h2>JSON en mémoire (sans fichier)</h2>
         <pre><code class="language-python">import json
 
-# Dict → chaîne JSON
-texte = json.dumps({"nom": "Alice", "age": 15})
-print(texte)   # {"nom": "Alice", "age": 15}
+# Python → chaîne JSON (pour l'envoyer sur le réseau, etc.)
+profil = {"nom": "Alice", "age": 15, "langages": ["Python", "HTML"]}
+json_texte = json.dumps(profil, indent=2, ensure_ascii=False)
+print(json_texte)
+# {
+#   "nom": "Alice",
+#   "age": 15,
+#   "langages": ["Python", "HTML"]
+# }
 
-# Chaîne JSON → dict
-d = json.loads('{"nom": "Alice", "age": 15}')
-print(d["nom"])  # Alice</code></pre>
-        <div class="tip-box"><p>✅ Dans Pyodide (le navigateur), les fichiers sont en mémoire uniquement. Utilise json.dumps/loads pour tester la sérialisation.</p></div>
+# Chaîne JSON → Python (données reçues d'une API par exemple)
+json_recu = '{"titre": "Mon livre", "pages": 250, "dispo": true}'
+livre = json.loads(json_recu)
+print(livre["titre"])  # Mon livre
+print(type(livre))     # dict</code></pre>
+
+        <h2>Correspondances JSON ↔ Python</h2>
+        <pre><code class="language-python"># Python          ←→  JSON
+# dict            ←→  objet {}
+# list            ←→  tableau []
+# str             ←→  string ""
+# int / float     ←→  number
+# True / False    ←→  true / false
+# None            ←→  null
+
+import json
+
+data_python = {
+    "texte": "Bonjour",
+    "liste": [1, 2, 3],
+    "actif": True,
+    "rien": None
+}
+print(json.dumps(data_python))
+# {"texte": "Bonjour", "liste": [1, 2, 3], "actif": true, "rien": null}</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Dans Pyodide (ce navigateur), les fichiers sont simulés en mémoire. Utilise <code>json.dumps()</code> et <code>json.loads()</code> pour pratiquer la sérialisation sans fichier. Dans tes vrais projets, tu utiliseras <code>json.dump()</code> et <code>json.load()</code> avec de vrais fichiers.</div>
       `
     },
     interactiveCode: `import json
@@ -2234,52 +2859,123 @@ print(f"\\nMoyenne de classe : {moyenne:.1f}/20")`,
     lesson: {
       title: 'Fonctions récursives',
       content: `
-        <h2>Qu'est-ce que la récursion ?</h2>
-        <p>Une fonction <strong>récursive</strong> est une fonction qui s'appelle elle-même. C'est une technique puissante pour résoudre des problèmes qui se répètent naturellement.</p>
-        <div class="info-box"><p>💡 Imagine un miroir face à un autre miroir : tu vois des reflets qui s'emboîtent à l'infini. La récursion, c'est pareil — mais avec un cas d'arrêt !</p></div>
+        <h2>Une fonction qui s'appelle elle-même ?</h2>
+        <p>La <strong>récursion</strong>, c'est l'idée qu'une fonction peut s'appeler elle-même pour résoudre un problème. Ça semble bizarre au premier abord, mais certains problèmes se définissent naturellement de façon récursive.</p>
+        <p>Exemple : la factorielle. 5! = 5 × 4! et 4! = 4 × 3! et 3! = 3 × 2! ... jusqu'à 1! = 1. Le problème se répète avec une valeur plus petite — c'est la récursion !</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Imagine des poupées russes (Matriochka). Pour ouvrir la dernière, tu dois d'abord ouvrir celle du dessus, et celle du dessus, et encore celle du dessus... jusqu'à la toute petite qui ne s'ouvre pas (cas de base). La récursion fonctionne pareil !</div>
 
-        <h2>La structure obligatoire</h2>
-        <p>Toute fonction récursive doit avoir :</p>
+        <h2>La règle d'or : toujours un cas de base</h2>
+        <p>Toute fonction récursive doit avoir <em>obligatoirement</em> :</p>
         <ul>
-          <li>Un <strong>cas de base</strong> (arrêt) — sinon boucle infinie !</li>
-          <li>Un <strong>appel récursif</strong> qui se rapproche du cas de base</li>
+          <li>Un <strong>cas de base</strong> — la condition d'arrêt, qui ne fait pas d'appel récursif</li>
+          <li>Un <strong>appel récursif</strong> — qui se rapproche du cas de base à chaque étape</li>
         </ul>
         <pre><code class="language-python">def countdown(n):
-    if n <= 0:          # Cas de base
+    if n <= 0:           # CAS DE BASE : on s'arrête
         print("Décollage !")
     else:
         print(n)
-        countdown(n - 1)  # Appel récursif
+        countdown(n - 1)  # APPEL RÉCURSIF : on se rapproche de 0
 
-countdown(5)  # 5, 4, 3, 2, 1, Décollage !</code></pre>
+countdown(5)
+# 5
+# 4
+# 3
+# 2
+# 1
+# Décollage !</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — Sans cas de base (ou si on ne s'en rapproche pas), la récursion tourne à l'infini et Python finit par lancer une <code>RecursionError: maximum recursion depth exceeded</code>. Python limite la récursion à ~1000 niveaux par sécurité.</div>
 
-        <h2>Factorielle</h2>
+        <h2>La factorielle — exemple classique</h2>
         <pre><code class="language-python">def factorielle(n):
-    if n == 0 or n == 1:   # Cas de base
+    # Cas de base : 0! et 1! valent 1
+    if n == 0 or n == 1:
         return 1
-    return n * factorielle(n - 1)  # n! = n × (n-1)!
+    # Appel récursif : n! = n × (n-1)!
+    return n * factorielle(n - 1)
 
-print(factorielle(5))  # 120  (5×4×3×2×1)
-print(factorielle(0))  # 1</code></pre>
+# Traçage de l'exécution pour n=4 :
+# factorielle(4)
+#   = 4 * factorielle(3)
+#         = 3 * factorielle(2)
+#               = 2 * factorielle(1)
+#                     = 1  ← cas de base !
+#               = 2 * 1 = 2
+#         = 3 * 2 = 6
+#   = 4 * 6 = 24
 
-        <h2>Suite de Fibonacci</h2>
+print(factorielle(0))   # 1
+print(factorielle(1))   # 1
+print(factorielle(5))   # 120
+print(factorielle(10))  # 3628800</code></pre>
+
+        <h2>La suite de Fibonacci</h2>
+        <p>La suite de Fibonacci se définit naturellement de façon récursive : chaque nombre est la somme des deux précédents (1, 1, 2, 3, 5, 8, 13, 21...) :</p>
         <pre><code class="language-python">def fibonacci(n):
+    # Cas de base : F(0) = 0, F(1) = 1
     if n <= 1:
         return n
+    # Récursion : F(n) = F(n-1) + F(n-2)
     return fibonacci(n - 1) + fibonacci(n - 2)
 
-for i in range(8):
+for i in range(10):
     print(fibonacci(i), end=" ")
-# 0 1 1 2 3 5 8 13</code></pre>
-        <div class="tip-box"><p>✅ La récursion est élégante mais peut être lente sur de grandes valeurs. Pour fibonacci(35)+, préfère une boucle.</p></div>
+# 0 1 1 2 3 5 8 13 21 34</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — La version récursive de Fibonacci est élégante mais <em>très lente</em> pour de grandes valeurs. <code>fibonacci(35)</code> fait ~29 millions d'appels ! On peut l'accélérer avec la mémoïsation (<code>@functools.lru_cache</code>) ou en utilisant une boucle simple.</div>
 
-        <h2>Parcourir une structure imbriquée</h2>
-        <pre><code class="language-python">def somme_liste(lst):
-    if not lst:           # Liste vide
-        return 0
-    return lst[0] + somme_liste(lst[1:])
+        <h2>Récursion vs. boucle — quand utiliser quoi ?</h2>
+        <pre><code class="language-python"># Fibonacci itératif (beaucoup plus rapide !)
+def fibonacci_iter(n):
+    if n <= 1:
+        return n
+    a, b = 0, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b
 
-print(somme_liste([1, 2, 3, 4, 5]))  # 15</code></pre>
+print(fibonacci_iter(100))   # Instantané !
+
+# Mémoïsation (cache) pour la version récursive
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def fibonacci_cache(n):
+    if n <= 1:
+        return n
+    return fibonacci_cache(n - 1) + fibonacci_cache(n - 2)
+
+print(fibonacci_cache(100))  # Instantané aussi !</code></pre>
+
+        <h2>Cas d'usage réels de la récursion</h2>
+        <p>La récursion brille vraiment pour parcourir des structures imbriquées :</p>
+        <pre><code class="language-python"># Calculer la somme d'une liste imbriquée (liste de listes)
+def somme_profonde(structure):
+    if isinstance(structure, (int, float)):
+        return structure        # Cas de base : c'est un nombre
+    total = 0
+    for element in structure:
+        total += somme_profonde(element)  # Récursion sur sous-listes
+    return total
+
+print(somme_profonde([1, [2, 3], [4, [5, 6]]]))  # 21
+print(somme_profonde([[1, 2], [3, [4, [5]]]]))   # 15
+
+# Afficher une arborescence de dossiers
+def afficher_arbre(structure, niveau=0):
+    for cle, valeur in structure.items():
+        print("  " * niveau + "📁 " + cle)
+        if isinstance(valeur, dict):
+            afficher_arbre(valeur, niveau + 1)  # Récursion sur sous-dossier
+
+arbre = {
+    "Documents": {
+        "Cours": {"Python.txt": {}, "Maths.txt": {}},
+        "Projets": {"MonApp": {}}
+    },
+    "Images": {"Vacances": {}}
+}
+afficher_arbre(arbre)</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — La récursion est le choix naturel pour : les arbres (arborescences de fichiers, structures XML/HTML, organigrammes), les algorithmes "diviser pour régner" (tri fusion, recherche dichotomique), et les puzzles mathématiques. Pour les suites simples, une boucle est souvent préférable.</div>
       `
     },
     interactiveCode: `def factorielle(n):
@@ -2351,61 +3047,131 @@ print("  " + " ".join(str(n) for n in fib))`,
     lesson: {
       title: 'Algorithmes de recherche et de tri',
       content: `
-        <h2>Recherche linéaire</h2>
-        <p>Parcourir une liste élément par élément jusqu'à trouver la cible :</p>
+        <h2>Pourquoi les algorithmes ?</h2>
+        <p>Un <strong>algorithme</strong>, c'est une suite d'instructions précises pour résoudre un problème. Deux algorithmes peuvent résoudre le même problème, mais avec des efficacités très différentes. Sur 1 million d'éléments, le choix d'algorithme peut faire la différence entre 0,02 secondes et... 11 jours !</p>
+        <p>Comprendre les algorithmes de recherche et de tri, c'est comprendre pourquoi Google trouve ta page en millisecondes, ou pourquoi le classement d'un jeu se met à jour instantanément.</p>
+
+        <h2>La complexité algorithmique — mesurer l'efficacité</h2>
+        <p>On mesure l'efficacité d'un algorithme avec la notation <strong>O(n)</strong> (Big O), qui indique combien d'opérations il faut en fonction de la taille n des données :</p>
+        <ul>
+          <li><strong>O(1)</strong> — Temps constant : toujours la même durée (accès à un dict)</li>
+          <li><strong>O(log n)</strong> — Logarithmique : divise par 2 à chaque étape (recherche dichotomique)</li>
+          <li><strong>O(n)</strong> — Linéaire : proportionnel à la taille (recherche linéaire)</li>
+          <li><strong>O(n²)</strong> — Quadratique : très lent sur grandes données (tri à bulles)</li>
+        </ul>
+
+        <h2>Recherche linéaire — O(n)</h2>
+        <p>La façon la plus simple : on parcourt tout jusqu'à trouver. Fonctionne sur n'importe quelle liste, triée ou non :</p>
         <pre><code class="language-python">def recherche_lineaire(liste, cible):
     for i, val in enumerate(liste):
         if val == cible:
-            return i      # Retourne l'index
-    return -1             # Pas trouvé
+            return i    # On retourne l'index dès qu'on trouve
+    return -1           # -1 signifie "pas trouvé"
 
-nombres = [5, 3, 8, 1, 9, 2]
-print(recherche_lineaire(nombres, 8))  # 2
-print(recherche_lineaire(nombres, 7))  # -1</code></pre>
+# Test
+nombres = [5, 3, 8, 1, 9, 2, 7, 4, 6]
+print(recherche_lineaire(nombres, 9))   # 4 (index de 9)
+print(recherche_lineaire(nombres, 10))  # -1 (absent)
 
-        <h2>Recherche dichotomique (liste triée)</h2>
-        <p>Sur une liste <strong>triée</strong>, on coupe en deux à chaque étape — beaucoup plus rapide !</p>
+# Dans le pire cas : on regarde TOUS les éléments
+# Sur une liste de 1 million d'éléments → jusqu'à 1 million comparaisons</code></pre>
+
+        <h2>Recherche dichotomique — O(log n)</h2>
+        <p>Sur une liste <strong>triée</strong>, on peut faire beaucoup mieux : on compare avec l'élément du milieu, et on élimine la moitié qui ne peut pas contenir la cible :</p>
         <pre><code class="language-python">def recherche_dicho(liste, cible):
     gauche, droite = 0, len(liste) - 1
+
     while gauche <= droite:
-        milieu = (gauche + droite) // 2
+        milieu = (gauche + droite) // 2    # Indice du milieu
+
         if liste[milieu] == cible:
-            return milieu
+            return milieu                  # Trouvé !
         elif liste[milieu] < cible:
-            gauche = milieu + 1
+            gauche = milieu + 1            # La cible est à droite
         else:
-            droite = milieu - 1
-    return -1
+            droite = milieu - 1            # La cible est à gauche
 
-triee = [1, 3, 5, 7, 9, 11, 13]
-print(recherche_dicho(triee, 7))   # 3
-print(recherche_dicho(triee, 6))   # -1</code></pre>
-        <div class="info-box"><p>💡 Recherche linéaire : jusqu'à N étapes. Dichotomique : jusqu'à log₂(N) étapes. Sur 1 million d'éléments → max 20 étapes !</p></div>
+    return -1   # Pas trouvé
 
-        <h2>Tri à bulles</h2>
+triee = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19]
+print(recherche_dicho(triee, 7))    # 3
+print(recherche_dicho(triee, 6))    # -1 (absent)
+print(recherche_dicho(triee, 19))   # 9 (dernier élément)
+
+# Sur 1 million d'éléments : max 20 comparaisons !  (log₂(1000000) ≈ 20)</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — C'est comme chercher un mot dans un dictionnaire papier ! Tu ouvres au milieu, tu vois si ton mot est avant ou après, tu coupes à nouveau en deux... En 20 coups, tu trouves n'importe quel mot parmi 1 million. Impossible de faire mieux sur une liste triée !</div>
+
+        <h2>Tri à bulles — O(n²) — à connaître mais pas à utiliser</h2>
+        <p>Le tri à bulles est le plus simple à comprendre : on compare des paires adjacentes et on les échange si nécessaire, jusqu'à ce que la liste soit triée. Intuitivement, les grands éléments "remontent" vers la fin comme des bulles :</p>
         <pre><code class="language-python">def tri_bulles(liste):
     n = len(liste)
-    lst = liste.copy()
+    lst = liste.copy()  # On ne modifie pas la liste originale
+
     for i in range(n):
+        # Après le passage i, les i derniers éléments sont à leur place
         for j in range(0, n - i - 1):
-            if lst[j] > lst[j + 1]:
+            if lst[j] > lst[j + 1]:   # Si désordonné, on échange
                 lst[j], lst[j + 1] = lst[j + 1], lst[j]
+
     return lst
 
 nombres = [64, 34, 25, 12, 22, 11, 90]
-print(tri_bulles(nombres))  # [11, 12, 22, 25, 34, 64, 90]</code></pre>
+print(tri_bulles(nombres))  # [11, 12, 22, 25, 34, 64, 90]
 
-        <h2>sorted() et sort()</h2>
-        <pre><code class="language-python">eleves = [("Alice", 15), ("Bob", 18), ("Chloé", 12)]
+# Complexité : O(n²) → sur 10000 éléments = 100 millions d'opérations !
+# À éviter en pratique, mais utile pour comprendre les algorithmes de tri.</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — En pratique, n'utilise <em>jamais</em> le tri à bulles dans un vrai programme ! Python inclut <code>sorted()</code> et <code>.sort()</code> qui utilisent l'algorithme Timsort (O(n log n)), bien plus rapide. Le tri à bulles sert uniquement à comprendre comment les algorithmes de tri fonctionnent.</div>
 
-# Trier par note (deuxième élément)
-par_note = sorted(eleves, key=lambda e: e[1])
-print(par_note)  # [('Chloé', 12), ('Alice', 15), ('Bob', 18)]
+        <h2>sorted() et sort() — les vrais outils</h2>
+        <pre><code class="language-python"># sorted() : retourne une NOUVELLE liste triée (n'affecte pas l'original)
+nombres = [5, 2, 8, 1, 9, 3]
+tries = sorted(nombres)        # Croissant
+print(tries)                   # [1, 2, 3, 5, 8, 9]
+print(nombres)                 # [5, 2, 8, 1, 9, 3] ← intact !
 
-# Tri décroissant
-desc = sorted(eleves, key=lambda e: e[1], reverse=True)
-print(desc)</code></pre>
-        <div class="tip-box"><p>✅ En pratique, utilise toujours sorted() ou .sort() de Python — ils utilisent Timsort, plus efficace que le tri à bulles.</p></div>
+# .sort() : trie la liste EN PLACE (modifie l'original)
+nombres.sort(reverse=True)     # Décroissant
+print(nombres)                 # [9, 8, 5, 3, 2, 1]
+
+# Trier des objets complexes avec key=
+eleves = [
+    {"nom": "Alice", "note": 15},
+    {"nom": "Bob",   "note": 18},
+    {"nom": "Chloé", "note": 12},
+]
+
+par_note = sorted(eleves, key=lambda e: e["note"])
+for e in par_note:
+    print(f"  {e['nom']} : {e['note']}")
+
+# Tri multi-critères : d'abord par note décroissante, puis nom alphabétique
+multi = sorted(eleves, key=lambda e: (-e["note"], e["nom"]))</code></pre>
+
+        <h2>Algorithmes utiles en pratique</h2>
+        <pre><code class="language-python"># Trouver le minimum et maximum sans min()/max()
+def trouver_min_max(liste):
+    mini = maxi = liste[0]
+    for val in liste[1:]:
+        if val < mini: mini = val
+        if val > maxi: maxi = val
+    return mini, maxi
+
+notes = [14, 8, 17, 12, 15, 9]
+mini, maxi = trouver_min_max(notes)
+print(f"Min : {mini}, Max : {maxi}")  # Min : 8, Max : 17
+
+# Supprimer les doublons en conservant l'ordre
+def uniques_ordonnes(liste):
+    vus = set()
+    resultat = []
+    for el in liste:
+        if el not in vus:
+            vus.add(el)
+            resultat.append(el)
+    return resultat
+
+mots = ["python", "java", "python", "c", "java", "ruby"]
+print(uniques_ordonnes(mots))  # ['python', 'java', 'c', 'ruby']</code></pre>
       `
     },
     interactiveCode: `def recherche_dicho(liste, cible):
@@ -2483,51 +3249,104 @@ for m in sorted(mots, key=len):
     lesson: {
       title: 'Compréhensions de dict, set, et imbriquées',
       content: `
-        <h2>Compréhension de dictionnaire</h2>
-        <p>Comme les compréhensions de listes, mais pour créer des dictionnaires :</p>
-        <pre><code class="language-python"># {clé: valeur for ... in ...}
-carres = {n: n**2 for n in range(1, 6)}
-print(carres)  # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+        <h2>Aller plus loin avec les compréhensions</h2>
+        <p>Tu maîtrises les compréhensions de listes. Python propose les mêmes mécanismes pour les <strong>dictionnaires</strong>, les <strong>sets</strong>, et même les <strong>générateurs</strong>. Ces outils permettent d'écrire du code concis, lisible et efficace pour transformer et filtrer n'importe quel type de données.</p>
 
-# Inverser un dictionnaire (clés ↔ valeurs)
+        <h2>Compréhensions de dictionnaire</h2>
+        <p>Syntaxe : <code>{clé: valeur for ... in ...}</code></p>
+        <pre><code class="language-python"># Créer un dictionnaire : n → n²
+carres = {n: n**2 for n in range(1, 6)}
+print(carres)   # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+
+# Transformer les clés et valeurs d'un dict existant
+prix = {"pomme": 0.5, "banane": 0.3, "kiwi": 1.2}
+prix_double = {fruit: prix_u * 2 for fruit, prix_u in prix.items()}
+print(prix_double)   # {'pomme': 1.0, 'banane': 0.6, 'kiwi': 2.4}
+
+# Inverser clés et valeurs
 original = {"a": 1, "b": 2, "c": 3}
 inverse = {v: k for k, v in original.items()}
 print(inverse)  # {1: 'a', 2: 'b', 3: 'c'}
 
-# Filtrer un dictionnaire
-notes = {"Alice": 15, "Bob": 9, "Chloé": 17, "David": 11}
+# Filtrer un dictionnaire (garder seulement les admis)
+notes = {"Alice": 15, "Bob": 9, "Chloé": 17, "David": 11, "Emma": 7}
 admis = {nom: n for nom, n in notes.items() if n >= 10}
-print(admis)  # {'Alice': 15, 'Chloé': 17, 'David': 11}</code></pre>
+print(admis)   # {'Alice': 15, 'Chloé': 17, 'David': 11}
 
-        <h2>Compréhension de set</h2>
-        <pre><code class="language-python"># {expression for ... in ...}
-impairs = {n for n in range(20) if n % 2 != 0}
-print(impairs)  # {1, 3, 5, 7, 9, 11, 13, 15, 17, 19}
+# Transformer ET filtrer : mentions pour les >12
+mentions = {
+    nom: ("TB" if n >= 16 else "B" if n >= 14 else "AB")
+    for nom, n in notes.items() if n >= 12
+}
+print(mentions)   # {'Alice': 'B', 'Chloé': 'TB', 'David': 'AB'}</code></pre>
 
-# Lettres uniques d'un texte
-lettres = {c.lower() for c in "Python est Super" if c.isalpha()}
-print(sorted(lettres))</code></pre>
+        <h2>Compréhensions de set</h2>
+        <p>Syntaxe : <code>{expression for ... in ...}</code> (comme dict mais sans <code>:</code>)</p>
+        <pre><code class="language-python"># Nombres impairs de 1 à 20
+impairs = {n for n in range(1, 21) if n % 2 != 0}
+print(impairs)   # {1, 3, 5, 7, 9, 11, 13, 15, 17, 19}
+# (non ordonné !)
+
+# Lettres uniques d'un texte (sans espaces ni ponctuations)
+texte = "Python est super et puissant"
+lettres_uniques = {c.lower() for c in texte if c.isalpha()}
+print(sorted(lettres_uniques))   # ['a', 'e', 'h', 'i', 'n', 'o', ...]
+
+# Domaines uniques d'une liste d'emails
+emails = ["alice@gmail.com", "bob@yahoo.fr", "chloé@gmail.com", "dave@hotmail.fr"]
+domaines = {email.split("@")[1] for email in emails}
+print(domaines)   # {'gmail.com', 'yahoo.fr', 'hotmail.fr'}</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Pour distinguer compréhension de dict et de set : si tu as <code>clé: valeur</code> c'est un dict, si tu as juste une expression c'est un set. Et <code>{}</code> seul crée un dict vide (pas un set) — utilise <code>set()</code> pour un set vide !</div>
 
         <h2>Compréhensions imbriquées</h2>
-        <pre><code class="language-python"># Table de multiplication (matrice)
-table = [[i * j for j in range(1, 4)] for i in range(1, 4)]
+        <p>On peut imbriquer des compréhensions, mais attention à la lisibilité !</p>
+        <pre><code class="language-python"># Créer une matrice (liste de listes)
+# Équivalent à deux boucles for imbriquées
+table = [[i * j for j in range(1, 6)] for i in range(1, 6)]
 for ligne in table:
     print(ligne)
-# [1, 2, 3]
-# [2, 4, 6]
-# [3, 6, 9]
+# [1, 2, 3, 4, 5]
+# [2, 4, 6, 8, 10]
+# [3, 6, 9, 12, 15]
+# ...
 
 # Aplatir une liste de listes
-matrice = [[1, 2], [3, 4], [5, 6]]
+matrice = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+# [x for liste in matrice for x in liste] — lire de gauche à droite comme des for imbriqués
 plat = [x for ligne in matrice for x in ligne]
-print(plat)  # [1, 2, 3, 4, 5, 6]</code></pre>
-        <div class="tip-box"><p>✅ Les compréhensions imbriquées se lisent de gauche à droite, comme des boucles for imbriquées.</p></div>
+print(plat)  # [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
-        <h2>Générateur</h2>
-        <pre><code class="language-python"># Utiliser () au lieu de [] crée un générateur (paresseux)
-gen = (n**2 for n in range(1000000))  # Pas de mémoire utilisée !
-print(next(gen))  # 0
-print(next(gen))  # 1</code></pre>
+# Toutes les combinaisons de deux listes
+couleurs = ["rouge", "vert"]
+tailles = ["S", "M", "L"]
+articles = [(c, t) for c in couleurs for t in tailles]
+print(articles)
+# [('rouge', 'S'), ('rouge', 'M'), ..., ('vert', 'L')]</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — Les compréhensions imbriquées se lisent <em>de gauche à droite</em>, dans le même ordre que des boucles for imbriquées. <code>[x for a in lst_a for x in a]</code> = d'abord la boucle sur <code>lst_a</code>, puis sur chaque <code>a</code>. Si tu confonds l'ordre, le résultat sera incorrect !</div>
+
+        <h2>Les expressions génératrices — paresseux mais efficaces</h2>
+        <p>En remplaçant les crochets <code>[]</code> par des parenthèses <code>()</code>, tu crées un <strong>générateur</strong> au lieu d'une liste. La différence clé : le générateur calcule les valeurs <em>une par une à la demande</em>, sans tout stocker en mémoire !</p>
+        <pre><code class="language-python"># Liste : calcule et stocke TOUT immédiatement
+liste_carres = [n**2 for n in range(1000000)]   # Utilise ~8 Mo de RAM !
+
+# Générateur : calcule à la demande, ultra-léger
+gen_carres = (n**2 for n in range(1000000))    # Utilise ~100 octets seulement !
+
+# On obtient les valeurs avec next() ou en itérant
+gen = (n**2 for n in range(5))
+print(next(gen))   # 0
+print(next(gen))   # 1
+print(next(gen))   # 4
+# etc.
+
+# Très utile avec sum(), max(), etc. (Python consomme les valeurs une par une)
+total = sum(n**2 for n in range(1000000))   # Efficace !
+print(total)
+
+# Trouver le premier élément qui satisfait une condition
+premier_pair = next(n for n in [3, 7, 2, 9, 4] if n % 2 == 0)
+print(premier_pair)   # 2</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Utilise un générateur plutôt qu'une liste quand tu n'as besoin des éléments qu'une seule fois (pour une somme, un max, etc.) ou quand les données sont très volumineuses. Pour indexer ou réutiliser les éléments, garde une liste.</div>
       `
     },
     interactiveCode: `# Compréhension de dictionnaire
@@ -2603,56 +3422,144 @@ print("Aplati :", plat)`,
     lesson: {
       title: 'Outils fonctionnels de Python',
       content: `
-        <h2>enumerate()</h2>
-        <p>Itérer avec l'index ET la valeur :</p>
-        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise"]
+        <h2>La boîte à outils fonctionnelle de Python</h2>
+        <p>Python inclut des fonctions intégrées ultra-pratiques pour travailler avec des collections : <code>enumerate</code>, <code>zip</code>, <code>map</code>, <code>filter</code>, <code>any</code>, <code>all</code>... Ces outils permettent d'écrire du code élégant et expressif. Une fois que tu les maîtrises, tu les utiliseras partout !</p>
 
-for i, fruit in enumerate(fruits):
-    print(f"{i+1}. {fruit}")
+        <h2>enumerate() — itérer avec l'index</h2>
+        <p>Problème classique : tu veux boucler sur une liste et connaître à la fois la valeur ET son numéro. <code>enumerate()</code> est fait pour ça :</p>
+        <pre><code class="language-python">fruits = ["pomme", "banane", "cerise", "kiwi"]
+
+# Sans enumerate (à éviter)
+for i in range(len(fruits)):
+    print(f"{i+1}. {fruits[i]}")
+
+# Avec enumerate (élégant !)
+for i, fruit in enumerate(fruits, start=1):
+    print(f"{i}. {fruit}")
 # 1. pomme
 # 2. banane
 # 3. cerise
+# 4. kiwi
 
-# Démarrer à un autre index
-for i, fruit in enumerate(fruits, start=1):
-    print(f"{i}. {fruit}")</code></pre>
+# Trouver l'index d'un élément
+for i, val in enumerate(fruits):
+    if val == "cerise":
+        print(f"Cerise trouvée à l'index {i}")  # index 2</code></pre>
 
-        <h2>zip()</h2>
-        <p>Combiner plusieurs listes en parallèle :</p>
+        <h2>zip() — combiner plusieurs listes</h2>
+        <p><code>zip()</code> associe les éléments de plusieurs listes par position, comme une fermeture éclair :</p>
         <pre><code class="language-python">prenoms = ["Alice", "Bob", "Chloé"]
 notes   = [15, 12, 18]
 villes  = ["Paris", "Lyon", "Nantes"]
 
+# Itérer sur 3 listes en parallèle
 for prenom, note, ville in zip(prenoms, notes, villes):
     print(f"{prenom} ({ville}) : {note}/20")
 
-# Créer un dictionnaire depuis deux listes
+# Créer un dictionnaire à partir de deux listes
 d = dict(zip(prenoms, notes))
-print(d)  # {'Alice': 15, 'Bob': 12, 'Chloé': 18}</code></pre>
+print(d)   # {'Alice': 15, 'Bob': 12, 'Chloé': 18}
 
-        <h2>map()</h2>
-        <p>Appliquer une fonction à chaque élément :</p>
+# zip s'arrête dès que la liste la plus courte est épuisée
+a = [1, 2, 3, 4, 5]
+b = ["a", "b", "c"]     # Plus courte !
+print(list(zip(a, b)))  # [(1,'a'), (2,'b'), (3,'c')] — 4 et 5 ignorés
+
+# zip peut "dézipper" aussi !
+paires = [(1, "a"), (2, "b"), (3, "c")]
+nums, lettres = zip(*paires)
+print(list(nums))     # [1, 2, 3]
+print(list(lettres))  # ['a', 'b', 'c']</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — <code>zip()</code> retourne un itérateur paresseux, pas une liste. Pour obtenir une liste, entoure de <code>list()</code>. C'est efficace pour les grandes collections car rien n'est calculé à l'avance !</div>
+
+        <h2>map() — transformer chaque élément</h2>
+        <p><code>map(fonction, itérable)</code> applique une fonction à chaque élément :</p>
         <pre><code class="language-python">nombres = [1, 2, 3, 4, 5]
 
+# Appliquer une fonction à chaque élément
 carres = list(map(lambda x: x**2, nombres))
-print(carres)  # [1, 4, 9, 16, 25]
+print(carres)   # [1, 4, 9, 16, 25]
 
-# Équivalent en compréhension (préféré en Python)
-carres = [x**2 for x in nombres]</code></pre>
+# Équivalent en compréhension (plus Pythonique !)
+carres = [x**2 for x in nombres]
 
-        <h2>filter()</h2>
+# map est pratique avec des fonctions existantes
+textes = ["  alice  ", "  BOB  ", "chloé "]
+nettoyes = list(map(str.strip, textes))   # Applique strip à chaque élément
+print(nettoyes)   # ['alice', 'BOB', 'chloé']
+
+# Convertir des types
+strings = ["1", "2", "3", "4"]
+entiers = list(map(int, strings))
+print(entiers)  # [1, 2, 3, 4]</code></pre>
+
+        <h2>filter() — filtrer des éléments</h2>
         <pre><code class="language-python">nombres = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
+# Garder seulement les pairs
 pairs = list(filter(lambda x: x % 2 == 0, nombres))
-print(pairs)  # [2, 4, 6, 8, 10]</code></pre>
+print(pairs)   # [2, 4, 6, 8, 10]
 
-        <h2>any() et all()</h2>
+# Équivalent en compréhension (plus lisible en général)
+pairs = [x for x in nombres if x % 2 == 0]
+
+# Filtrer des chaînes non vides
+mots = ["python", "", "super", "", "cool", "  "]
+non_vides = list(filter(lambda m: m.strip(), mots))
+print(non_vides)   # ['python', 'super', 'cool']
+
+# Combiner map et filter
+notes = [8, 15, 12, 5, 18, 9, 14]
+admis_double = list(map(lambda n: n * 2,
+                        filter(lambda n: n >= 10, notes)))
+print(admis_double)  # [30, 24, 36, 28]  (notes >= 10, doublées)</code></pre>
+
+        <h2>any() et all() — tester des conditions</h2>
         <pre><code class="language-python">notes = [12, 15, 9, 17, 11]
 
-print(any(n >= 18 for n in notes))   # False (aucun >= 18)
-print(all(n >= 10 for n in notes))   # False (9 < 10)
-print(all(n > 8 for n in notes))     # True (tous > 8)</code></pre>
-        <div class="tip-box"><p>✅ any() = au moins un True. all() = tous True. Très utiles pour valider des conditions sur des listes.</p></div>
+# any() : au moins un True
+print(any(n >= 18 for n in notes))    # False (aucune >= 18)
+print(any(n >= 15 for n in notes))    # True (15 et 17 ≥ 15)
+
+# all() : tous True
+print(all(n >= 10 for n in notes))    # False (9 < 10)
+print(all(n > 8 for n in notes))      # True (tous > 8)
+print(all(n > 0 for n in notes))      # True (tous positifs)
+
+# Usage pratique : validation de données
+def valider_notes(notes):
+    if not notes:
+        return False, "Liste vide"
+    if not all(0 <= n <= 20 for n in notes):
+        return False, "Note hors de [0, 20]"
+    if any(n < 0 for n in notes):
+        return False, "Note négative impossible"
+    return True, "OK"
+
+print(valider_notes([12, 15, 18]))   # (True, 'OK')
+print(valider_notes([12, 25, 15]))   # (False, 'Note hors de [0, 20]')</code></pre>
+
+        <h2>Autres fonctions intégrées essentielles</h2>
+        <pre><code class="language-python"># sum(), min(), max() avec key=
+notes = [14, 8, 17, 12, 15]
+print(sum(notes))          # 66
+print(min(notes))          # 8
+print(max(notes))          # 17
+print(sum(notes) / len(notes))  # 13.2
+
+eleves = [{"nom": "Alice", "note": 15}, {"nom": "Bob", "note": 18}]
+meilleur = max(eleves, key=lambda e: e["note"])
+print(meilleur["nom"])     # Bob
+
+# sorted() avec key et reverse
+mots = ["banane", "kiwi", "framboise", "figue"]
+par_longueur = sorted(mots, key=len)
+print(par_longueur)   # ['kiwi', 'figue', 'banane', 'framboise']
+
+# reversed() — itérateur inversé
+for x in reversed([1, 2, 3, 4, 5]):
+    print(x, end=" ")  # 5 4 3 2 1</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — En Python moderne, les compréhensions de listes sont généralement préférées à <code>map()</code> et <code>filter()</code> pour leur lisibilité. Mais <code>any()</code>, <code>all()</code>, <code>zip()</code> et <code>enumerate()</code> n'ont pas d'équivalent aussi élégant, donc on les utilise toujours !</div>
       `
     },
     interactiveCode: `prenoms = ["Alice", "Bob", "Chloé", "David"]
@@ -2730,71 +3637,124 @@ print(f"\\nDict : {dico}")`,
     lesson: {
       title: 'Le Web, HTML et Python',
       content: `
-        <h2>Comment fonctionne le Web ?</h2>
-        <p>Quand tu tapes une URL dans ton navigateur, voici ce qui se passe :</p>
-        <ul>
-          <li>Ton navigateur envoie une <strong>requête HTTP</strong> à un serveur</li>
-          <li>Le serveur (qui peut tourner Python !) reçoit la requête</li>
-          <li>Il répond avec du <strong>HTML + CSS + JS</strong></li>
-          <li>Ton navigateur <strong>affiche</strong> le résultat</li>
-        </ul>
-        <div class="info-box"><p>💡 <strong>Frontend</strong> = ce que l'utilisateur voit (HTML/CSS/JS dans le navigateur). <strong>Backend</strong> = le serveur qui traite les données (Python, base de données…).</p></div>
+        <h2>Comment fonctionne Internet ?</h2>
+        <p>Chaque fois que tu ouvres un site web, un dialogue invisible se produit entre ton navigateur et un serveur quelque part dans le monde. Comprendre ce dialogue est essentiel pour construire tes propres applications web avec Python !</p>
+        <p>Voici le cycle complet d'une requête web :</p>
+        <ol>
+          <li>Tu tapes <code>https://monsite.com/page</code> dans Chrome/Firefox</li>
+          <li>Ton navigateur <strong>résout le nom de domaine</strong> en adresse IP (via DNS)</li>
+          <li>Il envoie une <strong>requête HTTP GET</strong> au serveur</li>
+          <li>Le serveur (Python avec Flask !) reçoit la requête</li>
+          <li>Il traite et renvoie une <strong>réponse HTTP</strong> avec du HTML</li>
+          <li>Ton navigateur lit le HTML et <strong>affiche la page</strong></li>
+        </ol>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — <strong>Frontend</strong> = tout ce que l'utilisateur voit dans son navigateur (HTML, CSS, JavaScript). <strong>Backend</strong> = le serveur qui traite la logique, accède à la base de données, etc. Python est un langage backend. Tu vas apprendre les deux !</div>
 
-        <h2>HTML — la structure d'une page</h2>
-        <p>HTML (HyperText Markup Language) décrit la structure d'une page avec des <strong>balises</strong> :</p>
-        <pre><code class="language-python"># Python peut générer du HTML !
-page = """&lt;!DOCTYPE html&gt;
-&lt;html&gt;
+        <h2>HTML — la structure d'une page web</h2>
+        <p>HTML (HyperText Markup Language) est le langage de base du Web. Il décrit la <em>structure</em> d'une page avec des <strong>balises</strong>. Python peut générer du HTML dynamiquement !</p>
+        <pre><code class="language-python"># Python peut créer et manipuler du HTML
+page_html = """&lt;!DOCTYPE html&gt;
+&lt;html lang="fr"&gt;
   &lt;head&gt;
-    &lt;title&gt;Ma page&lt;/title&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;Ma page Python&lt;/title&gt;
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;h1&gt;Bonjour le monde !&lt;/h1&gt;
-    &lt;p&gt;C'est ma première page web.&lt;/p&gt;
+    &lt;h1&gt;Bonjour, je suis généré par Python !&lt;/h1&gt;
+    &lt;p&gt;Voici ma &lt;strong&gt;première page&lt;/strong&gt; web.&lt;/p&gt;
+    &lt;a href="https://python.org"&gt;Visiter Python.org&lt;/a&gt;
   &lt;/body&gt;
 &lt;/html&gt;"""
-print(page)</code></pre>
+
+print(page_html)</code></pre>
 
         <h2>Les balises HTML essentielles</h2>
-        <pre><code class="language-python">balises = {
-    "h1 à h6": "Titres (h1 = le plus grand)",
-    "p":        "Paragraphe",
-    "a":        "Lien : &lt;a href='url'&gt;texte&lt;/a&gt;",
-    "img":      "Image : &lt;img src='url' alt='desc'&gt;",
-    "ul/li":    "Liste à puces",
-    "div":      "Conteneur générique",
-    "form":     "Formulaire de saisie",
-    "input":    "Champ de saisie",
-    "button":   "Bouton cliquable",
+        <p>Voici les balises les plus importantes à connaître :</p>
+        <pre><code class="language-python">balises_html = {
+    "&lt;h1&gt; à &lt;h6&gt;": "Titres (h1 = plus grand, h6 = plus petit)",
+    "&lt;p&gt;":           "Paragraphe de texte",
+    "&lt;a href='url'&gt;": "Lien hypertexte (anchor)",
+    "&lt;img src='url' alt='desc'&gt;": "Image",
+    "&lt;ul&gt; + &lt;li&gt;":  "Liste non ordonnée (à puces)",
+    "&lt;ol&gt; + &lt;li&gt;":  "Liste ordonnée (numérotée)",
+    "&lt;div&gt;":         "Conteneur bloc générique",
+    "&lt;span&gt;":        "Conteneur inline (dans le texte)",
+    "&lt;table&gt;":       "Tableau",
+    "&lt;form&gt;":         "Formulaire de saisie",
+    "&lt;input&gt;":       "Champ de saisie",
+    "&lt;button&gt;":      "Bouton cliquable",
+    "&lt;nav&gt;":          "Navigation",
+    "&lt;header&gt;":      "En-tête de page",
+    "&lt;footer&gt;":      "Pied de page",
+    "&lt;main&gt;":        "Contenu principal",
 }
-for balise, role in balises.items():
-    print(f"  &lt;{balise}&gt; → {role}")</code></pre>
+
+for balise, role in balises_html.items():
+    print(f"  {balise} → {role}")</code></pre>
 
         <h2>Python génère du HTML dynamique</h2>
-        <p>L'intérêt de Python c'est de générer du HTML <strong>dynamiquement</strong>, avec de vraies données :</p>
-        <pre><code class="language-python">eleves = [
-    {"nom": "Alice", "note": 15},
+        <p>L'énorme avantage de Python est de générer du HTML <em>à la volée</em>, avec de vraies données provenant d'une base de données ou d'un calcul :</p>
+        <pre><code class="language-python">def generer_tableau(eleves):
+    html = "&lt;table border='1'&gt;\n"
+    html += "  &lt;tr&gt;&lt;th&gt;Nom&lt;/th&gt;&lt;th&gt;Note&lt;/th&gt;&lt;th&gt;Mention&lt;/th&gt;&lt;/tr&gt;\n"
+
+    for e in eleves:
+        mention = "TB" if e["note"] >= 16 else "B" if e["note"] >= 14 else "AB" if e["note"] >= 12 else "Insuffisant"
+        couleur = "green" if e["note"] >= 14 else "orange" if e["note"] >= 10 else "red"
+        html += f"""  &lt;tr&gt;
+    &lt;td&gt;{e["nom"]}&lt;/td&gt;
+    &lt;td style="color:{couleur}"&gt;{e["note"]}/20&lt;/td&gt;
+    &lt;td&gt;{mention}&lt;/td&gt;
+  &lt;/tr&gt;\n"""
+
+    html += "&lt;/table&gt;"
+    return html
+
+eleves = [
+    {"nom": "Alice", "note": 16},
     {"nom": "Bob",   "note": 12},
     {"nom": "Chloé", "note": 18},
+    {"nom": "David", "note": 8},
 ]
-
-# Génère un tableau HTML
-html = "&lt;table&gt;\\n"
-html += "  &lt;tr&gt;&lt;th&gt;Nom&lt;/th&gt;&lt;th&gt;Note&lt;/th&gt;&lt;/tr&gt;\\n"
-for e in eleves:
-    html += f"  &lt;tr&gt;&lt;td&gt;{e['nom']}&lt;/td&gt;&lt;td&gt;{e['note']}/20&lt;/td&gt;&lt;/tr&gt;\\n"
-html += "&lt;/table&gt;"
-print(html)</code></pre>
+print(generer_tableau(eleves))</code></pre>
 
         <h2>HTTP — le protocole du Web</h2>
+        <p>HTTP (HyperText Transfer Protocol) est le "langage" que le navigateur et le serveur utilisent pour communiquer.</p>
+        <pre><code class="language-python"># Les méthodes HTTP principales
+methodes = {
+    "GET":    "Demander une ressource (lire une page, obtenir des données)",
+    "POST":   "Envoyer des données au serveur (formulaire, création)",
+    "PUT":    "Modifier une ressource existante",
+    "DELETE": "Supprimer une ressource",
+    "PATCH":  "Modification partielle d'une ressource",
+}
+
+# Les codes de statut HTTP importants
+codes = {
+    200: "OK — Tout va bien",
+    201: "Created — Ressource créée avec succès",
+    301: "Moved Permanently — Redirection permanente",
+    400: "Bad Request — Requête mal formée",
+    401: "Unauthorized — Non authentifié",
+    403: "Forbidden — Accès refusé",
+    404: "Not Found — Ressource introuvable",
+    500: "Internal Server Error — Erreur serveur",
+    503: "Service Unavailable — Serveur indisponible",
+}
+
+for code, desc in codes.items():
+    print(f"  HTTP {code} → {desc}")</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — GET est pour <em>lire</em> des données (l'URL contient les paramètres : <code>?page=2&tri=date</code>). POST est pour <em>envoyer</em> des données sensibles (le corps de la requête contient les données, non visible dans l'URL). C'est pourquoi les formulaires de connexion utilisent toujours POST !</div>
+
+        <h2>Ce qui t'attend dans les prochains modules</h2>
+        <p>Maintenant que tu comprends comment le Web fonctionne, tu vas apprendre à construire le côté serveur avec Flask :</p>
         <ul>
-          <li><strong>GET</strong> : demander une page ou des données</li>
-          <li><strong>POST</strong> : envoyer des données au serveur (formulaire)</li>
-          <li><strong>200 OK</strong> : tout s'est bien passé</li>
-          <li><strong>404 Not Found</strong> : page introuvable</li>
-          <li><strong>500 Internal Server Error</strong> : erreur côté serveur</li>
+          <li><strong>Flask</strong> : créer un serveur Python qui répond aux requêtes HTTP</li>
+          <li><strong>Templates Jinja2</strong> : générer du HTML dynamique avec des variables Python</li>
+          <li><strong>Formulaires</strong> : recevoir et traiter des données envoyées par l'utilisateur</li>
+          <li><strong>Bases de données</strong> : stocker et retrouver des données avec SQLite</li>
+          <li><strong>APIs REST</strong> : créer des APIs que d'autres apps peuvent consommer</li>
         </ul>
-        <div class="tip-box"><p>✅ Dans ce niveau, tu vas créer ton propre serveur Python avec Flask — il recevra des requêtes HTTP et renverra du HTML !</p></div>
       `
     },
     interactiveCode: `eleves = [
@@ -2880,59 +3840,117 @@ print(generer_html("Résultats du trimestre", eleves))`,
       title: 'Flask — le micro-framework web Python',
       content: `
         <h2>Qu'est-ce que Flask ?</h2>
-        <p><strong>Flask</strong> est un mini-framework Python pour créer des applications web. Il est léger, simple à apprendre, et très utilisé. Avec Flask, Python devient ton serveur web !</p>
-        <div class="info-box"><p>⚠️ Flask s'installe et s'exécute sur ton ordinateur, pas dans ce navigateur. Les exemples ci-dessous montrent comment ça marche — tu peux les tester localement avec <code>pip install flask</code>.</p></div>
+        <p><strong>Flask</strong> est un micro-framework Python pour créer des applications web. "Micro" ne veut pas dire limité — ça veut dire qu'il reste simple et que tu gardes le contrôle. Il est utilisé par Pinterest, LinkedIn, et des milliers de startups.</p>
+        <p>Avec Flask, Python devient ton serveur web. Tu écris du Python, et Flask s'occupe de recevoir les requêtes HTTP et d'envoyer les réponses !</p>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Important</strong> — Flask s'installe et s'exécute sur ton ordinateur ou un serveur, pas dans ce navigateur. Les exemples montrent comment ça marche — teste localement avec <code>pip install flask</code> puis <code>python app.py</code>.</div>
 
-        <h2>Installation</h2>
-        <pre><code class="language-python"># Dans ton terminal :
-# pip install flask</code></pre>
+        <h2>Ton premier serveur Flask — 5 lignes !</h2>
+        <pre><code class="language-python"># app.py
+from flask import Flask
 
-        <h2>Ton premier serveur Flask</h2>
-        <pre><code class="language-python">from flask import Flask
+app = Flask(__name__)    # Crée l'application Flask
 
-app = Flask(__name__)   # Crée l'application
-
-@app.route("/")         # Route : URL "/"
+@app.route("/")          # Décore la fonction avec la route "/"
 def accueil():
     return "&lt;h1&gt;Bonjour le monde !&lt;/h1&gt;"
 
-@app.route("/hello")    # Route : URL "/hello"
-def hello():
-    return "&lt;p&gt;Page hello !&lt;/p&gt;"
+if __name__ == "__main__":
+    app.run(debug=True)   # Lance le serveur</code></pre>
+        <p>Après <code>python app.py</code>, ouvre <code>http://localhost:5000</code> dans ton navigateur. Tu verras "Bonjour le monde !" !</p>
+        <pre><code class="language-python"># Plusieurs routes dans la même app
+from flask import Flask
+app = Flask(__name__)
+
+@app.route("/")
+def accueil():
+    return """
+    &lt;h1&gt;Page d'accueil&lt;/h1&gt;
+    &lt;p&gt;&lt;a href='/a-propos'&gt;À propos&lt;/a&gt;&lt;/p&gt;
+    """
+
+@app.route("/a-propos")
+def a_propos():
+    return "&lt;h1&gt;À propos&lt;/h1&gt;&lt;p&gt;Ce site est construit avec Flask !&lt;/p&gt;"
+
+@app.route("/contact")
+def contact():
+    return "&lt;h1&gt;Contact&lt;/h1&gt;&lt;p&gt;Envoyez un email à ...&lt;/p&gt;"
 
 if __name__ == "__main__":
-    app.run(debug=True)  # Lance le serveur sur http://localhost:5000</code></pre>
+    app.run(debug=True)</code></pre>
 
-        <h2>Les routes avec paramètres</h2>
+        <h2>Le décorateur @app.route — le coeur de Flask</h2>
+        <p>Le décorateur <code>@app.route("/chemin")</code> associe une URL à une fonction Python. Quand quelqu'un visite cette URL, Flask appelle la fonction et renvoie ce qu'elle retourne :</p>
         <pre><code class="language-python">from flask import Flask
 app = Flask(__name__)
 
-@app.route("/bonjour/&lt;prenom&gt;")
-def bonjour(prenom):
-    return f"&lt;h1&gt;Bonjour {prenom} !&lt;/h1&gt;"
+# Route statique simple
+@app.route("/")
+def index():
+    return "&lt;p&gt;Page d'accueil&lt;/p&gt;"
 
-# http://localhost:5000/bonjour/Alice → Bonjour Alice !
-# http://localhost:5000/bonjour/Bob  → Bonjour Bob !</code></pre>
+# Routes avec paramètres dynamiques
+@app.route("/utilisateur/&lt;nom&gt;")           # &lt;nom&gt; = paramètre texte
+def profil(nom):
+    return f"&lt;h1&gt;Profil de {nom}&lt;/h1&gt;"
 
-        <h2>Retourner du JSON (API)</h2>
-        <pre><code class="language-python">from flask import Flask, jsonify
+@app.route("/article/&lt;int:article_id&gt;")    # &lt;int:id&gt; = paramètre entier
+def article(article_id):
+    return f"&lt;p&gt;Article numéro {article_id}&lt;/p&gt;"
+
+# http://localhost:5000/utilisateur/Alice → Profil de Alice
+# http://localhost:5000/article/42       → Article numéro 42</code></pre>
+
+        <h2>Retourner différents types de réponses</h2>
+        <pre><code class="language-python">from flask import Flask, jsonify, redirect, url_for
 app = Flask(__name__)
 
-eleves = [
-    {"nom": "Alice", "note": 15},
-    {"nom": "Bob",   "note": 12},
-]
+# Retourner du HTML (texte brut ou chaîne)
+@app.route("/")
+def accueil():
+    return "&lt;h1&gt;Bienvenue&lt;/h1&gt;"   # Code HTTP 200 par défaut
+
+# Retourner du JSON (pour une API)
+eleves = [{"nom": "Alice", "note": 15}, {"nom": "Bob", "note": 12}]
 
 @app.route("/api/eleves")
 def get_eleves():
-    return jsonify(eleves)   # Retourne du JSON automatiquement
+    return jsonify(eleves)   # Convertit en JSON + bon Content-Type
 
-# http://localhost:5000/api/eleves
-# → [{"nom": "Alice", "note": 15}, ...]</code></pre>
+# Retourner avec un code HTTP personnalisé
+@app.route("/secret")
+def secret():
+    return "&lt;p&gt;Accès refusé&lt;/p&gt;", 403   # 403 Forbidden
 
-        <h2>Le décorateur @app.route</h2>
-        <p>Le <code>@app.route("/url")</code> est un <strong>décorateur</strong> — il dit à Flask : "quand quelqu'un visite cette URL, exécute cette fonction". La fonction retourne ce que le navigateur reçoit.</p>
-        <div class="tip-box"><p>✅ Chaque fonction associée à une route s'appelle une <strong>vue</strong> (view). Elle reçoit la requête et retourne une réponse.</p></div>
+# Rediriger vers une autre URL
+@app.route("/ancien-chemin")
+def ancien():
+    return redirect(url_for("accueil"))   # Redirige vers /</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — <code>url_for("nom_fonction")</code> génère l'URL correspondant à une fonction de vue. C'est mieux que d'écrire l'URL en dur : si tu changes le chemin, <code>url_for</code> se met à jour automatiquement !</div>
+
+        <h2>Mode debug — l'outil indispensable</h2>
+        <p>En mode debug (<code>app.run(debug=True)</code>) :</p>
+        <ul>
+          <li>Le serveur se <strong>redémarre automatiquement</strong> quand tu sauvegardes un fichier</li>
+          <li>Les erreurs s'affichent dans le navigateur avec la <strong>trace complète</strong></li>
+          <li>Tu peux inspecter les variables directement dans le navigateur</li>
+        </ul>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — N'utilise <em>jamais</em> <code>debug=True</code> en production (serveur accessible par le public) ! Le mode debug permet d'exécuter du code Python directement depuis le navigateur — un énorme risque de sécurité !</div>
+
+        <h2>Structure d'un projet Flask typique</h2>
+        <pre><code class="language-python">mon_projet/
+├── app.py              ← Point d'entrée principal
+├── templates/          ← Fichiers HTML (templates Jinja2)
+│   ├── base.html
+│   ├── index.html
+│   └── eleves.html
+├── static/             ← Fichiers statiques (CSS, JS, images)
+│   ├── style.css
+│   └── script.js
+└── requirements.txt    ← Liste des dépendances (flask, etc.)</code></pre>
+        <pre><code class="language-python"># requirements.txt
+flask==3.0.0
+# Installation : pip install -r requirements.txt</code></pre>
       `
     },
     interactiveCode: `# Simulation du système de routing Flask en Python pur
@@ -3024,77 +4042,155 @@ print("GET /autre  →", app.simuler_requete("/inconnu"))`,
     lesson: {
       title: 'Templates HTML avec Jinja2',
       content: `
-        <h2>Pourquoi des templates ?</h2>
-        <p>Écrire du HTML directement dans Python devient vite illisible. Les <strong>templates</strong> séparent le code Python de la présentation HTML. Flask utilise le moteur de templates <strong>Jinja2</strong>.</p>
-        <div class="info-box"><p>💡 Structure Flask : <code>app.py</code> (logique Python) + <code>templates/</code> (fichiers HTML avec Jinja2).</p></div>
+        <h2>Le problème du HTML dans Python</h2>
+        <p>Dans le module précédent, les vues Flask retournaient des chaînes HTML directement. C'est pratique pour 2 lignes, mais dès qu'une page devient complexe, ton code Python ressemble à ça :</p>
+        <pre><code class="language-python">return f"&lt;html&gt;&lt;head&gt;&lt;title&gt;...&lt;/title&gt;&lt;/head&gt;&lt;body&gt;&lt;h1&gt;Bonjour {prenom}&lt;/h1&gt;..." # 200 lignes de ce style → CAUCHEMAR</code></pre>
+        <p>Les <strong>templates</strong> résolvent ce problème en séparant la logique Python du HTML. Flask utilise le moteur <strong>Jinja2</strong> qui ajoute de la logique (variables, boucles, conditions) directement dans les fichiers HTML.</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Le principe est le même que les f-strings, mais pour du HTML : tu mets des "trous" dans le HTML, et Python les remplit avec de vraies données. C'est ainsi que fonctionne chaque page dynamique sur le Web !</div>
 
         <h2>Structure d'un projet Flask avec templates</h2>
         <pre><code class="language-python">mon_app/
-├── app.py
-└── templates/
-    ├── base.html        ← template parent
-    ├── index.html       ← hérite de base.html
-    └── eleves.html</code></pre>
+├── app.py              ← Code Python (logique)
+└── templates/          ← Fichiers HTML avec Jinja2
+    ├── base.html       ← Structure commune (nav, header, footer)
+    ├── index.html      ← Page d'accueil (hérite de base.html)
+    └── eleves.html     ← Page liste des élèves</code></pre>
 
-        <h2>Utiliser render_template</h2>
+        <h2>Utiliser render_template()</h2>
         <pre><code class="language-python"># app.py
 from flask import Flask, render_template
 app = Flask(__name__)
 
 @app.route("/")
 def accueil():
-    prenom = "Alice"
-    notes = [15, 12, 18, 14]
+    # On passe des données au template via des arguments nommés
     return render_template("index.html",
-                           prenom=prenom,
-                           notes=notes)</code></pre>
+                           prenom="Alice",
+                           notes=[15, 12, 18, 14],
+                           admis=True)
 
-        <h2>Syntaxe Jinja2 dans le HTML</h2>
-        <pre><code class="language-python"># templates/index.html
-# {{ variable }}         → afficher une variable
-# {% if condition %}     → condition
-# {% for x in liste %}  → boucle
-# {{ variable | filtre }} → appliquer un filtre
+@app.route("/eleves")
+def eleves():
+    liste = [
+        {"nom": "Alice", "note": 15},
+        {"nom": "Bob",   "note": 9},
+        {"nom": "Chloé", "note": 17},
+    ]
+    return render_template("eleves.html", eleves=liste)</code></pre>
 
-# Exemple :
-"""
-&lt;h1&gt;Bonjour {{ prenom }} !&lt;/h1&gt;
-
-&lt;ul&gt;
-{% for note in notes %}
-  &lt;li&gt;{{ note }}/20&lt;/li&gt;
-{% endfor %}
-&lt;/ul&gt;
-
-{% if notes | sum / notes | length >= 12 %}
-  &lt;p&gt;Félicitations !&lt;/p&gt;
-{% else %}
-  &lt;p&gt;Continue tes efforts.&lt;/p&gt;
-{% endif %}
-"""</code></pre>
-
-        <h2>Template parent (héritage)</h2>
-        <pre><code class="language-python"># templates/base.html
+        <h2>Syntaxe Jinja2 dans les templates HTML</h2>
+        <p>Jinja2 ajoute trois types de balises dans le HTML :</p>
+        <ul>
+          <li><code>{{ variable }}</code> — afficher une valeur</li>
+          <li><code>{% instruction %}</code> — logique (if, for, extends...)</li>
+          <li><code>{# commentaire #}</code> — commentaire (non visible dans la page)</li>
+        </ul>
+        <pre><code class="language-python"># templates/index.html (contenu simplifié)
 """
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
-&lt;head&gt;&lt;title&gt;{% block titre %}Mon Site{% endblock %}&lt;/title&gt;&lt;/head&gt;
 &lt;body&gt;
-  &lt;nav&gt;&lt;a href="/"&gt;Accueil&lt;/a&gt;&lt;/nav&gt;
-  {% block contenu %}{% endblock %}
+
+{# Afficher une variable #}
+&lt;h1&gt;Bonjour {{ prenom }} !&lt;/h1&gt;
+
+{# Boucle for #}
+&lt;h2&gt;Tes notes :&lt;/h2&gt;
+&lt;ul&gt;
+  {% for note in notes %}
+    &lt;li&gt;{{ note }}/20&lt;/li&gt;
+  {% endfor %}
+&lt;/ul&gt;
+
+{# Condition if #}
+{% if admis %}
+  &lt;p style="color:green"&gt;Félicitations, tu es admis(e) !&lt;/p&gt;
+{% else %}
+  &lt;p style="color:red"&gt;Continue tes efforts.&lt;/p&gt;
+{% endif %}
+
+{# Calculs et filtres #}
+&lt;p&gt;Moyenne : {{ (notes | sum / notes | length) | round(1) }}&lt;/p&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"""</code></pre>
+
+        <h2>Les filtres Jinja2</h2>
+        <p>Les <strong>filtres</strong> transforment les valeurs avec le symbole <code>|</code> :</p>
+        <pre><code class="language-python"># Dans un template Jinja2 :
+"""
+{{ prenom | upper }}          → ALICE (majuscules)
+{{ prenom | lower }}          → alice (minuscules)
+{{ note | round(1) }}         → 15.3 (arrondi)
+{{ texte | truncate(50) }}    → Texte... (tronqué)
+{{ liste | length }}          → 4 (longueur)
+{{ liste | join(", ") }}      → "alice, bob, chloé"
+{{ valeur | default("N/A") }} → Valeur par défaut si None
+
+{# Boucle avec indice #}
+{% for eleve in eleves %}
+  {{ loop.index }}. {{ eleve.nom }}   {# loop.index commence à 1 #}
+  {{ loop.index0 }}. {{ eleve.nom }}  {# loop.index0 commence à 0 #}
+  {% if loop.first %} (Premier !) {% endif %}
+  {% if loop.last %}  (Dernier !) {% endif %}
+{% endfor %}
+"""</code></pre>
+
+        <h2>Héritage de templates — éviter la répétition</h2>
+        <p>Le principe DRY (Don't Repeat Yourself) appliqué aux templates : une structure commune dans un fichier parent, et chaque page remplit uniquement les "blocs" qui changent :</p>
+        <pre><code class="language-python"># templates/base.html — Structure commune à toutes les pages
+"""
+&lt;!DOCTYPE html&gt;
+&lt;html lang="fr"&gt;
+&lt;head&gt;
+  &lt;title&gt;{% block titre %}Mon Site Flask{% endblock %}&lt;/title&gt;
+  &lt;link rel="stylesheet" href="/static/style.css"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;nav&gt;
+    &lt;a href="/"&gt;Accueil&lt;/a&gt; |
+    &lt;a href="/eleves"&gt;Élèves&lt;/a&gt; |
+    &lt;a href="/contact"&gt;Contact&lt;/a&gt;
+  &lt;/nav&gt;
+
+  &lt;main&gt;
+    {% block contenu %}
+    {# Les pages enfants remplissent ce bloc #}
+    {% endblock %}
+  &lt;/main&gt;
+
+  &lt;footer&gt;&lt;p&gt;Mon site Flask — 2024&lt;/p&gt;&lt;/footer&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 """
 
-# templates/index.html
+# templates/index.html — Hérite de base.html
 """
 {% extends "base.html" %}
+
 {% block titre %}Accueil{% endblock %}
+
 {% block contenu %}
-  &lt;h1&gt;Bienvenue !&lt;/h1&gt;
+  &lt;h1&gt;Bienvenue sur mon site !&lt;/h1&gt;
+  &lt;p&gt;Bonjour {{ prenom }}, bienvenue !&lt;/p&gt;
+{% endblock %}
+"""
+
+# templates/eleves.html — Hérite aussi de base.html
+"""
+{% extends "base.html" %}
+
+{% block titre %}Liste des élèves{% endblock %}
+
+{% block contenu %}
+  &lt;h1&gt;Tous les élèves&lt;/h1&gt;
+  {% for e in eleves %}
+    &lt;p&gt;{{ e.nom }} : {{ e.note }}/20&lt;/p&gt;
+  {% endfor %}
 {% endblock %}
 """</code></pre>
-        <div class="tip-box"><p>✅ L'héritage de templates évite de répéter le header/footer/nav sur chaque page — DRY (Don't Repeat Yourself) !</p></div>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — L'héritage de templates signifie que si tu changes la navigation dans <code>base.html</code>, le changement s'applique automatiquement à <em>toutes</em> les pages. Plus besoin de modifier 20 fichiers HTML !</div>
       `
     },
     interactiveCode: `# Simulation du moteur Jinja2 en Python pur
@@ -3190,64 +4286,100 @@ print(html)`,
     lesson: {
       title: 'Formulaires HTML et Flask',
       content: `
+        <h2>L'interaction utilisateur — le coeur d'une web app</h2>
+        <p>Un site web statique affiche les mêmes données pour tout le monde. Une <em>application</em> web permet aux utilisateurs d'interagir : s'inscrire, se connecter, chercher, publier des messages... Tout ça passe par des <strong>formulaires HTML</strong> et la gestion des requêtes côté serveur.</p>
+
         <h2>Les formulaires HTML</h2>
-        <p>Un formulaire permet à l'utilisateur d'envoyer des données au serveur. Il a deux attributs importants : <code>action</code> (l'URL cible) et <code>method</code> (GET ou POST).</p>
-        <pre><code class="language-python"># Template HTML du formulaire :
+        <p>Un formulaire HTML a deux attributs essentiels : <code>action</code> (l'URL où envoyer) et <code>method</code> (GET ou POST). Chaque champ a un attribut <code>name</code> qui devient la clé dans les données reçues.</p>
+        <pre><code class="language-python"># templates/inscription.html
 """
-&lt;form action="/connexion" method="POST"&gt;
-  &lt;label&gt;Nom d\'utilisateur :&lt;/label&gt;
-  &lt;input type="text" name="username"&gt;
+&lt;form action="/inscription" method="POST"&gt;
+  &lt;label for="prenom"&gt;Prénom :&lt;/label&gt;
+  &lt;input type="text" id="prenom" name="prenom" required&gt;
 
-  &lt;label&gt;Mot de passe :&lt;/label&gt;
-  &lt;input type="password" name="password"&gt;
+  &lt;label for="email"&gt;Email :&lt;/label&gt;
+  &lt;input type="email" id="email" name="email" required&gt;
 
-  &lt;button type="submit"&gt;Se connecter&lt;/button&gt;
+  &lt;label for="mdp"&gt;Mot de passe :&lt;/label&gt;
+  &lt;input type="password" id="mdp" name="mot_de_passe" minlength="8"&gt;
+
+  &lt;label for="classe"&gt;Classe :&lt;/label&gt;
+  &lt;select id="classe" name="classe"&gt;
+    &lt;option value="3e"&gt;3ème&lt;/option&gt;
+    &lt;option value="4e"&gt;4ème&lt;/option&gt;
+  &lt;/select&gt;
+
+  &lt;button type="submit"&gt;S'inscrire&lt;/button&gt;
 &lt;/form&gt;
 """</code></pre>
 
-        <h2>Recevoir les données avec Flask</h2>
-        <pre><code class="language-python">from flask import Flask, request, render_template, redirect
+        <h2>Recevoir et traiter les données avec Flask</h2>
+        <pre><code class="language-python">from flask import Flask, request, render_template, redirect, url_for
 app = Flask(__name__)
 
 @app.route("/connexion", methods=["GET", "POST"])
 def connexion():
-    if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+    # GET : afficher le formulaire vide
+    if request.method == "GET":
+        return render_template("login.html")
 
-        if username == "admin" and password == "1234":
-            return f"&lt;h1&gt;Bienvenue {username} !&lt;/h1&gt;"
-        else:
-            return render_template("login.html",
-                                   erreur="Identifiants incorrects")
+    # POST : traiter les données soumises
+    username = request.form.get("username", "").strip()
+    password = request.form.get("password", "")
 
-    return render_template("login.html")</code></pre>
+    if username == "admin" and password == "1234":
+        return redirect(url_for("tableau_de_bord"))
+    else:
+        return render_template("login.html",
+                               erreur="Identifiants incorrects")</code></pre>
 
-        <h2>GET vs POST</h2>
+        <h2>GET vs POST — quand utiliser quoi ?</h2>
         <ul>
-          <li><strong>GET</strong> : données dans l'URL (<code>?nom=Alice&age=15</code>) — pour des recherches, filtres</li>
-          <li><strong>POST</strong> : données dans le corps de la requête — pour les formulaires sensibles (login, données personnelles)</li>
+          <li><strong>GET</strong> : données dans l'URL (<code>?q=python&page=2</code>) — pour des recherches, filtres, pagination. Peut être mis en favori, partagé.</li>
+          <li><strong>POST</strong> : données dans le corps de la requête (invisible dans l'URL) — pour les formulaires sensibles (login, inscription, modification de données).</li>
         </ul>
-
-        <h2>Paramètres GET (query strings)</h2>
-        <pre><code class="language-python">@app.route("/recherche")
+        <pre><code class="language-python"># Paramètres GET (query strings)
+@app.route("/recherche")
 def recherche():
-    # URL : /recherche?mot=python&page=2
-    mot = request.args.get("mot", "")       # "python"
-    page = request.args.get("page", "1")    # "2"
-    return f"Recherche : {mot}, page {page}"</code></pre>
+    # URL : /recherche?q=python&page=2
+    q    = request.args.get("q", "")        # Récupère "python"
+    page = int(request.args.get("page", 1)) # Récupère 2, défaut 1
+    return render_template("resultats.html", query=q, page=page)</code></pre>
 
-        <h2>Validation des données</h2>
-        <pre><code class="language-python">def valider_formulaire(data):
+        <h2>Validation des données — indispensable</h2>
+        <p>Ne fais <em>jamais</em> confiance aux données reçues ! Un utilisateur peut contourner les validations HTML et envoyer n'importe quoi.</p>
+        <pre><code class="language-python">def valider_inscription(data):
     erreurs = []
-    if not data.get("nom"):
-        erreurs.append("Le nom est obligatoire")
-    if len(data.get("password", "")) < 6:
-        erreurs.append("Mot de passe trop court (min 6 caractères)")
-    if "@" not in data.get("email", ""):
+
+    # Vérifier le prénom
+    if not data.get("prenom", "").strip():
+        erreurs.append("Le prénom est obligatoire")
+
+    # Vérifier l'email
+    email = data.get("email", "")
+    if not email or "@" not in email or "." not in email.split("@")[-1]:
         erreurs.append("Email invalide")
-    return erreurs</code></pre>
-        <div class="tip-box"><p>✅ Valide TOUJOURS les données côté serveur. Ne fais jamais confiance aux données venant du navigateur !</p></div>
+
+    # Vérifier le mot de passe
+    mdp = data.get("mot_de_passe", "")
+    if len(mdp) < 8:
+        erreurs.append("Mot de passe trop court (8 caractères min)")
+    elif not any(c.isdigit() for c in mdp):
+        erreurs.append("Le mot de passe doit contenir au moins un chiffre")
+
+    return erreurs
+
+# Dans la vue :
+@app.route("/inscription", methods=["GET", "POST"])
+def inscription():
+    if request.method == "POST":
+        erreurs = valider_inscription(request.form)
+        if erreurs:
+            return render_template("inscription.html", erreurs=erreurs)
+        # Tout valide → sauvegarder et rediriger
+        return redirect(url_for("confirmation"))
+    return render_template("inscription.html")</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — Toujours utiliser le pattern <strong>Post/Redirect/Get</strong> : après traitement d'un POST réussi, redirige vers une page GET avec <code>redirect(url_for(...))</code>. Sinon, si l'utilisateur rafraîchit la page, le formulaire sera soumis une deuxième fois !</div>
       `
     },
     interactiveCode: `# Simulation de traitement de formulaire
@@ -3345,69 +4477,151 @@ for i, data in enumerate(cas_tests, 1):
       title: 'SQLite avec Python',
       content: `
         <h2>Pourquoi une base de données ?</h2>
-        <p>Une variable ou un fichier JSON suffit pour peu de données. Mais pour stocker des milliers d'utilisateurs, de messages ou de produits, on utilise une <strong>base de données</strong>.</p>
-        <div class="info-box"><p>💡 <strong>SQLite</strong> est une base de données légère, stockée dans un seul fichier, idéale pour apprendre. Python l'inclut directement avec le module <code>sqlite3</code>.</p></div>
+        <p>Quand tu fermes ton programme Python, toutes les variables disparaissent. Les fichiers JSON sauvent les données, mais ils deviennent ingérables avec des milliers de lignes : pas de recherche rapide, pas de tri, pas de mise à jour partielle...</p>
+        <p>Les <strong>bases de données</strong> résolvent tout ça. Elles permettent de stocker, chercher, trier et modifier des millions d'enregistrements en millisecondes.</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — <strong>SQLite</strong> est une base de données légère stockée dans un seul fichier <code>.db</code>. C'est la base de données parfaite pour apprendre : elle ne nécessite aucun serveur, et Python l'inclut directement avec le module <code>sqlite3</code>. Elle est utilisée dans les navigateurs, les apps mobiles, et beaucoup de logiciels !</div>
 
-        <h2>Créer une base et une table</h2>
+        <h2>SQL — le langage des bases de données</h2>
+        <p>SQL (Structured Query Language) est le langage universel pour parler aux bases de données. Les 4 opérations principales forment l'acronyme <strong>CRUD</strong> :</p>
+        <pre><code class="language-python"># CREATE → créer une table (structure)
+# INSERT → ajouter des données
+# SELECT → lire/chercher des données
+# UPDATE → modifier des données
+# DELETE → supprimer des données</code></pre>
+
+        <h2>Créer une connexion et une table</h2>
         <pre><code class="language-python">import sqlite3
 
-# Connexion (crée le fichier si inexistant)
+# Connexion (crée le fichier .db s'il n'existe pas)
 conn = sqlite3.connect("ecole.db")
-cursor = conn.cursor()
+cursor = conn.cursor()   # Curseur pour exécuter des requêtes
 
-# Créer une table
+# CREATE TABLE : définir la structure
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS eleves (
-        id      INTEGER PRIMARY KEY AUTOINCREMENT,
-        nom     TEXT    NOT NULL,
+        id      INTEGER PRIMARY KEY AUTOINCREMENT,  -- Clé auto-incrémentée
+        nom     TEXT    NOT NULL,                    -- Obligatoire
         age     INTEGER,
-        note    REAL
+        note    REAL,                                -- Décimal
+        classe  TEXT    DEFAULT '3ème'               -- Valeur par défaut
     )
 """)
-conn.commit()
-conn.close()</code></pre>
 
-        <h2>Insérer des données</h2>
+conn.commit()   # Valider les changements (IMPORTANT !)
+conn.close()    # Fermer la connexion</code></pre>
+
+        <h2>Insérer des données (INSERT)</h2>
         <pre><code class="language-python">conn = sqlite3.connect("ecole.db")
 cursor = conn.cursor()
 
-# Insérer un élève (jamais concatener directement → injection SQL !)
+# Insérer un élève
+# TOUJOURS utiliser ? pour les valeurs, jamais du f-string !
 cursor.execute(
     "INSERT INTO eleves (nom, age, note) VALUES (?, ?, ?)",
-    ("Alice", 15, 14.5)
+    ("Alice", 15, 14.5)   # Tuple de valeurs
 )
 
-# Insérer plusieurs à la fois
-eleves = [("Bob", 14, 12.0), ("Chloé", 15, 17.5)]
+# Insérer plusieurs enregistrements en une fois
+nouveaux = [
+    ("Bob",   14, 12.0),
+    ("Chloé", 15, 17.5),
+    ("David", 15, 9.0),
+]
 cursor.executemany(
     "INSERT INTO eleves (nom, age, note) VALUES (?, ?, ?)",
-    eleves
+    nouveaux
 )
+
 conn.commit()
 conn.close()</code></pre>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent — Injection SQL !</strong> N'écris <em>jamais</em> <code>f"INSERT INTO eleves WHERE nom = '{nom}'"</code>. Un utilisateur malveillant pourrait passer <code>nom = "'; DROP TABLE eleves; --"</code> et détruire ta base ! Utilise toujours les <code>?</code> (paramètres préparés) : <code>cursor.execute("... WHERE nom = ?", (nom,))</code></div>
 
         <h2>Lire des données (SELECT)</h2>
         <pre><code class="language-python">conn = sqlite3.connect("ecole.db")
 cursor = conn.cursor()
 
-# Tous les élèves
+# Lire tous les enregistrements
 cursor.execute("SELECT * FROM eleves")
-tous = cursor.fetchall()
+tous = cursor.fetchall()     # Liste de tuples
 for eleve in tous:
-    print(eleve)   # (1, 'Alice', 15, 14.5)
+    print(eleve)   # (1, 'Alice', 15, 14.5, '3ème')
 
-# Filtrer
-cursor.execute("SELECT nom, note FROM eleves WHERE note >= ?", (14,))
-bons = cursor.fetchall()
-print(bons)   # [('Alice', 14.5), ('Chloé', 17.5)]
+# Sélectionner certaines colonnes et filtrer
+cursor.execute("""
+    SELECT nom, note
+    FROM eleves
+    WHERE note >= ?
+    ORDER BY note DESC
+""", (10,))
+
+admis = cursor.fetchall()
+for nom, note in admis:
+    print(f"  {nom} : {note}/20")
+
+# Requêtes d'agrégation (statistiques)
+cursor.execute("""
+    SELECT
+        COUNT(*) as nb_eleves,
+        AVG(note) as moyenne,
+        MAX(note) as maximum,
+        MIN(note) as minimum
+    FROM eleves
+""")
+stats = cursor.fetchone()
+print(f"Élèves: {stats[0]}, Moyenne: {stats[1]:.1f}")
 
 conn.close()</code></pre>
 
         <h2>Modifier et supprimer</h2>
-        <pre><code class="language-python">cursor.execute("UPDATE eleves SET note = ? WHERE nom = ?", (15.0, "Alice"))
-cursor.execute("DELETE FROM eleves WHERE note < ?", (10,))
-conn.commit()</code></pre>
-        <div class="tip-box"><p>✅ Utilise toujours des <code>?</code> pour les valeurs — jamais du f-string dans du SQL, c'est la faille d'injection SQL !</p></div>
+        <pre><code class="language-python">conn = sqlite3.connect("ecole.db")
+cursor = conn.cursor()
+
+# UPDATE : modifier des enregistrements existants
+cursor.execute(
+    "UPDATE eleves SET note = ? WHERE nom = ?",
+    (15.0, "Alice")   # Nouvelle valeur, condition
+)
+print(f"Lignes modifiées : {cursor.rowcount}")
+
+# DELETE : supprimer des enregistrements
+cursor.execute("DELETE FROM eleves WHERE note < ?", (8,))
+print(f"Élèves supprimés : {cursor.rowcount}")
+
+conn.commit()
+conn.close()</code></pre>
+
+        <h2>Intégrer SQLite avec Flask</h2>
+        <pre><code class="language-python">from flask import Flask, jsonify, request
+import sqlite3
+
+app = Flask(__name__)
+
+def get_db():
+    conn = sqlite3.connect("ecole.db")
+    conn.row_factory = sqlite3.Row  # → résultats comme dicts !
+    return conn
+
+@app.route("/api/eleves")
+def get_eleves():
+    db = get_db()
+    eleves = db.execute(
+        "SELECT * FROM eleves ORDER BY note DESC"
+    ).fetchall()
+    db.close()
+    return jsonify([dict(e) for e in eleves])  # dict grâce à row_factory
+
+@app.route("/api/eleves", methods=["POST"])
+def ajouter_eleve():
+    data = request.get_json()
+    db = get_db()
+    db.execute(
+        "INSERT INTO eleves (nom, note) VALUES (?, ?)",
+        (data["nom"], data["note"])
+    )
+    db.commit()
+    db.close()
+    return jsonify({"message": "Élève ajouté !"}), 201</code></pre>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — <code>conn.row_factory = sqlite3.Row</code> est une astuce précieuse : elle fait que chaque ligne retournée se comporte comme un dictionnaire, accessible par nom de colonne (<code>row["nom"]</code>) plutôt que par index (<code>row[1]</code>). C'est beaucoup plus lisible !</div>
       `
     },
     interactiveCode: `import sqlite3
@@ -3512,65 +4726,114 @@ conn.close()`,
       title: 'Construire une API REST avec Flask',
       content: `
         <h2>Qu'est-ce qu'une API REST ?</h2>
-        <p>Une <strong>API REST</strong> est une interface qui permet à des applications de communiquer entre elles via HTTP en échangeant du JSON. C'est ainsi que les apps mobiles parlent à leurs serveurs, que les sites web chargent des données dynamiquement, etc.</p>
-        <div class="info-box"><p>💡 REST = Representational State Transfer. Les <strong>ressources</strong> sont identifiées par des URLs, et les <strong>opérations</strong> par les méthodes HTTP (GET/POST/PUT/DELETE).</p></div>
+        <p>Quand tu ouvres l'app météo sur ton téléphone, elle affiche les données d'un serveur quelque part. Quand tu commandes sur Amazon, le site parle à une dizaine de serveurs différents. Toute cette communication se fait via des <strong>APIs REST</strong>.</p>
+        <p>Une <strong>API REST</strong> (Representational State Transfer) est un contrat qui définit comment deux logiciels communiquent via HTTP en échangeant du JSON. Ton Flask peut être cette API !</p>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Les <strong>ressources</strong> sont identifiées par des URLs (<code>/api/eleves</code>, <code>/api/eleves/1</code>) et les <strong>opérations</strong> par les méthodes HTTP. C'est le principe REST : les URLs désignent "quoi", les méthodes HTTP disent "quoi en faire".</div>
 
-        <h2>Les méthodes HTTP CRUD</h2>
-        <pre><code class="language-python"># CRUD = Create Read Update Delete
-GET    /api/eleves       → lire tous les élèves
-GET    /api/eleves/1     → lire l'élève n°1
-POST   /api/eleves       → créer un nouvel élève
-PUT    /api/eleves/1     → modifier l'élève n°1
-DELETE /api/eleves/1     → supprimer l'élève n°1</code></pre>
+        <h2>Le principe CRUD et les méthodes HTTP</h2>
+        <p>Chaque opération sur les données correspond à une méthode HTTP :</p>
+        <pre><code class="language-python"># CRUD = Create / Read / Update / Delete
+# Exemple : API pour gérer des élèves
 
-        <h2>API complète avec Flask</h2>
+GET    /api/eleves         → Lire TOUS les élèves (liste)
+GET    /api/eleves/42      → Lire l'élève n°42 (un seul)
+POST   /api/eleves         → Créer un nouvel élève
+PUT    /api/eleves/42      → Remplacer entièrement l'élève n°42
+PATCH  /api/eleves/42      → Modifier partiellement l'élève n°42
+DELETE /api/eleves/42      → Supprimer l'élève n°42</code></pre>
+
+        <h2>API CRUD complète avec Flask et SQLite</h2>
         <pre><code class="language-python">from flask import Flask, jsonify, request
+import sqlite3
+
 app = Flask(__name__)
 
-eleves = [
-    {"id": 1, "nom": "Alice", "note": 15},
-    {"id": 2, "nom": "Bob",   "note": 12},
-]
+def get_db():
+    conn = sqlite3.connect("ecole.db")
+    conn.row_factory = sqlite3.Row
+    return conn
 
+# READ ALL — GET /api/eleves
 @app.route("/api/eleves", methods=["GET"])
 def get_eleves():
-    return jsonify(eleves), 200   # 200 OK
+    db = get_db()
+    eleves = db.execute("SELECT * FROM eleves ORDER BY note DESC").fetchall()
+    db.close()
+    return jsonify([dict(e) for e in eleves]), 200
 
-@app.route("/api/eleves/&lt;int:id&gt;", methods=["GET"])
-def get_eleve(id):
-    eleve = next((e for e in eleves if e["id"] == id), None)
+# READ ONE — GET /api/eleves/&lt;id&gt;
+@app.route("/api/eleves/&lt;int:eleve_id&gt;", methods=["GET"])
+def get_eleve(eleve_id):
+    db = get_db()
+    eleve = db.execute("SELECT * FROM eleves WHERE id = ?", (eleve_id,)).fetchone()
+    db.close()
     if eleve is None:
-        return jsonify({"erreur": "Introuvable"}), 404
-    return jsonify(eleve), 200
+        return jsonify({"erreur": "Élève introuvable"}), 404
+    return jsonify(dict(eleve)), 200
 
+# CREATE — POST /api/eleves
 @app.route("/api/eleves", methods=["POST"])
 def creer_eleve():
     data = request.get_json()
-    nouvel = {"id": len(eleves) + 1, **data}
-    eleves.append(nouvel)
-    return jsonify(nouvel), 201   # 201 Created
 
-@app.route("/api/eleves/&lt;int:id&gt;", methods=["DELETE"])
-def supprimer_eleve(id):
-    global eleves
-    eleves = [e for e in eleves if e["id"] != id]
-    return jsonify({"message": "Supprimé"}), 200</code></pre>
+    # Validation des données
+    if not data or not data.get("nom"):
+        return jsonify({"erreur": "Champ 'nom' obligatoire"}), 400
 
-        <h2>Consommer une API (côté frontend)</h2>
-        <pre><code class="language-python"># En JavaScript (fetch API) :
+    db = get_db()
+    cursor = db.execute(
+        "INSERT INTO eleves (nom, note) VALUES (?, ?)",
+        (data["nom"], data.get("note", 0))
+    )
+    db.commit()
+    new_id = cursor.lastrowid
+    nouvel = db.execute("SELECT * FROM eleves WHERE id = ?", (new_id,)).fetchone()
+    db.close()
+    return jsonify(dict(nouvel)), 201   # 201 = Created
+
+# DELETE — DELETE /api/eleves/&lt;id&gt;
+@app.route("/api/eleves/&lt;int:eleve_id&gt;", methods=["DELETE"])
+def supprimer_eleve(eleve_id):
+    db = get_db()
+    result = db.execute("DELETE FROM eleves WHERE id = ?", (eleve_id,))
+    db.commit()
+    db.close()
+    if result.rowcount == 0:
+        return jsonify({"erreur": "Élève introuvable"}), 404
+    return jsonify({"message": f"Élève {eleve_id} supprimé"}), 200</code></pre>
+
+        <h2>Consommer l'API depuis le frontend (JavaScript)</h2>
+        <pre><code class="language-python"># Voici comment le navigateur (JavaScript) appelle ton API Flask :
 """
+// Lire tous les élèves
 fetch('/api/eleves')
-  .then(r => r.json())
-  .then(data => console.log(data))
+  .then(response => response.json())
+  .then(eleves => {
+    eleves.forEach(e => console.log(e.nom, e.note));
+  });
 
-// Créer un élève :
+// Créer un élève
 fetch('/api/eleves', {
   method: 'POST',
   headers: {'Content-Type': 'application/json'},
   body: JSON.stringify({nom: 'Chloé', note: 18})
 })
+  .then(r => r.json())
+  .then(data => console.log('Créé:', data));
+
+// Supprimer l'élève n°3
+fetch('/api/eleves/3', {method: 'DELETE'})
+  .then(r => console.log(r.status));  // 200 si ok, 404 si absent
 """</code></pre>
-        <div class="tip-box"><p>✅ Une bonne API retourne toujours le bon code HTTP : 200 (OK), 201 (créé), 400 (mauvaise requête), 404 (introuvable), 500 (erreur serveur).</p></div>
+
+        <h2>Bonnes pratiques d'une API</h2>
+        <ul>
+          <li>Toujours retourner le <strong>bon code HTTP</strong> : 200 (OK), 201 (créé), 400 (données invalides), 401 (non authentifié), 404 (introuvable), 500 (erreur serveur)</li>
+          <li>Retourner des <strong>messages d'erreur clairs</strong> en JSON : <code>{"erreur": "Le champ 'nom' est obligatoire"}</code></li>
+          <li><strong>Valider toutes les données</strong> reçues avant de les utiliser</li>
+          <li>Utiliser des <strong>noms de routes cohérents</strong> : toujours au pluriel pour les collections (<code>/api/eleves</code>), pas d'actions dans l'URL (<code>/api/eleves/supprimer/3</code> → non !)</li>
+        </ul>
+        <div class="bg-yellow-900/20 border border-yellow-700/40 rounded-xl p-4 mb-4"><strong class="text-yellow-400">⚠️ Piège fréquent</strong> — N'oublie pas d'ajouter le header <code>Content-Type: application/json</code> quand tu appelles ton API depuis JavaScript, sinon Flask ne comprend pas que les données sont du JSON et <code>request.get_json()</code> retourne <code>None</code> !</div>
       `
     },
     interactiveCode: `import json
@@ -3678,65 +4941,99 @@ print(f"GET/1  {code}: {r}")`,
     lesson: {
       title: 'Mini app web full-stack',
       content: `
-        <h2>Architecture d'une app web complète</h2>
-        <p>Voici comment les pièces s'assemblent dans une vraie application web :</p>
+        <h2>Tu arrives au bout du voyage !</h2>
+        <p>C'est le module final. Tu as appris Python de zéro jusqu'aux APIs REST. Il est temps d'<strong>assembler toutes les pièces</strong> en une vraie application web full-stack. C'est ce que font les développeurs dans les entreprises tech !</p>
+        <p>Full-stack signifie que tu maîtrises à la fois le <em>frontend</em> (ce que l'utilisateur voit) et le <em>backend</em> (le serveur, la base de données, la logique). Peu de développeurs maîtrisent les deux — toi, tu y es !</p>
+
+        <h2>Architecture d'une application web complète</h2>
+        <p>Voici comment toutes les couches s'articulent :</p>
         <pre><code class="language-python">mon_app/
-├── app.py           ← Backend Flask (routes, logique)
-├── database.py      ← Gestion SQLite
-├── templates/
-│   ├── base.html    ← Structure commune
-│   ├── index.html   ← Page d'accueil
-│   └── formulaire.html
-└── static/
-    ├── style.css    ← CSS
-    └── script.js    ← JavaScript (appels API)</code></pre>
+├── app.py              ← Point d'entrée Flask (routes, logique métier)
+├── database.py         ← Couche d'accès aux données (SQLite)
+├── templates/          ← Vues HTML (Jinja2)
+│   ├── base.html       ← Structure commune (nav, header, footer)
+│   ├── index.html      ← Page d'accueil
+│   └── messages.html   ← Liste des messages
+└── static/             ← Fichiers statiques
+    ├── style.css        ← CSS pour l'apparence
+    └── script.js        ← JavaScript pour les appels API
+
+# Flux d'une requête :
+# Navigateur → Flask (route) → SQLite (données) → Template (rendu) → Navigateur</code></pre>
 
         <h2>La couche base de données (database.py)</h2>
+        <p>On isole la logique base de données dans un fichier séparé — bonne pratique de séparation des responsabilités :</p>
         <pre><code class="language-python"># database.py
 import sqlite3
 
+DATABASE = "app.db"
+
 def get_db():
-    conn = sqlite3.connect("app.db")
-    conn.row_factory = sqlite3.Row   # → dictionnaires au lieu de tuples
+    conn = sqlite3.connect(DATABASE)
+    conn.row_factory = sqlite3.Row   # Accès par nom de colonne
     return conn
 
 def init_db():
+    """Initialise la base de données au démarrage."""
     db = get_db()
-    db.execute("""CREATE TABLE IF NOT EXISTS messages (
-        id        INTEGER PRIMARY KEY AUTOINCREMENT,
-        auteur    TEXT NOT NULL,
-        contenu   TEXT NOT NULL,
-        date      TEXT DEFAULT CURRENT_TIMESTAMP
-    )""")
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS messages (
+            id        INTEGER PRIMARY KEY AUTOINCREMENT,
+            auteur    TEXT    NOT NULL,
+            contenu   TEXT    NOT NULL,
+            date      TEXT    DEFAULT CURRENT_TIMESTAMP
+        )
+    """)
     db.commit()
-    db.close()</code></pre>
+    db.close()
+    print("Base de données initialisée !")</code></pre>
 
-        <h2>Le backend (app.py)</h2>
+        <h2>Le backend Flask (app.py)</h2>
+        <p>Flask s'occupe du routing et fait le lien entre les requêtes HTTP, la base de données et les templates :</p>
         <pre><code class="language-python"># app.py
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, redirect, url_for
 from database import get_db, init_db
 
 app = Flask(__name__)
 
+# --- Pages HTML ---
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    """Page d'accueil : affiche les messages via template Jinja2."""
+    db = get_db()
+    messages = db.execute(
+        "SELECT * FROM messages ORDER BY date DESC LIMIT 20"
+    ).fetchall()
+    db.close()
+    return render_template("index.html", messages=messages)
+
+# --- API JSON ---
 
 @app.route("/api/messages", methods=["GET"])
-def get_messages():
+def api_get_messages():
+    """API : retourne les messages en JSON."""
     db = get_db()
     msgs = db.execute("SELECT * FROM messages ORDER BY date DESC").fetchall()
     db.close()
-    return jsonify([dict(m) for m in msgs])
+    return jsonify([dict(m) for m in msgs]), 200
 
 @app.route("/api/messages", methods=["POST"])
-def post_message():
+def api_post_message():
+    """API : crée un nouveau message."""
     data = request.get_json()
-    if not data.get("auteur") or not data.get("contenu"):
-        return jsonify({"erreur": "Champs manquants"}), 400
+
+    # Validation
+    if not data or not data.get("auteur", "").strip():
+        return jsonify({"erreur": "Auteur obligatoire"}), 400
+    if not data.get("contenu", "").strip():
+        return jsonify({"erreur": "Contenu obligatoire"}), 400
+
     db = get_db()
-    db.execute("INSERT INTO messages (auteur, contenu) VALUES (?, ?)",
-               (data["auteur"], data["contenu"]))
+    db.execute(
+        "INSERT INTO messages (auteur, contenu) VALUES (?, ?)",
+        (data["auteur"].strip(), data["contenu"].strip())
+    )
     db.commit()
     db.close()
     return jsonify({"message": "Publié !"}), 201
@@ -3745,42 +5042,68 @@ if __name__ == "__main__":
     init_db()
     app.run(debug=True)</code></pre>
 
-        <h2>Le frontend (templates/index.html)</h2>
+        <h2>Le template HTML avec JavaScript (templates/index.html)</h2>
         <pre><code class="language-python">"""
-&lt;!-- Charger les messages depuis l'API --&gt;
-&lt;div id="messages"&gt;&lt;/div&gt;
+{% extends "base.html" %}
+{% block contenu %}
 
-&lt;form id="form"&gt;
-  &lt;input id="auteur" placeholder="Ton pseudo"&gt;
-  &lt;input id="contenu" placeholder="Ton message"&gt;
+&lt;!-- Affichage des messages depuis Jinja2 (rendu côté serveur) --&gt;
+&lt;div id="messages-container"&gt;
+  {% for msg in messages %}
+    &lt;div class="message"&gt;
+      &lt;b&gt;{{ msg.auteur }}&lt;/b&gt; &lt;span&gt;{{ msg.date }}&lt;/span&gt;
+      &lt;p&gt;{{ msg.contenu }}&lt;/p&gt;
+    &lt;/div&gt;
+  {% else %}
+    &lt;p&gt;Aucun message pour l'instant.&lt;/p&gt;
+  {% endfor %}
+&lt;/div&gt;
+
+&lt;!-- Formulaire d'envoi (appelle l'API via JavaScript) --&gt;
+&lt;form id="form-message"&gt;
+  &lt;input id="auteur" placeholder="Ton pseudo" required&gt;
+  &lt;textarea id="contenu" placeholder="Ton message" required&gt;&lt;/textarea&gt;
   &lt;button type="submit"&gt;Envoyer&lt;/button&gt;
 &lt;/form&gt;
 
 &lt;script&gt;
-async function charger() {
-  const res = await fetch('/api/messages');
-  const msgs = await res.json();
-  document.getElementById('messages').innerHTML =
-    msgs.map(m => \`&lt;p&gt;&lt;b&gt;\${m.auteur}&lt;/b&gt; : \${m.contenu}&lt;/p&gt;\`).join('');
-}
+// Envoyer via l'API REST (sans recharger la page !)
+document.getElementById('form-message').addEventListener('submit', async (e) => {
+  e.preventDefault();   // Empêche le rechargement de la page
 
-document.getElementById('form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  await fetch('/api/messages', {
+  const auteur  = document.getElementById('auteur').value;
+  const contenu = document.getElementById('contenu').value;
+
+  const response = await fetch('/api/messages', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({
-      auteur: document.getElementById('auteur').value,
-      contenu: document.getElementById('contenu').value
-    })
+    body: JSON.stringify({auteur, contenu})
   });
-  charger();
-});
 
-charger();  // Charger au démarrage
+  if (response.ok) {
+    // Recharger la page pour voir le nouveau message
+    location.reload();
+  } else {
+    const erreur = await response.json();
+    alert('Erreur : ' + erreur.erreur);
+  }
+});
 &lt;/script&gt;
+
+{% endblock %}
 """</code></pre>
-        <div class="tip-box"><p>✅ Ce pattern (Flask API + frontend JavaScript qui appelle l'API) est utilisé par des milliers d'applications en production. Tu connais maintenant l'architecture de base !</p></div>
+        <div class="bg-blue-900/20 border border-blue-700/40 rounded-xl p-4 mb-4"><strong class="text-blue-400">💡 Bon à savoir</strong> — Tu viens d'apprendre le pattern utilisé par des milliers d'applications en production : Flask comme serveur, SQLite pour les données, Jinja2 pour le rendu, et JavaScript pour les interactions dynamiques. C'est l'architecture de base de la plupart des apps web Python !</div>
+
+        <h2>Les prochaines étapes — que faire après ?</h2>
+        <p>Tu as les bases. Voici comment continuer :</p>
+        <ul>
+          <li><strong>Améliore ton app</strong> : ajoute l'authentification (sessions Flask), la pagination, la recherche</li>
+          <li><strong>Apprends CSS</strong> : rends tes pages belles avec Tailwind CSS ou Bootstrap</li>
+          <li><strong>Découvre Flask-SQLAlchemy</strong> : un ORM qui remplace les requêtes SQL brutes par du Python</li>
+          <li><strong>Déploie sur le web</strong> : Render, Railway, PythonAnywhere — ton app accessible à tout le monde !</li>
+          <li><strong>Explore React ou Vue</strong> : frameworks JavaScript pour des interfaces encore plus dynamiques</li>
+          <li><strong>Contribue à des projets open source</strong> : le meilleur moyen de progresser vite</li>
+        </ul>
       `
     },
     interactiveCode: `import sqlite3, json
