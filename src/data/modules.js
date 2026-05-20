@@ -82,6 +82,41 @@ print("Je commence à apprendre Python")`,
         hint: 'Tu as besoin de 3 lignes avec print()'
       }
     ],
+    activity: {
+      title: '🎮 Défi final : La carte de super-héros',
+      description: 'Tu maîtrises <code>print()</code> et les commentaires ? Prouve-le ! Crée une <strong>carte d\'identité de super-héros codeur</strong> qui affiche ton nom de code, ta ville, ton super-pouvoir et une devise secrète. Utilise des caractères pour décorer le cadre !',
+      goal: 'Objectif : afficher une carte avec au moins 6 lignes, utiliser au moins 1 commentaire, et inclure les 4 infos (nom, ville, pouvoir, devise).',
+      starter: `# 🦸 MA CARTE DE SUPER-HÉROS CODEUR
+# Remplace les ??? par tes vraies infos !
+
+print("================================")
+print("   🦸  SUPER-HÉROS CODEUR  🦸")
+print("================================")
+# Ton nom de héros
+print("Nom     :", "???")
+# Ta ville
+print("Ville   :", "???")
+# Ton super-pouvoir
+print("Pouvoir :", "???")
+print("================================")
+# Ta devise secrète
+print("Devise  :", "???")
+print("================================")`,
+      solution: `# 🦸 MA CARTE DE SUPER-HÉROS CODEUR
+print("================================")
+print("   🦸  SUPER-HÉROS CODEUR  🦸")
+print("================================")
+# Ton nom de héros
+print("Nom     :", "CodeMaster")
+# Ta ville
+print("Ville   :", "Paris")
+# Ton super-pouvoir
+print("Pouvoir :", "Déboguer en 10 secondes")
+print("================================")
+# Ta devise secrète
+print("Devise  :", "Je code, donc je suis !")
+print("================================")`
+    },
     quiz: [
       {
         id: 1,

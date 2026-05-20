@@ -86,6 +86,44 @@ export default function Lesson({ mod, progress, onLessonRead, onExerciseComplete
           ))}
         </div>
       </section>
+
+      {/* Final activity */}
+      {mod.activity && (
+        <section className="mt-12">
+          <div className="relative rounded-2xl overflow-hidden border border-yellow-500/40 bg-gradient-to-br from-yellow-950/40 via-orange-950/30 to-gray-900/60">
+            <div className="h-1.5 w-full bg-gradient-to-r from-yellow-400 via-orange-400 to-pink-400" />
+            <div className="px-6 py-5 border-b border-yellow-800/30 bg-yellow-900/10">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="text-2xl">🏆</span>
+                <div>
+                  <div className="text-xs text-yellow-400 font-bold uppercase tracking-widest mb-0.5">
+                    Activité finale
+                  </div>
+                  <h2 className="text-xl font-bold text-white">{mod.activity.title}</h2>
+                </div>
+              </div>
+              <p
+                className="text-gray-300 text-sm leading-relaxed mt-2"
+                dangerouslySetInnerHTML={{ __html: mod.activity.description }}
+              />
+              {mod.activity.goal && (
+                <div className="mt-3 flex items-start gap-2 text-xs text-yellow-300/80 bg-yellow-900/20 border border-yellow-700/30 rounded-lg px-3 py-2">
+                  <span className="mt-0.5 flex-shrink-0">🎯</span>
+                  <span>{mod.activity.goal}</span>
+                </div>
+              )}
+            </div>
+            <div className="p-5">
+              <CodeEditor
+                starterCode={mod.activity.starter}
+                solution={mod.activity.solution}
+                exerciseId={`${mod.id}-activity`}
+                onComplete={() => {}}
+              />
+            </div>
+          </div>
+        </section>
+      )}
     </div>
   )
 }
